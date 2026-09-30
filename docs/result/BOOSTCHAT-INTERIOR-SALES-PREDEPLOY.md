@@ -73,15 +73,17 @@ FINAL_VISUAL_REVIEW_URL =
 http://localhost:3000
 
 VERCEL_CLI          = AVAILABLE via npx (Vercel CLI 61.1.0; not installed globally)
-VERCEL_AUTH         = NOT LOGGED IN  (`vercel whoami` → "Logged out.")
-VERCEL_PROJECT_LINK = NOT LINKED     (no .vercel/ in the project)
-READY_FOR_VERCEL_PRODUCTION_DEPLOY = YES for code and build. One user action is left: `npx vercel login`.
+VERCEL_AUTH         = LOGGED IN  (user ran `npx vercel login`; `vercel whoami` → vnfm0580-7392,
+                                  team "vnfm0580's projects", Pro)
+VERCEL_PROJECT_LINK = NOT LINKED  (no .vercel/; no "boost-interior-sales" project exists yet —
+                                  `vercel link --yes` will create it on approval)
+READY_FOR_VERCEL_PRODUCTION_DEPLOY = YES
   No technical blocker in the app: it is a static Next 16.3.7 build with no required env vars.
 
 PRODUCTION_DEPLOYED = NO
 
 KNOWN_ISSUES =
-- Vercel CLI is logged out and the project is not linked. Log in once before deploying (see VERCEL NEXT STEP).
+- The Vercel project does not exist yet. Linking it (VERCEL NEXT STEP, step 1) creates it on approval.
 - The GitHub repository is PUBLIC. Everything committed is public, including design-reference/,
   source-assets/, the `prompt` task file and .claude/settings.json (it contains a local hook path).
   None of these contain secrets. Make the repository private on GitHub if that isn't intended.
@@ -225,8 +227,7 @@ Run these only after the user says **"배포 승인"**.
 ```bash
 cd /Users/woops/projects/boost-interior-sales
 
-# 0) one-time: log in (interactive, opens the browser)
-npx vercel login
+# 0) one-time login — DONE (vnfm0580-7392)
 
 # 1) link the folder to a new Vercel project (default team; project name = folder name "boost-interior-sales")
 #    If the project already exists in Vercel: npx vercel link --yes --project boost-interior-sales
