@@ -1,0 +1,13 @@
+<!-- @dsCard group="Components" viewport="700x230" name="Core — Button & Tag" subtitle="Pill CTAs and condition chips" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;padding:24px;background:var(--surface-page);font-family:var(--font-sans)}.r{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}</style></head><body><div id="root"></div>
+<script type="text/babel">const {Button,Tag}=window.BoostChatDesignSystem_29c1c3;
+ReactDOM.createRoot(document.getElementById('root')).render(<div>
+<div className="r"><Button size="lg" arrow>도입 상담 신청</Button><Button variant="secondary" size="lg">데모 보기</Button><Button variant="ghost" arrow>설치 방법</Button></div>
+<div className="r"><Button size="sm">이 사례로 상담하기</Button><Button variant="dark">시작하기</Button><Button disabled>남기기</Button><Button variant="secondary" disabled>비활성</Button><span style={{background:'var(--gray-700)',padding:8,borderRadius:12,display:'inline-flex'}}><Button variant="onImage" size="sm">상담 문의 ›</Button></span></div>
+<div className="r"><Tag tone="accent">공사 범위가 같은 사례</Tag><Tag>부분 리모델링</Tag><Tag>주방</Tag><Tag>욕실</Tag><Tag tone="outline">화이트</Tag><Tag tone="inverse" size="sm">사례 A</Tag><Tag size="sm">공급 32평</Tag></div>
+</div>);</script></body></html>

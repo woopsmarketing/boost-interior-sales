@@ -1,0 +1,18 @@
+:root{
+/* Neutrals — cool gray ramp sampled from product captures */
+--gray-0:#ffffff;--gray-25:#f9fafb;--gray-50:#f1f2f4;--gray-100:#f3f4f6;--gray-150:#eceef1;--gray-200:#e5e7eb;--gray-300:#d1d5dc;--gray-400:#99a1af;--gray-500:#6a7282;--gray-600:#596472;--gray-700:#374455;--gray-800:#1e2939;--gray-900:#101828;--gray-950:#0b111c;
+/* Boost blue — controlled accent */
+--blue-50:#eff6ff;--blue-100:#dbeafe;--blue-200:#bedbff;--blue-300:#89adfd;--blue-400:#3283ff;--blue-500:#1f66fd;--blue-600:#155dfc;--blue-700:#0d4be0;--blue-800:#053be4;
+/* Warm architectural neutrals (client-site nav, paper) */
+--warm-50:#faf8f4;--warm-100:#f3efe8;--warm-300:#d8d0c3;
+/* Demo tenant accent (부스트 인테리어 — client brand, never BoostChat) */
+--tenant-orange:#d9691f;--tenant-orange-deep:#b85416;
+/* Device */
+--device-ink:#111418;
+/* Semantic */
+--surface-page:var(--gray-50);--surface-raised:var(--gray-0);--surface-sunken:var(--gray-25);--surface-bubble:var(--gray-100);--surface-accent-soft:var(--blue-50);--surface-inverse:var(--gray-900);--surface-paper:var(--warm-50);
+--text-strong:var(--gray-900);--text-body:var(--gray-700);--text-muted:var(--gray-600);--text-subtle:var(--gray-500);--text-faint:var(--gray-400);--text-inverse:#ffffff;--text-accent:var(--blue-600);--text-link:var(--blue-800);
+--border-subtle:var(--gray-200);--border-strong:var(--gray-300);--border-focus:var(--blue-400);
+--accent:var(--blue-600);--accent-hover:var(--blue-700);--accent-soft:var(--blue-50);--accent-disabled:var(--blue-300);
+--success:#16a34a;--danger:#dc2626;
+}

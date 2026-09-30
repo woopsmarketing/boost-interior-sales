@@ -1,0 +1,683 @@
+# BOOSTCHAT INTERIOR SALES LANDING
+# FINAL PRE-DEPLOY / KAKAO CTA / GITHUB / VISUAL REVIEW
+
+현재 프로젝트:
+
+`/Users/woops/projects/boost-interior-sales`
+
+이 작업은 이미 완성된 Production V1을 다시 설계하거나 새 기능을 추가하는 작업이 아니다.
+
+현재 Production V1 보고서:
+
+`docs/result/BOOSTCHAT-INTERIOR-SALES-LANDING-V1.md`
+
+를 먼저 읽고 현재 실제 filesystem/code 상태를 확인한 뒤 작업하라.
+
+중요 원칙:
+
+- 기존 Claude Design 기반 Production V1을 유지한다.
+- 디자인 재설계 금지.
+- 12개 section 구조 변경 금지.
+- 기존 motion / responsive / reduced-motion 구조를 불필요하게 변경하지 않는다.
+- BoostChat 제품 자체를 수정하지 않는다.
+- CRM / DB / CMS / payment / email automation 등을 추가하지 않는다.
+- fake UI / fake metric / fake testimonial 생성 금지.
+- 이번 작업은 판매 시작 직전의 최소 변경만 한다.
+- 추측하지 말고 실제 코드와 filesystem을 기준으로 작업한다.
+
+이번 작업의 목적은 정확히 다음 5개다.
+
+1. 이메일 문의 폼을 제거하고 KakaoTalk 1:1 상담으로 전환
+2. Full Demo Video anchor를 `#demo-video`로 통일
+3. Git repository를 초기화하고 기존 GitHub remote에 push
+4. 전체 QA 후 local production preview를 사용자가 직접 검수할 수 있게 실행
+5. Vercel production deployment 준비 상태까지 만들되, 이번 단계에서는 실제 production deploy 전에 STOP
+
+---
+
+# 1. KAKAO OPEN CHAT으로 CONTACT FLOW 변경
+
+현재 Production V1은 `CONTACT_EMAIL`이 설정되지 않아 `#contact`의 상담 form이 disabled되어 있다.
+
+이 mailto 기반 contact 방식은 더 이상 사용하지 않는다.
+
+다음 공식 상담 채널을 사용한다.
+
+KakaoTalk 1:1 Open Chat:
+
+https://open.kakao.com/o/sAS9ebQi
+
+현재 이 링크는 BoostWorks 1:1 상담방이다.
+
+## 구현 원칙
+
+`lib/site.ts` 또는 기존 centralized site config에 다음과 같은 single source of truth를 만든다.
+
+예:
+
+```ts
+export const KAKAO_OPEN_CHAT_URL =
+  "https://open.kakao.com/o/sAS9ebQi";
+```
+
+실제 기존 architecture에 더 맞는 이름이 있으면 적절하게 사용해도 된다.
+
+단, URL을 여러 component에 hard-code하지 않는다.
+
+## CONTACT_EMAIL 제거
+
+기존:
+
+- `CONTACT_EMAIL`
+- CONTACT_EMAIL 유무에 따른 disabled form
+- mailto submit logic
+- "온라인 도입 상담 접수를 준비하고 있습니다"
+- "상담 신청 기능이 아직 연결되지 않아..."
+- contact email missing 상태 처리
+
+등은 더 이상 필요하지 않으므로 정리한다.
+
+프로젝트 어디에도 `CONTACT_EMAIL`이 production requirement로 남아 있지 않아야 한다.
+
+단순히 env 값을 넣어서 기존 form을 살리는 것이 아니다.
+
+우리는 contact channel 자체를 KakaoTalk 1:1 상담으로 변경하는 것이다.
+
+---
+
+# 2. 모든 "도입 상담" CTA 동작 통일
+
+현재 페이지에서 실제 상담 의도가 있는 CTA들을 조사하라.
+
+예상 위치:
+
+- fixed header의 `도입 상담`
+- Early Partner section
+- Final CTA / `#contact`
+- 그 외 실제로 상담을 시작하기 위한 CTA
+
+이 상담 CTA들은 모두:
+
+https://open.kakao.com/o/sAS9ebQi
+
+로 연결한다.
+
+권장 버튼 카피:
+
+`카카오톡 1:1 도입 상담`
+
+또는 기존 디자인 문맥상 카피를 유지하는 것이 더 자연스러운 위치에서는:
+
+`도입 상담 받아보기`
+
+를 유지해도 된다.
+
+중요한 것은 click destination이 Kakao Open Chat이라는 점이다.
+
+Live Demo CTA:
+
+`실제 데모 체험하기`
+
+는 기존 그대로:
+
+https://interior-demo.boostweb.co.kr
+
+를 유지한다.
+
+Live Demo와 Kakao 상담 CTA의 역할을 섞지 않는다.
+
+## External link behavior
+
+Kakao Open Chat은 external link로 처리한다.
+
+Desktop/mobile 모두 정상 작동해야 한다.
+
+새 탭을 사용하는 것이 기존 external-link convention과 일치한다면:
+
+```html
+target="_blank"
+rel="noopener noreferrer"
+```
+
+를 사용한다.
+
+접근성도 유지한다.
+
+기존 프로젝트가 external link에 "(새 창에서 열림)" 안내를 제공하고 있다면 같은 convention을 따른다.
+
+---
+
+# 3. FINAL CONTACT SECTION 정리
+
+현재 마지막 `#contact` section의 disabled form UI를 그대로 남겨두지 않는다.
+
+이 section의 기존 headline/supporting copy와 visual identity는 최대한 유지하면서,
+
+사용자가 바로 KakaoTalk 상담을 시작할 수 있는 명확한 CTA 구조로 변경한다.
+
+예를 들어:
+
+Headline:
+
+`귀사 홈페이지에도 적용할 수 있는지 확인해보세요.`
+
+Supporting:
+
+`현재 홈페이지를 간단히 확인한 뒤 적용 가능한 방식을 안내해드립니다.`
+
+Primary CTA:
+
+`카카오톡 1:1 도입 상담`
+
+→ KAKAO_OPEN_CHAT_URL
+
+Secondary CTA가 이미 필요하다면:
+
+`실제 데모 체험하기`
+
+→ DEMO_URL
+
+불필요한 form field는 제거한다.
+
+이 변경 때문에 section 전체를 새롭게 redesign하지 않는다.
+
+현재 디자인 시스템, spacing, typography, color, button hierarchy를 그대로 따른다.
+
+---
+
+# 4. FULL DEMO VIDEO ANCHOR 수정
+
+현재 보고서상 Full Demo Video section이:
+
+`#video`
+
+로 되어 있다.
+
+이것을 반드시:
+
+`#demo-video`
+
+로 변경한다.
+
+이유:
+
+향후 outbound email의 video thumbnail은 다음 형태로 직접 연결할 예정이다.
+
+`https://LANDING_DOMAIN/#demo-video`
+
+따라서 전체 프로젝트의 canonical video section anchor를 `demo-video`로 통일한다.
+
+확인할 것:
+
+- section id
+- header/internal links
+- button href
+- aria references
+- site constants
+- documentation
+- README
+- report
+- 기타 `#video`를 전제로 하는 코드
+
+기존 Full Demo Video 기능 자체는 변경하지 않는다.
+
+`master-sales.mp4`
+1:26
+click-to-play
+controls
+
+구조를 그대로 유지한다.
+
+작업 후 저장소 전체에서 오래된 `#video` reference가 남아 있는지 검색하라.
+
+단, 일반적인 video 변수명이나 CSS class까지 무조건 바꾸라는 의미는 아니다.
+
+URL anchor 의미의 `#video`만 정확하게 판단해서 변경한다.
+
+---
+
+# 5. NEXT_PUBLIC_SITE_URL
+
+현재 아직 최종 production domain이 결정되지 않았으므로 임의의 domain을 만들어 넣지 않는다.
+
+현재 구현의 Vercel fallback behavior를 먼저 확인한다.
+
+최종 Vercel production URL을 확보한 뒤:
+
+`NEXT_PUBLIC_SITE_URL`
+
+을 그 URL 또는 향후 연결할 canonical custom domain으로 설정할 수 있도록 유지한다.
+
+이번 local pre-deploy 단계에서 가짜 domain을 넣지 않는다.
+
+Vercel deployment 과정에서 최종 URL을 확보한 후 이 값을 설정하고 필요하면 production redeploy하면 된다.
+
+---
+
+# 6. GitHub repository 연결
+
+사용자가 새 GitHub repository를 생성했다.
+
+Repository:
+
+https://github.com/woopsmarketing/boost-interior-sales
+
+현재 remote repository는 새 repository이며 기존 production code를 여기에 올릴 예정이다.
+
+먼저 현재 local git 상태를 확인하라.
+
+보고서에는 이 directory가 아직 git repository가 아니라고 되어 있지만 실제 상태를 다시 확인한다.
+
+## Git 안전 검사
+
+push 전에 반드시 확인:
+
+- `.env`
+- `.env.local`
+- secret
+- token
+- OAuth credential
+- API key
+- Vercel credential
+- 기타 민감정보
+
+가 tracked되지 않도록 한다.
+
+적절한 `.gitignore`를 확인한다.
+
+최소한 Next.js project에서 일반적으로 제외되어야 할 항목을 정상적으로 제외한다.
+
+기존 source/design assets는 사용자가 보존하도록 명시한 것이므로 임의 삭제하지 않는다.
+
+특히:
+
+- `design-reference/`
+- `source-assets/`
+
+삭제 금지.
+
+## Git 초기화
+
+현재 git repository가 아니라면 정상적으로 초기화하라.
+
+대략적인 흐름:
+
+```bash
+git init
+git branch -M main
+git remote add origin https://github.com/woopsmarketing/boost-interior-sales.git
+```
+
+이미 설정되어 있다면 중복 remote를 만들지 않는다.
+
+그 후 변경 내용을 검토하고 첫 commit을 만든다.
+
+적절한 commit message 예:
+
+```text
+feat: prepare BoostChat interior sales landing for launch
+```
+
+그리고:
+
+```bash
+git push -u origin main
+```
+
+을 수행한다.
+
+GitHub authentication이 이미 구성되어 있으면 그대로 push한다.
+
+인증 때문에 push가 불가능한 경우:
+
+- repository를 새로 만들지 않는다.
+- 다른 remote를 사용하지 않는다.
+- force push하지 않는다.
+- 작업을 잃지 않는다.
+
+정확한 실패 이유와 사용자가 실행해야 하는 최소 command만 보고한다.
+
+---
+
+# 7. QA
+
+변경 완료 후 반드시 다시 실행:
+
+```bash
+npm run typecheck
+npm run lint
+npm run build
+```
+
+모두 PASS해야 한다.
+
+추가로 실제 browser QA를 수행한다.
+
+가능하면 Playwright Chromium 기준 최소:
+
+- 1440 desktop
+- 768 tablet
+- 390 mobile
+
+에서 확인한다.
+
+## 반드시 확인할 항목
+
+### Kakao CTA
+
+모든 상담 CTA가 정확히:
+
+https://open.kakao.com/o/sAS9ebQi
+
+를 가리키는지 확인.
+
+잘못된:
+
+- mailto:
+- 빈 링크
+- disabled form
+- CONTACT_EMAIL dependency
+
+가 남지 않아야 한다.
+
+### Demo CTA
+
+Live Demo CTA는 계속:
+
+https://interior-demo.boostweb.co.kr
+
+를 가리켜야 한다.
+
+### Demo Video
+
+`/#demo-video`
+
+로 직접 접근하거나 anchor navigation했을 때 정확히 86초 Full Demo Video section으로 이동해야 한다.
+
+### 기존 기능 regression
+
+- Hero video
+- Hero pause/play
+- desktop story scenes
+- mobile static scenes
+- reduced motion
+- Owner/Admin section
+- Mobile section
+- Full video click-to-play
+- Live Demo
+- Early Partner
+- Final CTA
+- fixed navigation
+- focus states
+- no horizontal overflow
+
+를 빠르게 regression test한다.
+
+### Console
+
+console error/warning의 새로운 regression이 없어야 한다.
+
+---
+
+# 8. LOCAL FINAL VISUAL REVIEW 환경 실행
+
+모든 테스트가 PASS하면 사용자가 직접 눈으로 최종 검수할 수 있도록 local production build를 실행한다.
+
+가능하면 development mode보다 실제 production build를 사용한다.
+
+예:
+
+```bash
+npm run build
+npm start
+```
+
+사용자가 브라우저에서:
+
+http://localhost:3000
+
+으로 접속할 수 있게 한다.
+
+현재 터미널 작업 방식상 foreground server가 이후 작업을 막는다면 안전한 방식으로 background에 실행해도 된다.
+
+예를 들면 macOS에서 적절하다면:
+
+```bash
+nohup npm start > /tmp/boost-interior-sales.log 2>&1 &
+```
+
+단, 이미 사용 중인 port나 process가 있다면 실제 상태를 먼저 확인한다.
+
+서버가 정상적으로 HTTP 200을 반환하는지 확인한다.
+
+마지막 응답에는 반드시:
+
+`FINAL_VISUAL_REVIEW_URL = http://localhost:3000`
+
+을 명확하게 알려라.
+
+사용자가 최종으로 눈으로 확인할 것이므로 이번 작업 종료 시 local preview server를 임의로 종료하지 않는다.
+
+---
+
+# 9. VERCEL 배포 준비
+
+이 프로젝트는 최종적으로 Vercel production에 배포할 예정이다.
+
+이번 작업에서 다음을 확인한다.
+
+- Vercel CLI 사용 가능 여부
+- 현재 login/auth 상태
+- project link 여부
+- Next.js build가 Vercel-compatible한지
+- production deploy를 막는 기술적 blocker가 있는지
+
+가능한 경우 다음과 같은 명령의 실행 준비가 되어 있어야 한다.
+
+```bash
+vercel
+vercel --prod
+```
+
+또는 현재 Vercel CLI version에서 권장되는 동등한 명령.
+
+중요:
+
+## 이번 작업에서는 Production deploy를 하지 마라.
+
+사용자가 local URL을 직접 보고 마지막 visual approval을 할 예정이다.
+
+따라서:
+
+`READY_FOR_VERCEL_PRODUCTION_DEPLOY = YES`
+
+상태까지만 만들고 STOP한다.
+
+사용자가 이후:
+
+`배포 승인`
+
+이라고 하면 그때 production deploy를 진행할 수 있도록 준비한다.
+
+Preview deployment도 이번 단계에서는 필수가 아니다.
+
+우선 local final review가 목적이다.
+
+---
+
+# 10. 불필요한 작업 금지
+
+이번 작업에서 하지 말 것:
+
+- 새로운 landing redesign
+- 카피 전체 rewrite
+- 새로운 animation
+- Three.js / WebGL
+- DB
+- CRM
+- CMS
+- payment
+- email automation
+- analytics system
+- BoostChat widget embed
+- Market Recon integration
+- 새 pricing system
+- 실제 제품 architecture 수정
+- unrelated refactor
+- dependency 대규모 업그레이드
+
+지금은 판매 시작 직전이다.
+
+작업 범위를 넓히지 않는다.
+
+---
+
+# 11. 결과 보고서
+
+작업 완료 후 새로운 결과 보고서를 생성하라.
+
+파일:
+
+`docs/result/BOOSTCHAT-INTERIOR-SALES-PREDEPLOY.md`
+
+최대한 실제 evidence 기반으로 작성한다.
+
+최소 다음 내용을 포함한다.
+
+```text
+TASK = BOOSTCHAT INTERIOR SALES PREDEPLOY
+
+KAKAO_OPEN_CHAT_URL =
+https://open.kakao.com/o/sAS9ebQi
+
+CONTACT_EMAIL_REMOVED =
+CONTACT_FORM_REMOVED =
+KAKAO_CTA_CONNECTED =
+
+KAKAO_CTA_LOCATIONS =
+- ...
+- ...
+
+LIVE_DEMO_URL =
+https://interior-demo.boostweb.co.kr
+
+DEMO_VIDEO_ANCHOR =
+#demo-video
+
+OLD_VIDEO_ANCHOR_REMAINING =
+
+GIT_INITIALIZED =
+GIT_REMOTE =
+https://github.com/woopsmarketing/boost-interior-sales
+
+GIT_BRANCH =
+GIT_COMMIT =
+GIT_PUSH =
+
+SECRETS_CHECK =
+GITIGNORE_CHECK =
+
+TYPECHECK =
+LINT =
+BUILD =
+
+DESKTOP_QA =
+TABLET_QA =
+MOBILE_QA =
+REDUCED_MOTION =
+ACCESSIBILITY_BASIC =
+
+CONTACT_CTA_QA =
+LIVE_DEMO_QA =
+DEMO_VIDEO_ANCHOR_QA =
+
+LOCAL_PRODUCTION_SERVER =
+FINAL_VISUAL_REVIEW_URL =
+http://localhost:3000
+
+VERCEL_CLI =
+VERCEL_AUTH =
+VERCEL_PROJECT_LINK =
+READY_FOR_VERCEL_PRODUCTION_DEPLOY =
+
+PRODUCTION_DEPLOYED = NO
+
+KNOWN_ISSUES =
+...
+```
+
+추가로:
+
+## CHANGED FILES
+
+실제 수정한 파일 목록.
+
+## EXACT BEHAVIOR CHANGES
+
+사용자 관점에서 무엇이 달라졌는지.
+
+## GIT EVIDENCE
+
+- current branch
+- remote -v
+- latest commit hash
+- push result
+
+## QA EVIDENCE
+
+실제 수행한 명령과 결과.
+
+## VISUAL REVIEW CHECKLIST
+
+사용자가 localhost에서 직접 확인해야 할 항목을 최대 7개 정도로 짧게 작성.
+
+예:
+
+1. Hero visual
+2. 실제 데모 CTA
+3. Interactive Story
+4. 86초 영상 + `#demo-video`
+5. Kakao Early Partner CTA
+6. Final Kakao 상담 CTA
+7. Mobile width
+
+## VERCEL NEXT STEP
+
+사용자가 visual approval한 뒤 실행해야 할 정확한 Vercel production deployment 절차 또는 command를 기록한다.
+
+---
+
+# 12. 최종 응답 형식
+
+작업 종료 시 장황하게 설명하지 말고 먼저 다음을 보여라.
+
+```text
+PREDEPLOY STATUS
+
+KAKAO CTA:
+VIDEO ANCHOR:
+TYPECHECK:
+LINT:
+BUILD:
+GITHUB PUSH:
+LOCAL REVIEW:
+VERCEL READY:
+PRODUCTION DEPLOYED: NO
+```
+
+그 다음:
+
+1. 무엇을 변경했는지
+2. GitHub push 결과
+3. local review URL
+4. 사용자가 눈으로 확인할 5~7개 항목
+5. Vercel 준비 상태
+6. report path
+
+를 알려라.
+
+가장 중요:
+
+사용자가 `http://localhost:3000`에서 마지막 눈검수를 할 수 있는 상태로 끝내라.
+
+Production Vercel deployment는 아직 하지 말고 STOP하라.

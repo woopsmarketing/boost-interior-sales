@@ -1,0 +1,52 @@
+<!-- @dsCard group="Sales Landing" viewport="1440x900" name="Sales landing — scroll story" subtitle="Hero → problem → product story → video → before/after → why → install → live demo → partner → form" -->
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BoostChat — 인테리어 업체를 위한 AI 상담</title>
+<link rel="stylesheet" href="../../styles.css">
+<style>html{scroll-behavior:smooth}body{margin:0;background:var(--surface-page);color:var(--text-strong);font-family:var(--font-sans);-webkit-font-smoothing:antialiased}a{color:var(--text-link)}a:hover{color:var(--accent-hover)}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+</head><body><div id="root"></div>
+<script type="text/babel" src="Scenes.jsx"></script>
+<script type="text/babel" src="Hero.jsx"></script>
+<script type="text/babel" src="Sections.jsx"></script>
+<script type="text/babel" src="Closing.jsx"></script>
+<script type="text/babel">
+const { SiteNav, StoryRail } = window.BoostChatDesignSystem_29c1c3;
+const IDS = [...SCENES.map(s => s.id), 'mobile', 'install'];
+const RAIL = [...SCENES.map(s => s.rail), '모바일', '설치'];
+function App() {
+  const mobile = useIsMobile();
+  const [solid, setSolid] = React.useState(false);
+  const [cur, setCur] = React.useState(-1);
+  React.useEffect(() => {
+    const f = () => { setSolid(window.scrollY > 40); const mid = window.innerHeight * .5; let c = -1; IDS.forEach((id, i) => { const el = document.getElementById(id); if (el) { const b = el.getBoundingClientRect(); if (b.top <= mid && b.bottom > mid) c = i; } }); setCur(c); };
+    f(); window.addEventListener('scroll', f, { passive: true }); return () => window.removeEventListener('scroll', f);
+  }, []);
+  const go = () => window.scrollTo({ top: document.getElementById('contact').offsetTop - 40, behavior: 'smooth' });
+  const jump = i => window.scrollTo({ top: document.getElementById(IDS[i]).offsetTop + (mobile ? -40 : window.innerHeight * .6), behavior: 'smooth' });
+  const total = IDS.length;
+  return <>
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 20 }}><SiteNav solid={solid} style={mobile ? { padding: '0 20px' } : { maxWidth: 1440, margin: '0 auto' }} links={mobile ? [] : [{ label: '작동 방식', href: '#talk' }, { label: '데모 영상', href: '#video' }, { label: '설치', href: '#install' }, { label: '실제 데모', href: '#live' }]} cta={mobile ? '상담 신청' : '도입 상담 신청'} onCta={go} /></div>
+    {!mobile && <div style={{ position: 'fixed', right: 28, top: '50%', transform: 'translateY(-50%)', zIndex: 15, opacity: cur >= 0 ? 1 : 0, transition: 'opacity 400ms var(--ease-out)', pointerEvents: cur >= 0 ? 'auto' : 'none' }}><StoryRail steps={RAIL} current={Math.max(0, cur)} onSelect={jump} /></div>}
+    <main>
+      <Hero onCta={go} />
+      <Problem />
+      {SCENES.map((s, i) => <StoryScene key={s.id} s={s} index={i} total={total} />)}
+      <MobileScene index={SCENES.length} total={total} />
+      <DemoVideo />
+      <BeforeAfter />
+      <Why />
+      <InstallScene index={SCENES.length + 1} total={total} />
+      <InstallPaths />
+      <LiveDemo />
+      <Partner onCta={go} />
+      <Closing />
+    </main>
+    <Footer />
+  </>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script></body></html>
