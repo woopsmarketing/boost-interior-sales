@@ -4,7 +4,8 @@ Result report for `prompt` (FINAL PRE-DEPLOY / KAKAO CTA / GITHUB / VISUAL REVIE
 It builds on [`BOOSTCHAT-INTERIOR-SALES-LANDING-V1.md`](./BOOSTCHAT-INTERIOR-SALES-LANDING-V1.md).
 The design, the 12 sections, motion, responsive and reduced-motion behavior are unchanged.
 
-**Production is not deployed.** Work stops for the user's visual approval on `http://localhost:3000`.
+**Update, same day.** The user approved the deploy ("배포승인") after the visual review on `http://localhost:3000`.
+Production is live at **https://boost-interior-sales.vercel.app**. See [PRODUCTION DEPLOYMENT](#production-deployment).
 
 ---
 
@@ -75,21 +76,27 @@ http://localhost:3000
 VERCEL_CLI          = AVAILABLE via npx (Vercel CLI 61.1.0; not installed globally)
 VERCEL_AUTH         = LOGGED IN  (user ran `npx vercel login`; `vercel whoami` → vnfm0580-7392,
                                   team "vnfm0580's projects", Pro)
-VERCEL_PROJECT_LINK = NOT LINKED  (no .vercel/; no "boost-interior-sales" project exists yet —
-                                  `vercel link --yes` will create it on approval)
+VERCEL_PROJECT_LINK = LINKED  (vnfm0580s-projects/boost-interior-sales, created on approval by `vercel link --yes`;
+                              GitHub repo auto-connected)
 READY_FOR_VERCEL_PRODUCTION_DEPLOY = YES
   No technical blocker in the app: it is a static Next 16.3.7 build with no required env vars.
 
-PRODUCTION_DEPLOYED = NO
+PRODUCTION_DEPLOYED = YES  (after the user's "배포승인")
+PRODUCTION_URL      = https://boost-interior-sales.vercel.app
+OUTBOUND_VIDEO_LINK = https://boost-interior-sales.vercel.app/#demo-video
 
 KNOWN_ISSUES =
-- The Vercel project does not exist yet. Linking it (VERCEL NEXT STEP, step 1) creates it on approval.
+- The GitHub repo is connected to the Vercel project. Every push to `main` now deploys to production automatically.
+- The hashed deployment URLs (`boost-interior-sales-<hash>-vnfm0580s-projects.vercel.app`) sit behind
+  Vercel Authentication (302 to login). This is Vercel's default Standard Protection. The production
+  domain is public. Always share the production URL.
+- `vercel link` wrote `.env.local` with a `VERCEL_OIDC_TOKEN`. It is gitignored (`.env*`); keep it out of commits.
 - The GitHub repository is PUBLIC. Everything committed is public, including design-reference/,
   source-assets/, the `prompt` task file and .claude/settings.json (it contains a local hook path).
   None of these contain secrets. Make the repository private on GitHub if that isn't intended.
 - NEXT_PUBLIC_SITE_URL is not set (on purpose; no final domain yet). On Vercel, canonical, og:url,
-  sitemap and robots fall back to https://$VERCEL_PROJECT_PRODUCTION_URL, which Vercel sets
-  automatically at build time. The local build uses http://localhost:3000.
+  sitemap and robots fall back to https://$VERCEL_PROJECT_PRODUCTION_URL. In production they now
+  resolve to https://boost-interior-sales.vercel.app. The local build uses http://localhost:3000.
 - Kakao Open Chat on desktop opens the open.kakao.com web page (KakaoTalk app / QR). On phones it
   hands off to the KakaoTalk app. The link was verified, but not on real iOS/Android devices.
 - Fixed a pre-existing V1 bug (see EXACT BEHAVIOR CHANGES #5): the hero pause/play button did not
@@ -220,9 +227,39 @@ Open `http://localhost:3000`:
 
 Stop the preview when done: `kill $(lsof -tiTCP:3000 -sTCP:LISTEN)`
 
+## PRODUCTION DEPLOYMENT
+
+Run after the user's **"배포승인"**:
+
+```
+$ npx vercel link --yes
+  ✓ Created vnfm0580s-projects/boost-interior-sales   (Detected Next.js)
+  > Connecting GitHub repository: https://github.com/woopsmarketing/boost-interior-sales  > Connected
+  ✓ Created .env.local file   (VERCEL_OIDC_TOKEN; gitignored)
+$ npx vercel deploy --prod
+  Production  https://boost-interior-sales-g9vvrfpjx-vnfm0580s-projects.vercel.app
+  ▲ Aliased   https://boost-interior-sales.vercel.app
+  deployment dpl_A6CAA3MtQx5x9P6ZCZZfnUCfcKkV   readyState READY   target production
+  inspector  https://vercel.com/vnfm0580s-projects/boost-interior-sales/A6CAA3MtQx5x9P6ZCZZfnUCfcKkV
+```
+
+**Production checks** (unauthenticated, against https://boost-interior-sales.vercel.app)
+
+- `/`, `/robots.txt`, `/sitemap.xml`, `/video/master-sales.mp4` and `/opengraph-image.jpg` all load (range requests → 206).
+- `canonical` and `og:url` are `https://boost-interior-sales.vercel.app`. og:image and twitter:image are absolute URLs on the same domain. `robots.txt` and the sitemap point to the same domain.
+- The HTML has 3 Kakao hrefs, `id="demo-video"` and `href="#demo-video"` once each, and 0 `mailto:`, `href="#video"` or `<form`.
+- The full Playwright suite (same script as local) ran against production: **0 failures.**
+  - Covers 1440, 1280, 1024, 821, 768, 390, 375 and 1440-reduced.
+  - Kakao and demo links pass, there is no overflow, no reveal block is left hidden, and the console has 0 errors or warnings.
+  - Hero mouse pause/play works at 1440, 1280 and 1024.
+  - The `/#demo-video` deep link lands on the section (±2px) and plays 86.6s at 1440, 768, 390 and 1440-reduced.
+
 ## VERCEL NEXT STEP
 
-Run these only after the user says **"배포 승인"**.
+> Done on approval: steps 0–3 below (login, link, production deploy; the Git connection happened during `link`).
+> What remains: set `NEXT_PUBLIC_SITE_URL` once a custom domain is attached.
+
+Original plan, run only after the user said **"배포 승인"**:
 
 ```bash
 cd /Users/woops/projects/boost-interior-sales
