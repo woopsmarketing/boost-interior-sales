@@ -7,6 +7,9 @@ The design, the 12 sections, motion, responsive and reduced-motion behavior are 
 **Update, same day.** The user approved the deploy ("배포승인") after the visual review on `http://localhost:3000`.
 Production is live at **https://boost-interior-sales.vercel.app**. See [PRODUCTION DEPLOYMENT](#production-deployment).
 
+**Later update.** The hero was refined in [`BOOSTCHAT-INTERIOR-SALES-HERO-FINAL.md`](./BOOSTCHAT-INTERIOR-SALES-HERO-FINAL.md).
+It adds a fourth Kakao CTA (hero secondary button) and replaces the hero loop video with a product showcase.
+
 ---
 
 ## Report

@@ -9,6 +9,10 @@ Built locally only. Not deployed.
 > - The full demo video section anchor is now `#demo-video` (was `#video`).
 >
 > Contact-form details below are kept only as a record of V1.
+>
+> **Hero refined — see [`BOOSTCHAT-INTERIOR-SALES-HERO-FINAL.md`](./BOOSTCHAT-INTERIOR-SALES-HERO-FINAL.md).** The hero is now
+> copy + a real product showcase (desktop) or a phone capture (tablet/mobile). The hero loop video, its pause button and the
+> flow pills described below are no longer rendered (the video files are kept).
 
 ---
 
