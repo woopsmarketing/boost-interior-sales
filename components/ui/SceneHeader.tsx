@@ -21,6 +21,8 @@ interface Props extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   titleId?: string;
   /** Extra classes for the heading (e.g. a mobile size override) */
   titleClassName?: string;
+  /** Extra classes for the sub line */
+  subClassName?: string;
 }
 
 /** Eyebrow → bold statement ending in "." → gray sub line with "·" separators. */
@@ -34,6 +36,7 @@ export function SceneHeader({
   as: Heading = "h2",
   titleId,
   titleClassName = "",
+  subClassName = "",
   className = "",
   ...rest
 }: Props) {
@@ -56,7 +59,7 @@ export function SceneHeader({
         {title}
       </Heading>
       {sub && (
-        <p className="mt-4 mb-0 text-[20px] leading-[1.6] tracking-[-0.01em] text-pretty text-muted">
+        <p className={`mt-4 mb-0 text-[20px] leading-[1.6] tracking-[-0.01em] text-pretty text-muted ${subClassName}`}>
           {sub}
         </p>
       )}

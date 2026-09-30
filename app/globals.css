@@ -24,6 +24,8 @@
 }
 /* Desktop with reduced motion: static story layout next to the story rail. */
 @custom-variant desktop-static (@media (min-width: 821px) and (prefers-reduced-motion: reduce));
+/* Hero: two columns (copy | product showcase) from 1024px up; stacked below. */
+@custom-variant split (@media (min-width: 1024px));
 @custom-variant mobile (@media (max-width: 820px));
 
 @theme {
@@ -108,43 +110,15 @@
   --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
   --ease-spring-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  --animate-flow-pill: flow-pill 9s linear infinite both;
-  --animate-flow-badge: flow-badge 9s linear infinite both;
+  /* Hero showcase: one step's progress bar; its animationend advances the showcase. */
+  --animate-showcase-progress: showcase-progress 5s linear both;
 
-  @keyframes flow-pill {
-    0% {
-      background-color: var(--color-white);
-      color: var(--color-body);
-      box-shadow: var(--shadow-hairline);
+  @keyframes showcase-progress {
+    from {
+      transform: scaleX(0);
     }
-    4.44%,
-    20% {
-      background-color: var(--color-ink);
-      color: var(--color-white);
-      box-shadow: 0 0 0 1px transparent;
-    }
-    24.44%,
-    100% {
-      background-color: var(--color-white);
-      color: var(--color-body);
-      box-shadow: var(--shadow-hairline);
-    }
-  }
-
-  @keyframes flow-badge {
-    0% {
-      background-color: var(--color-gray-100);
-      color: var(--color-muted);
-    }
-    4.44%,
-    20% {
-      background-color: var(--color-accent);
-      color: var(--color-white);
-    }
-    24.44%,
-    100% {
-      background-color: var(--color-gray-100);
-      color: var(--color-muted);
+    to {
+      transform: scaleX(1);
     }
   }
 }

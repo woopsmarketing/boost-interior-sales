@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ASSETS, type Asset } from "./assets";
+import { ASSETS, CAPTURED_CONDITIONS, type Asset } from "./assets";
 import type { Motion } from "./motion";
 
 /**
@@ -140,7 +140,7 @@ export const STORY_SCENES: readonly StorySceneData[] = [
     ar: FRAME,
     title: "처음부터 다시 설명할 필요가 없습니다.",
     sub: "앞서 말한 지역 · 면적 · 공사 범위를 기억하고 견적 상담을 이어갑니다.",
-    tags: ["대구", "아파트 · 공급 32평", "주방 · 욕실", "화이트"],
+    tags: CAPTURED_CONDITIONS,
     composite: ASSETS.sceneMemory,
     layers: [
       {

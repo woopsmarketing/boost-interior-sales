@@ -11,6 +11,12 @@ export interface Asset {
   alt: string;
 }
 
+/**
+ * The visitor's conditions in the captured demo conversation, as the chat restates them
+ * ("대구 32평 아파트 … 주방·욕실 … 화이트톤"). Shown as chips next to the captures.
+ */
+export const CAPTURED_CONDITIONS = ["대구", "아파트 · 공급 32평", "주방 · 욕실", "화이트"] as const;
+
 const p = (file: string, width: number, height: number, alt: string): Asset => ({
   src: `/images/product/${file}`,
   width,
