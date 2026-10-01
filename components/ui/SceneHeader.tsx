@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import { SITE_NAME } from "@/lib/site";
 
 type Size = "xl" | "lg" | "md";
 
@@ -9,7 +10,7 @@ const TITLE: Record<Size, string> = {
 };
 
 interface Props extends Omit<HTMLAttributes<HTMLElement>, "title"> {
-  /** Blue eyebrow; default "BoostChat" */
+  /** Blue eyebrow; default is the product name */
   eyebrow?: string;
   title: ReactNode;
   sub?: ReactNode;
@@ -27,7 +28,7 @@ interface Props extends Omit<HTMLAttributes<HTMLElement>, "title"> {
 
 /** Eyebrow → bold statement ending in "." → gray sub line with "·" separators. */
 export function SceneHeader({
-  eyebrow = "BoostChat",
+  eyebrow = SITE_NAME,
   title,
   sub,
   size = "lg",
@@ -50,7 +51,7 @@ export function SceneHeader({
         className={`m-0 flex items-center gap-2.5 text-[15px] leading-[1.4] font-bold text-accent ${center ? "justify-center" : ""}`}
       >
         {step && <span className="font-mono text-[13px] leading-none font-medium text-muted">{step}</span>}
-        <span>{eyebrow}</span>
+        <span className="text-balance">{eyebrow}</span>
       </p>
       <Heading
         id={titleId}

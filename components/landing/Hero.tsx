@@ -2,8 +2,8 @@ import Image from "next/image";
 import { Br } from "@/components/ui/Br";
 import { ButtonLink } from "@/components/ui/Button";
 import { SceneHeader } from "@/components/ui/SceneHeader";
-import { ASSETS } from "@/lib/assets";
-import { DEMO_URL, DEMO_VIDEO_ID, KAKAO_OPEN_CHAT_URL, VIDEOS } from "@/lib/site";
+import { ASSETS, PHONE_FADE } from "@/lib/assets";
+import { DEMO_URL, DEMO_VIDEO_ID, KAKAO_OPEN_CHAT_URL, SITE_NAME, VIDEOS } from "@/lib/site";
 import { HeroShowcase } from "./HeroShowcase";
 
 /** Phone capture's device body inside the 380 × 788 image, and its corner radius (capture px). */
@@ -25,7 +25,7 @@ export function Hero() {
           as="h1"
           size="xl"
           titleId="hero-title"
-          eyebrow="BoostChat · 인테리어 · 리모델링 업체를 위한 AI 상담"
+          eyebrow={`${SITE_NAME} · 인테리어 · 리모델링 업체를 위한 AI 상담`}
           className="max-w-[980px]"
           titleClassName="split:text-[clamp(40px,4.1vw,60px)] mobile:text-[clamp(30px,9.2vw,40px)]"
           subClassName="split:narrow:text-[18px]"
@@ -85,7 +85,7 @@ export function Hero() {
       {/* Tablet / mobile: one real phone capture, static. */}
       <div className="mt-14 flex justify-center split:hidden mobile:mt-10">
         <div
-          className="relative aspect-[375/784] w-[min(300px,72vw)] overflow-hidden shadow-device"
+          className={`relative aspect-[375/784] w-[min(300px,72vw)] overflow-hidden shadow-device ${PHONE_FADE}`}
           style={{ borderRadius: `${(PHONE.r / PHONE.w) * 100}% / ${(PHONE.r / PHONE.h) * 100}%` }}
         >
           <Image

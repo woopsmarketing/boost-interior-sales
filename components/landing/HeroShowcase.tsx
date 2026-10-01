@@ -4,7 +4,7 @@ import Image, { getImageProps } from "next/image";
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { preload } from "react-dom";
 import { DepthStage } from "@/components/motion/DepthStage";
-import { ASSETS, CAPTURED_CONDITIONS, type Asset } from "@/lib/assets";
+import { ASSETS, CAPTURED_CONDITIONS, CHAT_WINDOW, cropStyles, type Asset, type Crop } from "@/lib/assets";
 
 /** Layers are placed in px of the 600 × 640 frame they were composed at, rendered as %. */
 const FRAME = { w: 600, h: 640 };
@@ -12,17 +12,9 @@ const SPLIT = "(min-width: 1024px)";
 
 const STEPS = ["자연어 상담", "시공사례 추천", "사진 확인", "견적 문의"] as const;
 
-/** Part of a capture to show (capture px, trims the baked-in margins) and the UI's own corner radius. */
-interface Crop {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  r: number;
-}
-
 interface Shot {
   asset: Asset;
+  /** Part of the capture to show: trims the margins baked into it */
   crop: Crop;
   l: number;
   t: number;
@@ -34,7 +26,6 @@ interface Shot {
   z: number;
 }
 
-const CHAT_CROP: Crop = { x: 7, y: 6, w: 483, h: 728, r: 18 };
 const CHAT_BOX = { l: 236, t: 0, w: 364 };
 
 const SHOTS: readonly Shot[] = [
@@ -44,8 +35,8 @@ const SHOTS: readonly Shot[] = [
     l: 0, t: 44, w: 432,
     steps: [0, 1, 2, 3], shadow: "shadow-window", z: -30,
   },
-  { asset: ASSETS.chatWidget, crop: CHAT_CROP, ...CHAT_BOX, steps: [0, 1, 2], shadow: "shadow-float", z: 0 },
-  { asset: ASSETS.chatMemory, crop: CHAT_CROP, ...CHAT_BOX, steps: [3], shadow: "shadow-float", z: 0 },
+  { asset: ASSETS.chatWidget, crop: CHAT_WINDOW, ...CHAT_BOX, steps: [0, 1, 2], shadow: "shadow-float", z: 0 },
+  { asset: ASSETS.chatMemory, crop: CHAT_WINDOW, ...CHAT_BOX, steps: [3], shadow: "shadow-float", z: 0 },
   {
     asset: ASSETS.portfolioCard,
     crop: { x: 2, y: 2, w: 401, h: 424, r: 14 },
@@ -69,7 +60,7 @@ const SHOTS: readonly Shot[] = [
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
 
 /**
- * Hero product showcase (desktop, ≥1024px): real BoostChat captures on the demo homepage,
+ * Hero product showcase (desktop, ≥1024px): real product captures on the demo homepage,
  * cycling 자연어 상담 → 시공사례 추천 → 사진 확인 → 견적 문의 with a slow crossfade.
  * The active step's CSS progress bar is the timer — its animationend advances the step,
  * so pausing is just `animation-play-state`. Rotation holds on hover, focus, offscreen and
@@ -139,7 +130,7 @@ export function HeroShowcase() {
         className="relative ml-auto aspect-[600/640] w-[min(100%,calc((100svh-236px)*600/640))] [container-type:inline-size]"
         role="group"
         aria-roledescription="제품 화면 미리보기"
-        aria-label={`BoostChat 실제 상담 화면 — ${active + 1}단계 ${STEPS[active]}`}
+        aria-label={`BoostInterior 실제 상담 화면 — ${active + 1}단계 ${STEPS[active]}`}
       >
         <DepthStage>
           <div data-hero-parallax className="preserve-3d relative size-full">
@@ -154,7 +145,7 @@ export function HeroShowcase() {
       </div>
 
       <div className="mt-6 ml-auto flex w-[min(100%,calc((100svh-236px)*600/640))] items-start gap-4">
-        <ol aria-label="BoostChat 상담 흐름" className="m-0 grid flex-1 list-none grid-cols-4 gap-3 p-0">
+        <ol aria-label="BoostInterior 상담 흐름" className="m-0 grid flex-1 list-none grid-cols-4 gap-3 p-0">
           {STEPS.map((label, i) => {
             const current = i === active;
             return (
@@ -234,18 +225,13 @@ function Capture({ shot, on, first }: { shot: Shot; on: boolean; first: boolean 
     const { props } = getImageProps(image);
     preload(props.src, { as: "image", imageSrcSet: props.srcSet, imageSizes: props.sizes, fetchPriority: "high", media: SPLIT });
   }
+  const { box: clip, img } = cropStyles(asset, crop);
   const box: CSSProperties = {
     left: pct(shot.l, FRAME.w),
     top: pct(shot.t, FRAME.h),
     width: pct(shot.w, FRAME.w),
-    aspectRatio: `${crop.w} / ${crop.h}`,
+    aspectRatio: clip.aspectRatio,
     transform: `translateZ(${shot.z}px)`,
-  };
-  const img: CSSProperties = {
-    width: pct(asset.width, crop.w),
-    maxWidth: "none",
-    left: pct(-crop.x, crop.w),
-    top: pct(-crop.y, crop.h),
   };
   const moving = shot.z > 0;
   return (
@@ -254,7 +240,7 @@ function Capture({ shot, on, first }: { shot: Shot; on: boolean; first: boolean 
         className={`relative size-full overflow-hidden ${shot.shadow} transition-[opacity,translate] duration-700 ease-out motion-reduce:transition-none ${
           on ? "opacity-100" : `opacity-0 ${moving ? "translate-y-3" : ""}`
         }`}
-        style={{ borderRadius: `${pct(crop.r, crop.w)} / ${pct(crop.r, crop.h)}` }}
+        style={{ borderRadius: clip.borderRadius }}
       >
         <Image
           {...image}

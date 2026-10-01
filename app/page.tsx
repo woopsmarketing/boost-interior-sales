@@ -6,6 +6,7 @@ import { InstallPaths } from "@/components/landing/InstallPaths";
 import { LiveDemo } from "@/components/landing/LiveDemo";
 import { MobileScene } from "@/components/landing/MobileScene";
 import { Partner } from "@/components/landing/Partner";
+import { Pricing } from "@/components/landing/Pricing";
 import { Problem } from "@/components/landing/Problem";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
@@ -15,7 +16,7 @@ import { Why } from "@/components/landing/Why";
 import { MotionController } from "@/components/motion/MotionController";
 import { INSTALL_SCENE, STORY_SCENES } from "@/lib/scenes";
 
-/** Section order follows ui_kits/sales-landing/index.html (Claude Design, approved). */
+/** Section order follows ui_kits/sales-landing/index.html (Claude Design, approved), plus Pricing before Partner. */
 export default function Home() {
   return (
     <>
@@ -40,6 +41,7 @@ export default function Home() {
         <StoryScene scene={INSTALL_SCENE} />
         <InstallPaths />
         <LiveDemo />
+        <Pricing />
         <Partner />
         <Contact />
       </main>

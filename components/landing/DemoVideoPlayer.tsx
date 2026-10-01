@@ -27,6 +27,9 @@ export function DemoVideoPlayer({
     if (playing) videoRef.current?.focus();
   }, [playing]);
 
+  // Zoom the facade from its top edge so the rows below the poster's crop fall outside the frame.
+  const zoom = poster.crop ? poster.height / poster.crop.h : 1;
+
   const posterUrl = getImageProps({
     src: poster.src,
     width: poster.width,
@@ -46,7 +49,7 @@ export function DemoVideoPlayer({
           autoPlay
           playsInline
           preload="auto"
-          aria-label={`BoostChat 실제 작동 영상 (${duration})`}
+          aria-label={`BoostInterior 실제 작동 영상 (${duration})`}
           className="block size-full object-contain"
         />
       ) : (
@@ -57,7 +60,8 @@ export function DemoVideoPlayer({
             fill
             sizes="(max-width: 820px) calc(100vw - 40px), 1280px"
             quality={75}
-            className="object-cover brightness-[.62] saturate-[.9]"
+            className="origin-top object-cover brightness-[.62] saturate-[.9]"
+            style={{ transform: `scale(${zoom})` }}
           />
           <button
             type="button"

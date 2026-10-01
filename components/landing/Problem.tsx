@@ -53,7 +53,7 @@ export function Problem() {
         <p className="m-0 flex items-center gap-4 rounded-pill border border-blue-200 bg-white px-8 py-[22px] shadow-window mobile:rounded-xl mobile:px-[22px] mobile:py-[18px]">
           <span aria-hidden="true" className="size-2.5 flex-none rounded-pill bg-accent" />
           <span className="text-[22px] leading-[1.4] font-semibold tracking-[-0.02em] text-ink mobile:text-[17px]">
-            BoostChat은 이 과정을 <span className="text-accent">하나의 대화</span> 안에서 이어줍니다.
+            BoostInterior는 이 과정을 <span className="text-accent">하나의 대화</span> 안에서 이어줍니다.
           </span>
         </p>
       </div>

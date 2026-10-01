@@ -29,7 +29,7 @@ export function Why() {
             사례를 찾고, 궁금한 점을 해결하고, 실제 문의까지 남기는 과정은 별개입니다.
           </p>
           <p className={`${BODY} font-medium text-ink`}>
-            BoostChat은 새로운 홈페이지를 만드는 것보다 먼저, 이미 방문한 고객과 상담이 시작되는 지점을 개선하는 데서
+            BoostInterior는 새로운 홈페이지를 만드는 것보다 먼저, 이미 방문한 고객과 상담이 시작되는 지점을 개선하는 데서
             출발했습니다.
           </p>
         </div>

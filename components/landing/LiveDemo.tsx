@@ -2,12 +2,13 @@ import Image from "next/image";
 import { ButtonLink } from "@/components/ui/Button";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
-import { ASSETS } from "@/lib/assets";
+import { ASSETS, CHAT_WINDOW, cropStyles } from "@/lib/assets";
 import { DEMO_URL } from "@/lib/site";
 
 /** 실제 데모 — send the owner to the live demo site to try it as a customer. */
 export function LiveDemo() {
   const shot = ASSETS.chatWidget;
+  const { box, img } = cropStyles(shot, CHAT_WINDOW);
   return (
     <Section id="live" aria-labelledby="live-title">
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,440px)] items-center gap-24 narrow:grid-cols-1 narrow:gap-14 mobile:gap-9">
@@ -28,15 +29,21 @@ export function LiveDemo() {
           </div>
         </div>
         <div data-reveal>
-          <Image
-            src={shot.src}
-            width={shot.width}
-            height={shot.height}
-            alt={shot.alt}
-            sizes="440px"
-            quality={85}
-            className="mx-auto block h-auto w-full max-w-[440px] [filter:drop-shadow(0_30px_50px_rgba(16,24,40,.14))] [transform:perspective(1800px)_rotateY(-4deg)] narrow:[transform:none]"
-          />
+          <div
+            className="relative mx-auto w-full max-w-[424px] overflow-hidden shadow-float [transform:perspective(1800px)_rotateY(-4deg)] narrow:[transform:none]"
+            style={box}
+          >
+            <Image
+              src={shot.src}
+              width={shot.width}
+              height={shot.height}
+              alt={shot.alt}
+              sizes="440px"
+              quality={85}
+              className="absolute block h-auto"
+              style={img}
+            />
+          </div>
         </div>
       </div>
     </Section>

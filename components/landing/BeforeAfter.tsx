@@ -51,7 +51,7 @@ function FlowColumn({ title, steps, on = false }: { title: string; steps: string
   );
 }
 
-/** 비교 — existing homepage flow vs. with BoostChat. */
+/** 비교 — existing homepage flow vs. with BoostInterior. */
 export function BeforeAfter() {
   return (
     <Section id="compare" aria-labelledby="compare-title">
@@ -69,7 +69,7 @@ export function BeforeAfter() {
       </div>
       <div data-reveal className="mt-16 grid grid-cols-2 items-start gap-8 mobile:mt-8 mobile:grid-cols-1 mobile:gap-4">
         <FlowColumn title="기존 홈페이지" steps={BEFORE} />
-        <FlowColumn title="BoostChat 적용" steps={AFTER} on />
+        <FlowColumn title="BoostInterior 적용" steps={AFTER} on />
       </div>
     </Section>
   );

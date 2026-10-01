@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { Asset } from "@/lib/assets";
+import { cropStyles, type Asset } from "@/lib/assets";
 import { motionProps, type Motion } from "@/lib/motion";
 
 const ELEVATION = {
@@ -20,6 +20,7 @@ const VISUAL_MAX = 1280;
 /**
  * A real product capture on a Z plane inside a DepthStage (reference `ProductShot`).
  * Positioned in % of the scene frame; transform/filter/opacity are scroll-scrubbed.
+ * l/t/w place the whole capture; a capture with a `crop` shows that part of it, in place.
  */
 export function ProductLayer({
   asset,
@@ -48,22 +49,37 @@ export function ProductLayer({
   imgClassName?: string;
 }) {
   const { style, ...data } = motionProps(motion);
+  const image = {
+    src: asset.src,
+    width: asset.width,
+    height: asset.height,
+    alt: decorative ? "" : asset.alt,
+    sizes: `${Math.ceil((w / 100) * frameWidth)}px`,
+    quality: 85,
+    draggable: false,
+  };
+  const { crop } = asset;
+  if (crop) {
+    const { box, img } = cropStyles(asset, crop);
+    const k = w / asset.width;
+    return (
+      <figure
+        {...data}
+        className={`absolute m-0 overflow-hidden ${ELEVATION[elevation]} ${className}`}
+        // % margins resolve against the frame's width, which is what the capture is scaled by.
+        style={{ left: `${l + crop.x * k}%`, top: `${t}%`, marginTop: `${crop.y * k}%`, width: `${crop.w * k}%`, ...box, ...style }}
+      >
+        <Image {...image} alt={image.alt} className={`absolute block h-auto select-none ${imgClassName}`} style={img} />
+      </figure>
+    );
+  }
   return (
     <figure
       {...data}
       className={`absolute m-0 ${radius === "none" ? "" : "overflow-hidden"} ${ELEVATION[elevation]} ${RADIUS[radius]} ${className}`}
       style={{ left: `${l}%`, top: `${t}%`, width: `${w}%`, ...style }}
     >
-      <Image
-        src={asset.src}
-        width={asset.width}
-        height={asset.height}
-        alt={decorative ? "" : asset.alt}
-        sizes={`${Math.ceil((w / 100) * frameWidth)}px`}
-        quality={85}
-        draggable={false}
-        className={`block h-auto w-full select-none ${imgClassName}`}
-      />
+      <Image {...image} alt={image.alt} className={`block h-auto w-full select-none ${imgClassName}`} />
     </figure>
   );
 }

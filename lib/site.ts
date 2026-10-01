@@ -26,10 +26,14 @@ function resolveSiteUrl() {
 /** Canonical origin used for metadataBase, sitemap and robots. */
 export const SITE_URL = resolveSiteUrl();
 
-export const SITE_NAME = "BoostChat";
-export const SITE_TITLE = "BoostChat | 인테리어 홈페이지 AI 상담";
+/** Customer-facing product name. The chat backend it runs on keeps its own (internal) name. */
+export const SITE_NAME = "BoostInterior";
+export const SITE_TITLE = "BoostInterior | 인테리어 업체를 위한 AI 상담·견적 시스템";
 export const SITE_DESCRIPTION =
-  "고객 조건에 맞는 시공사례를 추천하고, 사진 상담부터 견적 문의까지 연결하는 인테리어 홈페이지 AI 상담 솔루션.";
+  "인테리어·리모델링 홈페이지 방문자의 조건을 이해하고, 관련 시공사례 추천부터 상담·견적 문의까지 연결하는 AI 상담 시스템.";
+
+/** Anchor of the pricing section (header "가격" link). */
+export const PRICING_ID = "pricing";
 
 /**
  * The 15s hero loop (public/video/chat-to-portfolio*.mp4) is kept on disk but no longer

@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { DepthStage } from "@/components/motion/DepthStage";
 import { ProductLayer } from "@/components/motion/ProductLayer";
 import { SceneHeader } from "@/components/ui/SceneHeader";
+import { cropStyles, type Asset } from "@/lib/assets";
 import { motionProps, type Motion } from "@/lib/motion";
 import { stepLabel, type StorySceneData } from "@/lib/scenes";
 
@@ -50,16 +51,7 @@ export function StoryScene({ scene }: { scene: StorySceneData }) {
 
           {/* Static composite — mobile and reduced motion. */}
           <div data-reveal="unpinned" className="mt-12 hidden unpinned:block desktop-static:pr-12 mobile:mt-7">
-            <Image
-              src={scene.composite.src}
-              width={scene.composite.width}
-              height={scene.composite.height}
-              alt={scene.composite.alt}
-              sizes="(max-width: 820px) calc(100vw - 40px), 1280px"
-              quality={85}
-              className="block h-auto w-full rounded-md"
-              style={{ maxWidth: scene.composite.width }}
-            />
+            <Composite asset={scene.composite} />
           </div>
 
           {scene.note && (
@@ -70,6 +62,28 @@ export function StoryScene({ scene }: { scene: StorySceneData }) {
         </div>
       </div>
     </section>
+  );
+}
+
+/** The scene as one capture, cropped to `asset.crop` when it has one. */
+function Composite({ asset }: { asset: Asset }) {
+  const image = {
+    src: asset.src,
+    width: asset.width,
+    height: asset.height,
+    alt: asset.alt,
+    sizes: "(max-width: 820px) calc(100vw - 40px), 1280px",
+    quality: 85,
+  };
+  const { crop } = asset;
+  if (!crop) {
+    return <Image {...image} alt={image.alt} className="block h-auto w-full rounded-md" style={{ maxWidth: asset.width }} />;
+  }
+  const { box, img } = cropStyles(asset, crop);
+  return (
+    <div className="relative overflow-hidden rounded-md" style={{ ...box, maxWidth: crop.w }}>
+      <Image {...image} alt={image.alt} className="absolute block h-auto" style={img} />
+    </div>
   );
 }
 

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { DepthStage } from "@/components/motion/DepthStage";
 import { ProductLayer } from "@/components/motion/ProductLayer";
 import { SceneHeader } from "@/components/ui/SceneHeader";
-import { ASSETS } from "@/lib/assets";
+import { ASSETS, PHONE_COMPOSITE_FADE, PHONE_FADE } from "@/lib/assets";
 import { MOBILE_SCENE, stepLabel } from "@/lib/scenes";
 
 const PHONE_SHADOW = "[filter:drop-shadow(0_30px_40px_rgba(16,24,40,.18))]";
@@ -40,6 +40,7 @@ export function MobileScene() {
                 elevation="none"
                 radius="none"
                 frameWidth={790}
+                className={PHONE_FADE}
                 imgClassName={PHONE_SHADOW}
                 motion={{ y: [6, 0, 0.05, 0.5], ry: [10, 5, 0.05, 0.6], z: [-40, 0, 0.05, 0.5] }}
               />
@@ -51,6 +52,7 @@ export function MobileScene() {
                 elevation="none"
                 radius="none"
                 frameWidth={790}
+                className={PHONE_FADE}
                 imgClassName={PHONE_SHADOW}
                 motion={{
                   y: [14, 0, 0.15, 0.65],
@@ -70,7 +72,7 @@ export function MobileScene() {
               alt={ASSETS.sceneMobile.alt}
               sizes="(max-width: 820px) calc(100vw - 40px), 860px"
               quality={85}
-              className="block h-auto w-full"
+              className={`block h-auto w-full ${PHONE_COMPOSITE_FADE}`}
               style={{ maxWidth: ASSETS.sceneMobile.width }}
             />
           </div>

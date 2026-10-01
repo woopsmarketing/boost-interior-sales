@@ -5,7 +5,8 @@ import type { Motion } from "./motion";
 /**
  * Story scene data ported from ui_kits/sales-landing/Scenes.jsx.
  * Layer l/t/w are % of the scene frame (crop origin in the 1600×1000 capture),
- * so the layers re-assemble into the original composite. Motion tracks keep the
+ * so the layers re-assemble into the original composite. Chat windows are cropped to
+ * the window itself (see lib/assets.ts), so they take a CSS shadow instead of the baked one. Motion tracks keep the
  * reference animation ranges: [from, to, progressStart, progressEnd].
  */
 export interface SceneLayer {
@@ -54,12 +55,12 @@ export const STORY_SCENES: readonly StorySceneData[] = [
       },
       {
         asset: ASSETS.chatWelcome,
-        l: 61.4, t: 1.27, w: 35.7, elevation: "none", radius: "none", decorative: true,
+        l: 61.4, t: 1.27, w: 35.7, elevation: "float", radius: "none", decorative: true,
         motion: { z: 30, opacity: [1, 0, 0.3, 0.5] },
       },
       {
         asset: ASSETS.chatWidget,
-        l: 61.4, t: 1.27, w: 35.7, elevation: "none", radius: "none",
+        l: 61.4, t: 1.27, w: 35.7, elevation: "float", radius: "none",
         motion: { z: [30, 50, 0.3, 0.6], y: [2, 0, 0.3, 0.6], opacity: [0, 1, 0.3, 0.5] },
       },
     ],
@@ -150,7 +151,7 @@ export const STORY_SCENES: readonly StorySceneData[] = [
       },
       {
         asset: ASSETS.chatMemory,
-        l: 61.4, t: 1.27, w: 35.7, elevation: "none", radius: "none",
+        l: 61.4, t: 1.27, w: 35.7, elevation: "float", radius: "none",
         motion: { z: [0, 50, 0.1, 0.5] },
       },
     ],
@@ -170,7 +171,7 @@ export const STORY_SCENES: readonly StorySceneData[] = [
       },
       {
         asset: ASSETS.chatForm,
-        l: 61.4, t: 1.27, w: 35.7, elevation: "none", radius: "none",
+        l: 61.4, t: 1.27, w: 35.7, elevation: "float", radius: "none",
         motion: { z: [0, 60, 0.1, 0.5], x: [0, -12, 0.1, 0.6] },
       },
     ],
@@ -179,7 +180,7 @@ export const STORY_SCENES: readonly StorySceneData[] = [
     id: "owner",
     rail: "관리 화면",
     ar: 1400 / 760,
-    eyebrow: "BoostChat · 사업자 관리 화면",
+    eyebrow: "BoostInterior · 사업자 관리 화면",
     title: "들어온 문의는 한눈에 정리됩니다.",
     sub: (
       <>
@@ -221,7 +222,7 @@ export const INSTALL_SCENE: StorySceneData = {
     },
     {
       asset: ASSETS.chatWelcome,
-      l: 61.4, t: 1.27, w: 35.7, elevation: "none", radius: "none",
+      l: 61.4, t: 1.27, w: 35.7, elevation: "float", radius: "none",
       motion: { x: [-20, 0, 0.3, 0.7], y: [8, 0, 0.3, 0.7], z: [-40, 40, 0.3, 0.7], opacity: [0, 1, 0.3, 0.55] },
     },
   ],
