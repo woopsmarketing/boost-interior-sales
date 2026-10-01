@@ -65,7 +65,7 @@ const PATHS = {
   ),
   /** Bolt — speed */
   bolt: <path d="M13 2.5 5 13.5h6l-1 8 8-11h-6l1-8Z" />,
-  /** Sliders — CMS */
+  /** Sliders — management screen */
   sliders: (
     <>
       <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
@@ -108,6 +108,27 @@ const PATHS = {
     <>
       <path d="M12 3 4.5 6v5.5c0 4.4 3.1 7.9 7.5 9.5 4.4-1.6 7.5-5.1 7.5-9.5V6L12 3Z" />
       <path d="m9 12 2.2 2.2L15.2 10" />
+    </>
+  ),
+  /** Book — consultation knowledge */
+  book: (
+    <>
+      <path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5v-15Z" />
+      <path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7.5h6" />
+    </>
+  ),
+  /** Sheet with lines — 견적 문의 form */
+  form: (
+    <>
+      <rect x="5" y="3.5" width="14" height="17" rx="2.5" />
+      <path d="M9 8.5h6M9 12h6M9 15.5h3.5" />
+    </>
+  ),
+  /** Padlock — HTTPS */
+  lock: (
+    <>
+      <rect x="5" y="10.5" width="14" height="10" rx="2.5" />
+      <path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5M12 14.5v2" />
     </>
   ),
   /** Chevron down — expand / collapse */

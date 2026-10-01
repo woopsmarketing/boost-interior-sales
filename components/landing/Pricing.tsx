@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import { ButtonLink } from "@/components/ui/Button";
 import { CheckList } from "@/components/ui/CheckList";
+import { Notice } from "@/components/ui/Notice";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
-import { manwon, PLANS, SETUP_OPTIONS, won } from "@/lib/pricing";
+import { COMMON_BUILD, manwon, PLANS, SETUP_OPTIONS, VAT_NOTICE, won } from "@/lib/pricing";
 import { KAKAO_OPEN_CHAT_URL, PRICING_ID, PRICING_PATH } from "@/lib/site";
 
 /** Cards share their row tracks (subgrid), so prices, copy and lists line up across a row. */
@@ -46,7 +47,8 @@ function Step({
 
 /**
  * 도입 비용 — the landing's price summary: four ways to build (one-time) and three ways to
- * run (monthly), a few lines each. The full scope of every option lives on /pricing.
+ * run (monthly), a few lines each. Every setup card opens with the same line — the common build —
+ * and then says what happens to the homepage. The full scope of every option lives on /pricing.
  */
 export function Pricing() {
   return (
@@ -58,13 +60,14 @@ export function Pricing() {
           title="구축 방식과 운영 플랜을 각각 선택합니다."
           sub="처음 한 번의 구축비와 매월의 운영 플랜으로 나뉩니다. 두 가지는 서로 독립적으로 고를 수 있습니다."
         />
+        <Notice className="mt-7 w-fit font-semibold text-ink mobile:mt-6">{VAT_NOTICE.all}</Notice>
       </div>
 
       <Step
         n="01"
         id="pricing-setup"
         title="초기 구축"
-        sub="홈페이지 상태에 맞는 구축 방식을 한 번 선택합니다."
+        sub={`어떤 구축 방식을 선택해도 ${COMMON_BUILD}이 포함됩니다. 달라지는 것은 홈페이지 작업 범위입니다.`}
         cols="grid-cols-4 narrow:grid-cols-2"
       >
         {SETUP_OPTIONS.map((option) => (
@@ -89,7 +92,7 @@ export function Pricing() {
             </p>
             <p className="mt-4 mb-0 text-[15px] leading-[1.6] text-body">{option.summary}</p>
             <div className="mt-5 border-t border-line pt-5">
-              <CheckList items={option.highlights} />
+              <CheckList items={option.highlights} lead={`${COMMON_BUILD} 포함`} />
             </div>
           </article>
         ))}

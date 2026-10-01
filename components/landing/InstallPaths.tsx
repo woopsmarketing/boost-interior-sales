@@ -6,7 +6,7 @@ const PATHS = [
   {
     key: "A",
     label: "이미 홈페이지가 있다면",
-    text: `기존 디자인은 그대로 두고 ${SITE_NAME}만 연결합니다.`,
+    text: `기존 디자인은 그대로 두고 ${SITE_NAME}를 구축합니다.`,
   },
   {
     key: "B",
@@ -16,7 +16,7 @@ const PATHS = [
   {
     key: "C",
     label: "지금 홈페이지를 고쳐 쓰고 싶다면",
-    text: "디자인과 상담 전환 동선을 맞춤 개선합니다.",
+    text: `디자인과 상담 동선을 맞춤 개선하고 ${SITE_NAME}를 함께 구축합니다.`,
   },
   {
     key: "D",

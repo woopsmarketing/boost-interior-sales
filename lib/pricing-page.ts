@@ -1,55 +1,58 @@
 import type { IconName } from "@/components/ui/Icon";
-import { manwon, SETUP_OPTIONS } from "@/lib/pricing";
+import { COMMON_BUILD, manwon, SETUP_OPTIONS } from "@/lib/pricing";
 
 /**
- * Copy for the /pricing page that is not a price: what the 290,000원 setup actually does,
- * what a Quick Website is, and the questions an owner asks before paying. Prices and scope
- * lists come from lib/pricing.ts.
+ * Copy for the /pricing page that is not a price: what every setup option shares, what the
+ * 290,000원 setup actually does, what a Quick Website is, and the questions an owner asks before
+ * paying. Prices and scope lists come from lib/pricing.ts.
  */
 
-const [INTEGRATION, QUICK, IMPROVEMENT] = SETUP_OPTIONS;
+const [INTEGRATION, QUICK, IMPROVEMENT, CUSTOM] = SETUP_OPTIONS;
 
 /** "29만원" / "120만원부터" — amounts inside sentences, read from the price list. */
 const spoken = (option: (typeof SETUP_OPTIONS)[number]) => `${manwon(option.price)}만원${option.from ? "부터" : ""}`;
 
-/** Why 기존 홈페이지 연동 is not "a widget install": said once, above the four things it produces. */
-export const INTEGRATION_VALUE = {
-  title: `${spoken(INTEGRATION)}은 단순한 위젯 설치비가 아닙니다.`,
-  text: "현재 홈페이지의 업체 정보와 공개된 기존 시공사례를 BoostInterior가 실제 상담에서 활용할 수 있도록 수집 · 구조화하고, AI 검색과 상담 · 견적 흐름에 연결한 뒤 설치 · 검수까지 진행하는 업체 전용 AI 상담 시스템 초기 구축입니다.",
+/**
+ * The common build, above the setup comparison: the four options carry the same BoostInterior,
+ * and the price follows the homepage work. The scope itself is COMMON_BOOSTINTERIOR_SCOPE.
+ */
+export const COMMON_SCOPE = {
+  title: `어떤 구축 방식을 선택해도 ${COMMON_BUILD}은 동일하게 포함됩니다.`,
+  text: "가격 차이는 AI 상담 기능의 차이가 아니라, 현재 홈페이지를 그대로 사용할지, 표준 홈페이지를 새로 만들지, 기존 사이트를 맞춤 개선할지, 완전히 맞춤 제작할지에 따라 결정됩니다.",
+  /** Portfolio policy: everything public on the current homepage, and nothing implied beyond it */
+  portfolio: {
+    lead: "포트폴리오 건수 제한 없음.",
+    text: "현재 홈페이지에 공개된 기존 포트폴리오 전체를 초기 구축 대상으로 수집 · 구조화합니다. 홈페이지에 없는 별도 자료의 정리는 범위를 확인한 뒤 안내해드립니다.",
+  },
 } as const;
 
-/**
- * 기존 홈페이지 연동 in four steps: `text` is what shows first, `items` are the same 13 items as
- * SETUP_OPTIONS[0].includes, grouped by the step that produces them.
- */
-export const INTEGRATION_GROUPS: readonly { icon: IconName; title: string; text: string; items: readonly string[] }[] = [
+/** Why 기존 홈페이지 연동 is not "a widget install": it is the common build, with no homepage work on top. */
+export const INTEGRATION_VALUE = {
+  title: `${spoken(INTEGRATION)}은 단순한 위젯 설치비가 아닙니다.`,
+  text: `스크립트 한 줄을 넣는 비용이 아니라, 우리 업체에 BoostInterior를 처음 구축하는 기본 구축비입니다. 홈페이지는 지금 그대로 사용하므로, 홈페이지 작업 없이 아래 ${COMMON_BUILD} 과정만 진행합니다.`,
+} as const;
+
+/** The common build in four steps, in the order the work happens. */
+export const INTEGRATION_GROUPS: readonly { icon: IconName; title: string; text: string }[] = [
   {
     icon: "window",
     title: "홈페이지 · 업체 분석",
     text: "현재 홈페이지 구조와 업체 정보를 확인하고 초기 세팅합니다.",
-    items: ["기존 홈페이지 구조 확인", "업체 기본정보 초기 세팅", "상담 전문정보 초기 세팅"],
   },
   {
     icon: "layers",
     title: "기존 포트폴리오 전체 구조화",
     text: "홈페이지에 공개된 기존 시공사례 전체를 수집해 AI가 검색할 수 있는 데이터로 정리합니다.",
-    items: [
-      "홈페이지에 공개된 기존 포트폴리오 전체 수집",
-      "기존 시공사례 구조화",
-      "지역 · 평형 · 공간 · 스타일 · 공사범위 검색 데이터 구성",
-    ],
   },
   {
     icon: "chat",
     title: "AI 검색 · 상담 연결",
     text: "방문자의 조건에 맞는 실제 시공사례 검색 · 추천과 상담 · 견적 흐름을 연결합니다.",
-    items: ["AI 시공사례 검색 연결", "실제 포트폴리오 추천 흐름 연결", "상담 → 견적 문의 흐름 구성"],
   },
   {
     icon: "shield",
     title: "설치 · 검수",
     text: "위젯, 도메인, 모바일, 상담 동작, 견적 흐름을 검수한 뒤 적용합니다.",
-    items: ["BoostInterior 위젯 연결", "고객 도메인 연결 · 허용 설정", "모바일 포함 기본 동작 QA", "초기 데이터 검수"],
   },
 ];
 
@@ -69,9 +72,9 @@ export const QUICK_FEATURES: readonly { icon: IconName; label: string; text: str
   { icon: "phone", label: "Responsive", text: "모바일 반응형" },
   { icon: "search", label: "SEO", text: "기본 SEO 구조" },
   { icon: "bolt", label: "Speed", text: "빠른 로딩 · 성능 기준" },
-  { icon: "sliders", label: "CMS", text: "관리자 CMS" },
+  { icon: "lock", label: "HTTPS", text: "HTTPS(SSL) 적용" },
   { icon: "gallery", label: "Portfolio", text: "포트폴리오 구성" },
-  { icon: "chat", label: "BoostInterior", text: "AI 상담 기본 연동" },
+  { icon: "chat", label: "BoostInterior", text: "기본 구축 전체 포함" },
 ];
 
 /** Quick Website: why a new site costs this little, in the customer's terms. */
@@ -97,8 +100,16 @@ export const QUICK_VS_IMPROVEMENT = {
 
 export const PRICING_FAQ: readonly { q: string; a: string }[] = [
   {
-    q: `${spoken(INTEGRATION)}은 단순 설치비인가요?`,
-    a: "아닙니다. 스크립트 한 줄을 넣는 비용이 아니라 업체 전용 상담 시스템을 처음 구축하는 비용입니다. 홈페이지 확인, 업체 정보와 상담 정보 초기 세팅, 공개된 기존 포트폴리오 전체 수집과 구조화, AI 시공사례 검색 연결, 견적 문의 흐름 구성, 위젯 · 도메인 설정, QA까지 포함합니다.",
+    q: `${spoken(INTEGRATION)}은 단순 위젯 설치비인가요?`,
+    a: `아닙니다. 스크립트 한 줄을 넣는 비용이 아니라, 우리 업체에 BoostInterior를 처음 구축하는 기본 구축비입니다. 업체 정보와 상담 정보 초기 세팅, 공개된 기존 포트폴리오 전체 수집과 구조화, AI 시공사례 검색 연결, 상담 · 견적 문의 흐름 구성, 위젯 · 도메인 설정, QA까지 포함합니다.`,
+  },
+  {
+    q: "어떤 구축 방식을 선택해도 AI 상담 기능은 같은가요?",
+    a: `네. ${COMMON_BUILD} 범위는 모든 구축 방식에 공통으로 포함됩니다. 가격 차이는 홈페이지 작업 범위에 따라 달라집니다.`,
+  },
+  {
+    q: "표시 가격에 부가세가 포함되어 있나요?",
+    a: "네. BoostInterior에 표시된 구축비와 월 이용료는 모두 부가세(VAT)가 포함된 최종 금액입니다.",
   },
   {
     q: "기존 포트폴리오가 많아도 모두 등록하나요?",
@@ -109,8 +120,12 @@ export const PRICING_FAQ: readonly { q: string; a: string }[] = [
     a: `Quick Website는 ${QUICK_VS_IMPROVEMENT.quick.text} 기존 홈페이지 맞춤 개선은 ${QUICK_VS_IMPROVEMENT.improvement.text}`,
   },
   {
-    q: "Quick Website는 어떤 홈페이지인가요?",
-    a: "인테리어 업체에 맞게 검증된 표준 템플릿으로 만드는 홈페이지입니다. 모바일 반응형, 기본 SEO 구조, 빠른 로딩, HTTPS(SSL), 포트폴리오 구성, 상담 · 견적 CTA, 관리자 CMS, BoostInterior 연동을 기본으로 제공합니다.",
+    q: "Quick Website와 Custom Website는 무엇이 다른가요?",
+    a: `표준화와 맞춤의 차이입니다. Quick Website(${spoken(QUICK)})는 인테리어 업체에 맞게 검증된 표준 템플릿으로 빠르게 만드는 홈페이지로, 모바일 반응형, 기본 SEO 구조, 빠른 로딩, HTTPS(SSL), 포트폴리오 구성, 상담 · 견적 CTA를 기본으로 제공합니다. Custom Website(${spoken(CUSTOM)})는 브랜드, 정보구조, 주요 페이지를 업체에 맞춰 처음부터 설계합니다. ${COMMON_BUILD}은 두 방식 모두 동일하게 포함됩니다.`,
+  },
+  {
+    q: "기존 홈페이지 개선에 기존 CMS 재개발도 포함되나요?",
+    a: "기존 홈페이지의 CMS 자체 재개발은 기본 범위에 포함되지 않습니다. 특수 관리자 개발이나 CMS 개편이 필요한 경우 범위를 확인한 뒤 별도 안내드립니다. 상담 기록과 상담 요청을 확인하는 BoostInterior 관리 화면은 홈페이지 CMS와 별개이며, 모든 구축 방식에 기본으로 제공됩니다.",
   },
   {
     q: "월 운영 플랜은 구축비와 별도인가요?",

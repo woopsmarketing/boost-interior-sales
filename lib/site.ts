@@ -1,7 +1,12 @@
+import { manwon, PLANS, SETUP_OPTIONS, won } from "@/lib/pricing";
+
 /**
  * Single source of truth for URLs, contact channel and SEO copy.
  * Change values here (or via env) instead of editing components.
  */
+
+const [INTEGRATION, QUICK] = SETUP_OPTIONS;
+const [CORE] = PLANS;
 
 /** Live interior demo site visitors can try as a customer. */
 export const DEMO_URL = "https://interior-demo.boostweb.co.kr";
@@ -37,8 +42,10 @@ export const PRICING_ID = "pricing";
 /** Dedicated pricing page (header "가격" link). */
 export const PRICING_PATH = "/pricing";
 export const PRICING_TITLE = "BoostInterior 가격 | 인테리어 AI 상담 시스템 구축·운영 비용";
-export const PRICING_DESCRIPTION =
-  "기존 홈페이지 연동 29만원부터, Quick Website 49만원, Core 월 88,000원부터. BoostInterior 구축 방식과 운영 플랜의 포함 범위를 확인하세요.";
+/** Amounts come from the price list, so the search snippet cannot fall behind the page. */
+export const PRICING_DESCRIPTION = `${INTEGRATION.name} ${manwon(INTEGRATION.price)}만원부터, ${QUICK.name} ${manwon(QUICK.price)}만원, ${CORE.name} 월 ${won(CORE.price)}원부터. 모든 가격은 부가세(VAT) 포함. BoostInterior 구축 방식과 운영 플랜의 포함 범위를 확인하세요.`;
+/** /pricing: anchor of the plan comparison table. The plan cards link to it. */
+export const COMPARISON_ID = "comparison";
 
 /** Anchor of the Founding Partner block on the landing. */
 export const PARTNER_ID = "partner";

@@ -1,0 +1,174 @@
+// Pricing regression checks: `npm test` (node --test, no dependencies).
+// lib/pricing.ts is the only price source, so the prices, the common build and the VAT wording
+// are checked there; the rest of the customer-facing source is scanned as text.
+import assert from "node:assert/strict";
+import { readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { test } from "node:test";
+import {
+  COMMON_BOOSTINTERIOR_SCOPE,
+  COMMON_BUILD,
+  COMMON_SCOPE_ITEMS,
+  COMPARISON,
+  COMPARISON_CORE,
+  PLANS,
+  SETUP_COMPARISON,
+  SETUP_OPTIONS,
+  SETUP_SCOPE_GROUPS,
+  VAT_NOTICE,
+  scopeItems,
+} from "../lib/pricing.ts";
+
+const ROOT = join(import.meta.dirname, "..");
+const sourceFiles = (dir) =>
+  readdirSync(join(ROOT, dir), { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile() && /\.(ts|tsx)$/.test(entry.name))
+    .map((entry) => join(entry.parentPath, entry.name));
+/** Everything a customer can be shown: pages, components and the copy they read from. */
+const SOURCE = ["app", "components", "lib"].flatMap(sourceFiles).map((file) => ({ file, text: readFileSync(file, "utf8") }));
+
+test("current prices", () => {
+  assert.deepEqual(
+    SETUP_OPTIONS.map((option) => [option.key, option.price, Boolean(option.from)]),
+    [
+      ["A", 290_000, false],
+      ["B", 490_000, false],
+      ["C", 1_200_000, true],
+      ["D", 2_500_000, true],
+    ],
+  );
+  assert.deepEqual(
+    PLANS.map((plan) => [plan.name, plan.price]),
+    [
+      ["Core", 88_000],
+      ["Growth", 198_000],
+      ["Managed", 297_000],
+    ],
+  );
+});
+
+test("monthly prices are a supply price plus 10% VAT", () => {
+  assert.deepEqual(
+    PLANS.map((plan) => plan.price / 1.1),
+    [80_000, 180_000, 270_000],
+  );
+});
+
+test("the common build is defined once and covers the agreed scope", () => {
+  assert.equal(COMMON_SCOPE_ITEMS.length, 14);
+  assert.equal(new Set(COMMON_SCOPE_ITEMS).size, COMMON_SCOPE_ITEMS.length);
+  assert.ok(COMMON_BOOSTINTERIOR_SCOPE.length >= 6 && COMMON_BOOSTINTERIOR_SCOPE.length <= 8);
+  const all = COMMON_SCOPE_ITEMS.join("\n");
+  for (const required of [
+    "업체 기본정보",
+    "상담 전문정보",
+    "기존 포트폴리오 전체 수집",
+    "시공사례 구조화",
+    "AI 시공사례 검색",
+    "포트폴리오 추천",
+    "AI 상담 흐름",
+    "견적 문의 흐름",
+    "BoostInterior 관리 화면",
+    "위젯",
+    "도메인",
+    "기본 동작 QA",
+    "초기 데이터 검수",
+  ]) {
+    assert.ok(all.includes(required), `common build is missing "${required}"`);
+  }
+});
+
+test("A / B / C / D all carry the same common build, and none restates or narrows it", () => {
+  const [common, ...rest] = SETUP_COMPARISON;
+  assert.equal(common.label, COMMON_BUILD);
+  assert.equal(common.included, true);
+  assert.equal(common.values.length, SETUP_OPTIONS.length);
+  assert.equal(new Set(common.values).size, 1, "the common build row must read the same for every option");
+  for (const row of rest) assert.ok(!row.label.includes("BoostInterior"), `"${row.label}" compares BoostInterior per option`);
+
+  for (const option of SETUP_OPTIONS) {
+    assert.deepEqual(Object.keys(option.includes), SETUP_SCOPE_GROUPS.map((group) => group.key));
+    for (const item of scopeItems(option)) {
+      assert.ok(!COMMON_SCOPE_ITEMS.includes(item), `${option.key} restates the common item "${item}"`);
+      assert.ok(!/BoostInterior (기본 )?(연동|통합|구축)/.test(item), `${option.key} lists its own BoostInterior scope: "${item}"`);
+    }
+  }
+});
+
+test("the plan cards are short, and nothing they left out is missing from the comparison", () => {
+  for (const plan of PLANS) {
+    assert.ok(plan.highlights.length + (plan.base ? 1 : 0) <= 4, `${plan.name} card is long again`);
+  }
+  assert.equal(COMPARISON_CORE.length, 6);
+  const rows = COMPARISON.flatMap((group) => group.rows);
+  assert.equal(rows.length, 22);
+  const labels = rows.map((row) => row.label).join("\n");
+  // Every feature the cards listed before they were shortened (V2.1).
+  for (const feature of [
+    "24시간 AI 상담",
+    "업체 정보 기반 답변",
+    "상담 전문지식 관리 기능",
+    "방문자의 공사 조건 이해",
+    "실제 시공사례 검색",
+    "관련 포트폴리오 추천",
+    "사진 · 시공사례 연결",
+    "상담 맥락 유지",
+    "견적 문의 수집",
+    "상담 기록 확인",
+    "기본 시스템 운영",
+    "방문자 행동 분석",
+    "방문 페이지",
+    "주요 클릭 분석",
+    "체류 · 이탈 흐름 분석",
+    "상담 시작",
+    "포트폴리오 확인",
+    "견적 문의 전환 흐름",
+    "AI Portfolio Video 제작 지원 · 건수 제한 없음",
+    "월 1회 방문 · 상담 데이터 리뷰",
+    "AI 상담 응답 흐름 점검",
+    "자주 묻는 질문",
+    "응답 개선",
+    "전문 상담지식",
+    "포트폴리오 업데이트 지원",
+    "상담 · 견적 CTA 흐름 점검",
+    "전환 동선 개선 제안",
+    "월간 개선 포인트 정리",
+    "우선 지원",
+  ]) {
+    assert.ok(labels.includes(feature), `comparison lost "${feature}"`);
+  }
+});
+
+test("VAT: every notice says included, nothing says extra", () => {
+  for (const line of Object.values(VAT_NOTICE)) assert.match(line, /부가세\(VAT\)가 포함된/);
+  for (const { file, text } of SOURCE) {
+    assert.ok(!/(VAT|부가세|부가가치세)\s*(는|은)?\s*(별도|미포함|제외)/.test(text), `${file} says VAT is extra`);
+  }
+  const faq = SOURCE.find(({ file }) => file.endsWith("pricing-page.ts")).text;
+  assert.match(faq, /표시 가격에 부가세가 포함되어 있나요\?/);
+});
+
+test("no obsolete price, and no amount written outside lib/pricing.ts", () => {
+  for (const { file, text } of SOURCE) {
+    for (const obsolete of [/700[,_]?000/, /1[,_]?500[,_]?000/, /3[,_]?000[,_]?000/, /150만/, /300만/]) {
+      assert.ok(!obsolete.test(text), `${file} still has ${obsolete}`);
+    }
+    if (file.endsWith(join("lib", "pricing.ts"))) continue;
+    // Comments may name an amount; a string or JSX text may not.
+    const code = text.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
+    assert.ok(!/\d{2,3}[,_]\d{3}\s*원|\d+\s*만\s*원/.test(code), `${file} hardcodes a price`);
+  }
+});
+
+test("CMS: the homepage CMS is never sold, and never confused with the BoostInterior 관리 화면", () => {
+  for (const { file, text } of SOURCE) {
+    assert.ok(!/BoostChat/.test(text.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "")), `${file} shows BoostChat`);
+    assert.ok(!/관리자 CMS|CMS\s*(기본\s*)?제공|CMS\s*·\s*SEO|SEO\s*·\s*속도\s*·\s*CMS/.test(text), `${file} sells a homepage CMS`);
+  }
+  for (const option of SETUP_OPTIONS) {
+    assert.ok(!scopeItems(option).some((item) => /CMS/.test(item)), `${option.key} includes CMS work`);
+    assert.ok(!option.highlights.some((item) => /CMS/.test(item)), `${option.key} highlights a CMS`);
+  }
+  const [, , improvement] = SETUP_OPTIONS;
+  assert.match(improvement.beyond, /CMS 재개발.*별도 견적/);
+});

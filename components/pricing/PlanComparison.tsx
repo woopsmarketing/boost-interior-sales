@@ -3,6 +3,7 @@
 import { DisclosureButton, useDisclosure } from "@/components/pricing/Disclosure";
 import { Check } from "@/components/ui/CheckList";
 import { COMPARISON, COMPARISON_CORE, PLANS, won } from "@/lib/pricing";
+import { COMPARISON_ID } from "@/lib/site";
 
 const FULL_ID = "comparison-full";
 
@@ -41,16 +42,20 @@ function Row({ row }: { row: (typeof COMPARISON_CORE)[number] }) {
 }
 
 /**
- * 플랜 비교 — one table at every width: the six rows that decide a plan first, and every feature
- * by category in their place once "전체 기능 비교 보기" is opened.
+ * 플랜 비교 — where the plan cards hand over: they carry three lines each, this carries the rest.
+ * One table at every width: the six rows that decide a plan first, and every feature by category
+ * in their place once "전체 기능 비교 보기" is opened.
  */
 export function PlanComparison() {
   const { open, toggle, ref } = useDisclosure();
   return (
-    <div data-reveal className="mt-16 mobile:mt-12">
+    <div id={COMPARISON_ID} data-reveal className="mt-16 scroll-mt-24 mobile:mt-12">
       <h3 id="comparison-title" className="m-0 text-[28px] leading-[1.3] font-bold tracking-[-0.03em] text-ink mobile:text-[22px]">
         플랜별 차이 한눈에 보기
       </h3>
+      <p className="mt-2 mb-0 text-[16px] leading-[1.6] text-muted mobile:text-[15px]">
+        카드에는 핵심만 담았습니다. 세부 기능은 이 표에서 모두 확인할 수 있습니다.
+      </p>
 
       <div className="mt-7 overflow-hidden rounded-xl bg-white shadow-md mobile:mt-5">
         <table aria-labelledby="comparison-title" className="w-full border-collapse text-left">

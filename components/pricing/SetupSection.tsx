@@ -1,13 +1,14 @@
 import type { ReactNode } from "react";
+import { CommonScope } from "@/components/pricing/CommonScope";
 import { Disclosure } from "@/components/pricing/Disclosure";
 import { SetupComparison } from "@/components/pricing/SetupComparison";
 import { Letter, SetupPrice } from "@/components/pricing/SetupParts";
 import { ButtonLink } from "@/components/ui/Button";
-import { Check, CheckList } from "@/components/ui/CheckList";
+import { CheckList } from "@/components/ui/CheckList";
 import { Icon } from "@/components/ui/Icon";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
-import { scopeItems, SETUP_OPTIONS, won, type SetupOption } from "@/lib/pricing";
+import { COMMON_BUILD, scopeItems, SETUP_OPTIONS, VAT_NOTICE, won, type SetupOption } from "@/lib/pricing";
 import {
   INTEGRATION_GROUPS,
   INTEGRATION_PROCESS,
@@ -26,6 +27,8 @@ const STATEMENT = "mb-0 font-bold tracking-[-0.03em] text-balance text-ink";
 const DETAIL_HEAD = "m-0 text-[17px] leading-[1.4] font-bold tracking-[-0.01em] text-ink";
 
 const SCOPE_TOGGLE = { show: "전체 포함 범위 보기", hide: "전체 포함 범위 접기" };
+/** First row of every option's scope list: the common build is in all of them, in full. */
+const COMMON_LEAD = `${COMMON_BUILD} 전체 포함`;
 
 /** Which option a block is about: letter and name on the left, the price on the right. */
 function Head({ option }: { option: SetupOption }) {
@@ -51,6 +54,16 @@ function Fit({ option, className = "" }: { option: SetupOption; className?: stri
   );
 }
 
+/** An option's homepage work under its toggle: the common build as one line, then what the option adds to it. */
+function Scope({ option, columns, className = "" }: { option: SetupOption; columns?: "wide"; className?: string }) {
+  return (
+    <>
+      <h4 className={DETAIL_HEAD}>홈페이지 작업 {scopeItems(option).length}개 항목</h4>
+      <CheckList items={scopeItems(option)} lead={COMMON_LEAD} columns={columns} className={`mt-5 ${className}`} />
+    </>
+  );
+}
+
 /** One option's block: summary in the open, the full scope under a toggle. */
 function Block({ option, className = "", children }: { option: SetupOption; className?: string; children: ReactNode }) {
   return (
@@ -61,7 +74,7 @@ function Block({ option, className = "", children }: { option: SetupOption; clas
   );
 }
 
-/** 기존 홈페이지 연동 — why 290,000원 is a build, not an install: four things it produces, in order. */
+/** 기존 홈페이지 연동 — why 290,000원 is a build, not an install: the common build in four steps, and no homepage work. */
 function Integration() {
   return (
     <Block option={INTEGRATION} className="mt-6 mobile:mt-4">
@@ -91,25 +104,9 @@ function Integration() {
         ))}
       </ol>
 
-      <p className="mt-5 mb-0 flex gap-2.5 rounded-lg border border-blue-200 bg-accent-soft px-5 py-4 text-[15px] leading-[1.6] text-body">
-        <Check className="mt-[5px] size-3.5 text-accent" />
-        <span>
-          <strong className="font-bold text-ink">포트폴리오 건수 제한 없음.</strong> 현재 홈페이지에 공개된 기존 포트폴리오
-          전체가 초기 구축 대상입니다. 홈페이지에 없는 별도 자료의 정리는 범위를 확인한 뒤 안내해드립니다.
-        </span>
-      </p>
-
       <Disclosure {...SCOPE_TOGGLE} context={INTEGRATION.name} className="mt-7">
         <div className="mt-7 border-t border-line pt-7">
-          <h4 className={DETAIL_HEAD}>포함 항목 {scopeItems(INTEGRATION).length}개</h4>
-          <div className="mt-5 grid gap-x-8 gap-y-6 min-[601px]:grid-cols-2 min-[601px]:gap-y-7 min-[1101px]:grid-cols-4">
-            {INTEGRATION_GROUPS.map((group) => (
-              <div key={group.title}>
-                <p className={SUBHEAD}>{group.title}</p>
-                <CheckList items={group.items} className="mt-3" />
-              </div>
-            ))}
-          </div>
+          <Scope option={INTEGRATION} />
 
           <h4 className={`mt-10 mobile:mt-8 ${DETAIL_HEAD}`}>
             {won(INTEGRATION.price)}원으로 진행되는 작업 {INTEGRATION_PROCESS.length}단계
@@ -134,7 +131,7 @@ function Integration() {
   );
 }
 
-/** Quick Website — six things the standard structure already covers; the 14-item scope on demand. */
+/** Quick Website — six things the standard structure already covers; its homepage work item by item on demand. */
 function Quick() {
   return (
     <Block option={QUICK} className="mt-6 mobile:mt-4">
@@ -166,11 +163,7 @@ function Quick() {
         }
       >
         <div className="mt-7 border-t border-line pt-7">
-          <h4 className={DETAIL_HEAD}>포함 항목 {scopeItems(QUICK).length}개</h4>
-          <CheckList
-            items={scopeItems(QUICK)}
-            className="mt-5 min-[600px]:grid-cols-2 min-[600px]:gap-x-8 min-[1101px]:grid-cols-3"
-          />
+          <Scope option={QUICK} className="min-[600px]:grid-cols-2 min-[600px]:gap-x-8 min-[1101px]:grid-cols-3" />
           <Fit option={QUICK} className="mt-6" />
           {QUICK.note && <p className="mt-4 mb-0 text-[13px] leading-[1.6] text-muted">{QUICK.note}</p>}
         </div>
@@ -220,15 +213,16 @@ function QuickVsImprovement() {
 function Tailored({ option }: { option: SetupOption }) {
   return (
     <Block option={option} className="row-span-5 grid grid-rows-subgrid gap-y-0">
-      <p className={`mt-7 text-[22px] leading-[1.4] mobile:mt-5 mobile:text-[19px] ${STATEMENT}`}>{option.scope}</p>
+      <p className={`mt-7 text-[22px] leading-[1.4] mobile:mt-5 mobile:text-[19px] ${STATEMENT}`}>
+        {option.website} + {COMMON_BUILD}
+      </p>
       <p className="mt-2 mb-0 text-[16px] leading-[1.65] text-pretty text-body">{option.summary}</p>
-      <CheckList items={option.highlights} className="mt-6" />
+      <CheckList items={option.highlights} lead={COMMON_LEAD} className="mt-6" />
       <div className="mt-6">
         {option.note && <p className="m-0 text-[13px] leading-[1.6] text-muted">{option.note}</p>}
         <Disclosure {...SCOPE_TOGGLE} context={option.name} className="mt-6">
           <div className="mt-6 border-t border-line pt-6">
-            <h4 className={DETAIL_HEAD}>포함 항목 {scopeItems(option).length}개</h4>
-            <CheckList items={scopeItems(option)} columns="wide" className="mt-5" />
+            <Scope option={option} columns="wide" />
             <Fit option={option} className="mt-6" />
           </div>
         </Disclosure>
@@ -238,8 +232,9 @@ function Tailored({ option }: { option: SetupOption }) {
 }
 
 /**
- * 초기 구축 — the four ways to build. The comparison answers "which one" at a glance; the blocks
- * under it answer "why this price", each with its full scope one toggle away.
+ * 초기 구축 — the four ways to build. What they share comes first, once; the comparison then answers
+ * "which one" by the homepage work alone, and the blocks under it answer "why this price", each
+ * with its full scope one toggle away.
  */
 export function SetupSection() {
   return (
@@ -254,7 +249,11 @@ export function SetupSection() {
         />
       </div>
 
+      <CommonScope />
       <SetupComparison />
+      <p data-reveal className="mt-4 mb-0 text-[14px] leading-[1.6] text-muted">
+        {VAT_NOTICE.setup}
+      </p>
 
       <Integration />
       <Quick />

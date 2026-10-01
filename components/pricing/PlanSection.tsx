@@ -3,15 +3,11 @@ import { CheckList } from "@/components/ui/CheckList";
 import { Icon } from "@/components/ui/Icon";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
-import { PLANS, won } from "@/lib/pricing";
-import { PORTFOLIO_VIDEO_SAMPLE } from "@/lib/site";
+import { PLANS, VAT_NOTICE, won } from "@/lib/pricing";
+import { COMPARISON_ID, PORTFOLIO_VIDEO_SAMPLE } from "@/lib/site";
 
 const ROLE_TAG =
   "inline-flex h-[26px] items-center rounded-pill bg-accent-soft px-2.5 text-[12px] leading-none font-semibold whitespace-nowrap text-blue-700";
-
-/** What a plan adds, as chips under its price — readable without going through the list. */
-const ACCENT =
-  "inline-flex h-7 items-center rounded-pill border border-blue-200 bg-accent-soft px-2.5 text-[13px] leading-none font-semibold whitespace-nowrap text-blue-700";
 
 /** What AI Portfolio Video is, in customer terms. A real sample plays here once one exists. */
 function PortfolioVideo() {
@@ -57,7 +53,10 @@ function PortfolioVideo() {
   );
 }
 
-/** 운영 플랜 — the three monthly plans in full, then what separates them: six rows first, every feature on demand. */
+/**
+ * 운영 플랜 — the cards say what each plan is in three lines; the comparison right under them is
+ * where the features are checked: six rows first, every feature on demand.
+ */
 export function PlanSection() {
   return (
     <Section id="plans" aria-labelledby="plans-title" pt="pt-32 mobile:pt-20" pb="pb-0" className="scroll-mt-8">
@@ -67,7 +66,7 @@ export function PlanSection() {
           eyebrow="운영 플랜 · 매월"
           titleId="plans-title"
           title="필요한 기능과 운영 수준을 선택합니다."
-          sub="Core는 시스템, Growth는 성장 기능, Managed는 사람이 함께하는 운영입니다."
+          sub="Core는 핵심 기능, Growth는 분석과 Portfolio Video, Managed는 사람이 함께하는 운영입니다."
         />
       </div>
 
@@ -77,7 +76,7 @@ export function PlanSection() {
             key={plan.name}
             id={`plan-${plan.name.toLowerCase()}`}
             aria-labelledby={`plan-${plan.name}`}
-            className="row-span-6 grid scroll-mt-24 grid-rows-subgrid gap-y-0 rounded-xl bg-white p-8 shadow-md mobile:p-6"
+            className="row-span-5 grid scroll-mt-24 grid-rows-subgrid gap-y-0 rounded-xl bg-white p-8 shadow-md mobile:p-6"
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 id={`plan-${plan.name}`} className="m-0 text-[22px] leading-[1.3] font-bold tracking-[-0.02em] text-ink">
@@ -95,24 +94,32 @@ export function PlanSection() {
               </span>
             </p>
             <p className="mt-4 mb-0 text-[16px] leading-[1.6] text-pretty text-body">{plan.summary}</p>
-            <p className="mt-5 mb-0 flex flex-wrap items-center gap-1.5">
-              {plan.base && <span className="mr-0.5 text-[13px] leading-none font-bold text-muted">{plan.base} +</span>}
-              {plan.accents.map((accent) => (
-                <span key={accent} className={ACCENT}>
-                  {accent}
-                </span>
-              ))}
-            </p>
             <div className="mt-6 border-t border-line pt-6">
-              <CheckList items={plan.features} lead={plan.base && `${plan.base} 전체 포함`} columns="narrow" />
+              <CheckList items={plan.highlights} lead={plan.base && `${plan.base} 전체 포함`} />
             </div>
             {plan.note && <p className="m-0 self-end pt-6 text-[13px] leading-[1.6] text-muted">{plan.note}</p>}
           </article>
         ))}
       </div>
 
-      <PortfolioVideo />
+      <p
+        data-reveal
+        className="mt-5 mb-0 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 text-[14px] leading-[1.6] text-muted"
+      >
+        {VAT_NOTICE.monthly}
+        <a
+          href={`#${COMPARISON_ID}`}
+          className="group inline-flex items-center gap-1.5 text-[15px] leading-[1.4] font-semibold text-link no-underline"
+        >
+          <span className="underline-offset-4 group-hover:underline">전체 기능 비교</span>
+          <span aria-hidden="true" className="transition-transform duration-160 ease-out group-hover:translate-y-0.5">
+            ↓
+          </span>
+        </a>
+      </p>
+
       <PlanComparison />
+      <PortfolioVideo />
     </Section>
   );
 }

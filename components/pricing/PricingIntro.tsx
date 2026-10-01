@@ -1,8 +1,9 @@
 import { Br } from "@/components/ui/Br";
 import { ButtonLink } from "@/components/ui/Button";
+import { Notice } from "@/components/ui/Notice";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
-import { PLANS, SETUP_OPTIONS, won } from "@/lib/pricing";
+import { COMMON_BUILD, PLANS, SETUP_OPTIONS, VAT_NOTICE, won } from "@/lib/pricing";
 import { DEMO_URL, KAKAO_OPEN_CHAT_URL, SITE_NAME } from "@/lib/site";
 
 const [INTEGRATION] = SETUP_OPTIONS;
@@ -13,7 +14,7 @@ const KINDS = [
     when: "한 번만",
     name: "초기 구축비",
     meaning: "우리 업체에 맞게 처음 세팅하는 비용",
-    what: "업체 전용 초기 구축",
+    what: `${COMMON_BUILD} + 홈페이지 작업`,
     price: `${won(INTEGRATION.price)}원부터`,
   },
   {
@@ -64,7 +65,7 @@ export function PricingHero() {
   );
 }
 
-/** Why there are two prices: a one-time setup, plus a monthly plan for running what was set up. */
+/** Why there are two prices: a one-time setup, plus a monthly plan for running what was set up. Both include VAT. */
 export function TwoPrices() {
   return (
     <Section id="two-prices" aria-labelledby="two-prices-title" pt="pt-24 mobile:pt-14" pb="pb-0">
@@ -110,7 +111,10 @@ export function TwoPrices() {
           </div>
         ))}
       </div>
-      <p data-reveal className="mt-6 mb-0 max-w-[820px] text-[15px] leading-[1.7] text-muted">
+      <div data-reveal className="mt-5 mobile:mt-3">
+        <Notice className="w-fit font-semibold text-ink">{VAT_NOTICE.all}</Notice>
+      </div>
+      <p data-reveal className="mt-5 mb-0 max-w-[820px] text-[15px] leading-[1.7] text-muted">
         예를 들어 {INTEGRATION.name}({won(INTEGRATION.price)}원, 한 번)으로 구축하고 {CORE.name}(월 {won(CORE.price)}원)로
         운영할 수 있습니다. 구축 방식과 운영 플랜은 서로 독립적으로 선택합니다.
       </p>
