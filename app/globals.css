@@ -121,6 +121,18 @@
       transform: scaleX(1);
     }
   }
+
+  /* /pricing: detail that opens under a "전체 … 보기" toggle. Used with motion-safe: only. */
+  --animate-disclose: disclose 220ms var(--ease-out) both;
+
+  @keyframes disclose {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 @layer base {

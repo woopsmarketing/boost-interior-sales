@@ -1,4 +1,5 @@
 import type { IconName } from "@/components/ui/Icon";
+import { manwon, SETUP_OPTIONS } from "@/lib/pricing";
 
 /**
  * Copy for the /pricing page that is not a price: what the 290,000원 setup actually does,
@@ -6,16 +7,32 @@ import type { IconName } from "@/components/ui/Icon";
  * lists come from lib/pricing.ts.
  */
 
-/** 기존 홈페이지 연동 — the same 13 items as SETUP_OPTIONS[0].includes, grouped by what they produce. */
-export const INTEGRATION_GROUPS: readonly { icon: IconName; title: string; items: readonly string[] }[] = [
+const [INTEGRATION, QUICK, IMPROVEMENT] = SETUP_OPTIONS;
+
+/** "29만원" / "120만원부터" — amounts inside sentences, read from the price list. */
+const spoken = (option: (typeof SETUP_OPTIONS)[number]) => `${manwon(option.price)}만원${option.from ? "부터" : ""}`;
+
+/** Why 기존 홈페이지 연동 is not "a widget install": said once, above the four things it produces. */
+export const INTEGRATION_VALUE = {
+  title: `${spoken(INTEGRATION)}은 단순한 위젯 설치비가 아닙니다.`,
+  text: "현재 홈페이지의 업체 정보와 공개된 기존 시공사례를 BoostInterior가 실제 상담에서 활용할 수 있도록 수집 · 구조화하고, AI 검색과 상담 · 견적 흐름에 연결한 뒤 설치 · 검수까지 진행하는 업체 전용 AI 상담 시스템 초기 구축입니다.",
+} as const;
+
+/**
+ * 기존 홈페이지 연동 in four steps: `text` is what shows first, `items` are the same 13 items as
+ * SETUP_OPTIONS[0].includes, grouped by the step that produces them.
+ */
+export const INTEGRATION_GROUPS: readonly { icon: IconName; title: string; text: string; items: readonly string[] }[] = [
   {
     icon: "window",
-    title: "홈페이지 · 업체 정보",
+    title: "홈페이지 · 업체 분석",
+    text: "현재 홈페이지 구조와 업체 정보를 확인하고 초기 세팅합니다.",
     items: ["기존 홈페이지 구조 확인", "업체 기본정보 초기 세팅", "상담 전문정보 초기 세팅"],
   },
   {
     icon: "layers",
-    title: "포트폴리오 데이터",
+    title: "기존 포트폴리오 전체 구조화",
+    text: "홈페이지에 공개된 기존 시공사례 전체를 수집해 AI가 검색할 수 있는 데이터로 정리합니다.",
     items: [
       "홈페이지에 공개된 기존 포트폴리오 전체 수집",
       "기존 시공사례 구조화",
@@ -24,17 +41,19 @@ export const INTEGRATION_GROUPS: readonly { icon: IconName; title: string; items
   },
   {
     icon: "chat",
-    title: "AI 상담 연결",
+    title: "AI 검색 · 상담 연결",
+    text: "방문자의 조건에 맞는 실제 시공사례 검색 · 추천과 상담 · 견적 흐름을 연결합니다.",
     items: ["AI 시공사례 검색 연결", "실제 포트폴리오 추천 흐름 연결", "상담 → 견적 문의 흐름 구성"],
   },
   {
     icon: "shield",
     title: "설치 · 검수",
+    text: "위젯, 도메인, 모바일, 상담 동작, 견적 흐름을 검수한 뒤 적용합니다.",
     items: ["BoostInterior 위젯 연결", "고객 도메인 연결 · 허용 설정", "모바일 포함 기본 동작 QA", "초기 데이터 검수"],
   },
 ];
 
-/** How the 290,000원 setup proceeds — the work behind "연동". */
+/** How the 290,000원 setup proceeds, step by step — the detail behind the four steps above. */
 export const INTEGRATION_PROCESS: readonly { title: string; text: string }[] = [
   { title: "홈페이지 확인", text: "현재 홈페이지와 상담 동선을 분석합니다." },
   { title: "업체 정보 정리", text: "서비스, 지역, 상담 기준, 업체 정보를 BoostInterior에 세팅합니다." },
@@ -55,9 +74,15 @@ export const QUICK_FEATURES: readonly { icon: IconName; label: string; text: str
   { icon: "chat", label: "BoostInterior", text: "AI 상담 기본 연동" },
 ];
 
-/** 49만원 vs 150만원부터 — the one comparison owners get stuck on. */
+/** Quick Website: why a new site costs this little, in the customer's terms. */
+export const QUICK_VALUE = {
+  title: `싸게 만들어서가 아니라, 표준화해서 빠르게 제작하기 때문에 ${spoken(QUICK)}입니다.`,
+  text: "검증된 표준 구조에 맞춰 제작하기 때문에 빠르고 합리적인 가격으로 제공합니다.",
+} as const;
+
+/** Quick Website vs 기존 홈페이지 맞춤 개선 — the one comparison owners get stuck on. */
 export const QUICK_VS_IMPROVEMENT = {
-  question: "새 홈페이지가 49만원인데, 기존 홈페이지 개선은 왜 150만원부터인가요?",
+  question: `새 홈페이지가 ${spoken(QUICK)}인데, 기존 홈페이지 개선은 왜 ${spoken(IMPROVEMENT)}인가요?`,
   quick: {
     name: "Quick Website",
     line: "검증된 구조에 맞춰 빠르게 제작",
@@ -72,7 +97,7 @@ export const QUICK_VS_IMPROVEMENT = {
 
 export const PRICING_FAQ: readonly { q: string; a: string }[] = [
   {
-    q: "29만원은 단순 설치비인가요?",
+    q: `${spoken(INTEGRATION)}은 단순 설치비인가요?`,
     a: "아닙니다. 스크립트 한 줄을 넣는 비용이 아니라 업체 전용 상담 시스템을 처음 구축하는 비용입니다. 홈페이지 확인, 업체 정보와 상담 정보 초기 세팅, 공개된 기존 포트폴리오 전체 수집과 구조화, AI 시공사례 검색 연결, 견적 문의 흐름 구성, 위젯 · 도메인 설정, QA까지 포함합니다.",
   },
   {

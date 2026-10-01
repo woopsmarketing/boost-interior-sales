@@ -1,27 +1,17 @@
-import { Check, CheckList } from "@/components/ui/CheckList";
+import { PlanComparison } from "@/components/pricing/PlanComparison";
+import { CheckList } from "@/components/ui/CheckList";
 import { Icon } from "@/components/ui/Icon";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
-import { COMPARISON, PLANS, won } from "@/lib/pricing";
+import { PLANS, won } from "@/lib/pricing";
 import { PORTFOLIO_VIDEO_SAMPLE } from "@/lib/site";
 
 const ROLE_TAG =
   "inline-flex h-[26px] items-center rounded-pill bg-accent-soft px-2.5 text-[12px] leading-none font-semibold whitespace-nowrap text-blue-700";
 
-/** Included / not included, said in words for screen readers and as a mark for the eye. */
-function Mark({ on }: { on: boolean }) {
-  return on ? (
-    <>
-      <Check className="mx-auto size-4 text-accent" />
-      <span className="sr-only">포함</span>
-    </>
-  ) : (
-    <>
-      <span aria-hidden="true" className="mx-auto block h-px w-3 bg-gray-300" />
-      <span className="sr-only">미포함</span>
-    </>
-  );
-}
+/** What a plan adds, as chips under its price — readable without going through the list. */
+const ACCENT =
+  "inline-flex h-7 items-center rounded-pill border border-blue-200 bg-accent-soft px-2.5 text-[13px] leading-none font-semibold whitespace-nowrap text-blue-700";
 
 /** What AI Portfolio Video is, in customer terms. A real sample plays here once one exists. */
 function PortfolioVideo() {
@@ -67,115 +57,7 @@ function PortfolioVideo() {
   );
 }
 
-function Comparison() {
-  return (
-    <div data-reveal className="mt-16 mobile:mt-12">
-      <h3 id="comparison-title" className="m-0 text-[28px] leading-[1.3] font-bold tracking-[-0.03em] text-ink mobile:text-[22px]">
-        플랜별 차이 한눈에 보기
-      </h3>
-
-      {/* Desktop: one table, grouped by category. */}
-      <div className="mt-7 overflow-hidden rounded-xl bg-white shadow-md mobile:hidden">
-        <table aria-labelledby="comparison-title" className="w-full border-collapse text-left">
-          <colgroup>
-            <col />
-            <col className="w-[17%]" />
-            <col className="w-[17%]" />
-            <col className="w-[17%]" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th scope="col" className="px-8 py-6 text-[13px] leading-[1.4] font-bold text-muted">
-                기능
-              </th>
-              {PLANS.map((plan) => (
-                <th key={plan.name} scope="col" className="px-3 py-6 text-center align-bottom">
-                  <span className="block text-[18px] leading-[1.3] font-bold text-ink">{plan.name}</span>
-                  <span className="mt-1 block text-[13px] leading-[1.4] font-medium whitespace-nowrap text-muted">
-                    월 {won(plan.price)}원
-                  </span>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          {COMPARISON.map((group) => (
-            <tbody key={group.category}>
-              <tr>
-                <th
-                  scope="colgroup"
-                  colSpan={4}
-                  className="border-t border-line bg-sunken px-8 py-3 text-[13px] leading-[1.4] font-bold text-accent"
-                >
-                  {group.category}
-                </th>
-              </tr>
-              {group.rows.map((row) => (
-                <tr key={row.label}>
-                  <th scope="row" className="border-t border-line px-8 py-3.5 text-[15px] leading-[1.5] font-medium text-body">
-                    {row.label}
-                  </th>
-                  {row.plans.map((on, i) => (
-                    <td key={PLANS[i].name} className="border-t border-line px-3 py-3.5 text-center">
-                      <Mark on={on} />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          ))}
-        </table>
-      </div>
-
-      {/* Mobile: one collapsible list per category. */}
-      <div className="mt-5 hidden gap-3 mobile:grid">
-        {COMPARISON.map((group, g) => (
-          <details key={group.category} open={g === 0} className="group rounded-xl bg-white shadow-md">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-[16px] leading-[1.4] font-bold text-ink [&::-webkit-details-marker]:hidden">
-              {group.category}
-              <span aria-hidden="true" className="text-[20px] leading-none font-medium text-muted transition-transform duration-160 ease-out group-open:rotate-45">
-                +
-              </span>
-            </summary>
-            <table className="w-full border-collapse text-left">
-              <thead>
-                <tr>
-                  <th scope="col" className="sr-only">
-                    기능
-                  </th>
-                  {PLANS.map((plan) => (
-                    <th
-                      key={plan.name}
-                      scope="col"
-                      className="w-[58px] border-t border-line bg-sunken px-1 py-2 text-center text-[11px] leading-none font-bold text-muted"
-                    >
-                      {plan.name}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {group.rows.map((row) => (
-                  <tr key={row.label}>
-                    <th scope="row" className="border-t border-line py-3 pr-2 pl-5 text-[14px] leading-[1.5] font-medium text-body">
-                      {row.label}
-                    </th>
-                    {row.plans.map((on, i) => (
-                      <td key={PLANS[i].name} className="border-t border-line px-1 py-3 text-center">
-                        <Mark on={on} />
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </details>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/** 운영 플랜 — the three monthly plans in full, then what separates them, category by category. */
+/** 운영 플랜 — the three monthly plans in full, then what separates them: six rows first, every feature on demand. */
 export function PlanSection() {
   return (
     <Section id="plans" aria-labelledby="plans-title" pt="pt-32 mobile:pt-20" pb="pb-0" className="scroll-mt-8">
@@ -195,7 +77,7 @@ export function PlanSection() {
             key={plan.name}
             id={`plan-${plan.name.toLowerCase()}`}
             aria-labelledby={`plan-${plan.name}`}
-            className="row-span-5 grid scroll-mt-24 grid-rows-subgrid gap-y-0 rounded-xl bg-white p-8 shadow-md mobile:p-6"
+            className="row-span-6 grid scroll-mt-24 grid-rows-subgrid gap-y-0 rounded-xl bg-white p-8 shadow-md mobile:p-6"
           >
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 id={`plan-${plan.name}`} className="m-0 text-[22px] leading-[1.3] font-bold tracking-[-0.02em] text-ink">
@@ -213,6 +95,14 @@ export function PlanSection() {
               </span>
             </p>
             <p className="mt-4 mb-0 text-[16px] leading-[1.6] text-pretty text-body">{plan.summary}</p>
+            <p className="mt-5 mb-0 flex flex-wrap items-center gap-1.5">
+              {plan.base && <span className="mr-0.5 text-[13px] leading-none font-bold text-muted">{plan.base} +</span>}
+              {plan.accents.map((accent) => (
+                <span key={accent} className={ACCENT}>
+                  {accent}
+                </span>
+              ))}
+            </p>
             <div className="mt-6 border-t border-line pt-6">
               <CheckList items={plan.features} lead={plan.base && `${plan.base} 전체 포함`} columns="narrow" />
             </div>
@@ -222,7 +112,7 @@ export function PlanSection() {
       </div>
 
       <PortfolioVideo />
-      <Comparison />
+      <PlanComparison />
     </Section>
   );
 }
