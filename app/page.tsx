@@ -16,7 +16,10 @@ import { Why } from "@/components/landing/Why";
 import { MotionController } from "@/components/motion/MotionController";
 import { INSTALL_SCENE, STORY_SCENES } from "@/lib/scenes";
 
-/** Section order follows ui_kits/sales-landing/index.html (Claude Design, approved), plus Pricing before Partner. */
+/**
+ * Section order follows ui_kits/sales-landing/index.html (Claude Design, approved), with the
+ * Founding Partner benefits moved up under the hero and the pricing summary before the final CTA.
+ */
 export default function Home() {
   return (
     <>
@@ -30,6 +33,7 @@ export default function Home() {
       <StoryRail />
       <main id="main">
         <Hero />
+        <Partner />
         <Problem />
         {STORY_SCENES.map((scene) => (
           <StoryScene key={scene.id} scene={scene} />
@@ -42,7 +46,6 @@ export default function Home() {
         <InstallPaths />
         <LiveDemo />
         <Pricing />
-        <Partner />
         <Contact />
       </main>
       <SiteFooter />

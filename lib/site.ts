@@ -32,8 +32,16 @@ export const SITE_TITLE = "BoostInterior | 인테리어 업체를 위한 AI 상�
 export const SITE_DESCRIPTION =
   "인테리어·리모델링 홈페이지 방문자의 조건을 이해하고, 관련 시공사례 추천부터 상담·견적 문의까지 연결하는 AI 상담 시스템.";
 
-/** Anchor of the pricing section (header "가격" link). */
+/** Anchor of the landing's pricing summary. The full scope lives on the pricing page. */
 export const PRICING_ID = "pricing";
+/** Dedicated pricing page (header "가격" link). */
+export const PRICING_PATH = "/pricing";
+export const PRICING_TITLE = "BoostInterior 가격 | 인테리어 AI 상담 시스템 구축·운영 비용";
+export const PRICING_DESCRIPTION =
+  "기존 홈페이지 연동 29만원부터, Quick Website 49만원, Core 월 88,000원부터. BoostInterior 구축 방식과 운영 플랜의 포함 범위를 확인하세요.";
+
+/** Anchor of the Founding Partner block on the landing. */
+export const PARTNER_ID = "partner";
 
 /**
  * The 15s hero loop (public/video/chat-to-portfolio*.mp4) is kept on disk but no longer
@@ -49,3 +57,9 @@ export const VIDEOS = {
     height: 1080,
   },
 } as const;
+
+/**
+ * AI Portfolio Video sample for /pricing. There is no real sample yet, and nothing is shown
+ * until there is one: set this to a real asset under public/ and the block appears.
+ */
+export const PORTFOLIO_VIDEO_SAMPLE: { src: string; poster: string; width: number; height: number } | null = null;

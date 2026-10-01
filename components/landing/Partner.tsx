@@ -1,53 +1,59 @@
 import { ButtonLink } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { Section } from "@/components/ui/Section";
-import { KAKAO_OPEN_CHAT_URL, SITE_NAME } from "@/lib/site";
+import { PARTNER_BENEFITS, PARTNER_TERMS } from "@/lib/partner";
+import { KAKAO_OPEN_CHAT_URL, PARTNER_ID, SITE_NAME } from "@/lib/site";
 
-/** Planned, not promised in detail: terms are set by the platform's policy when it launches. */
-const BENEFITS = ["우선 입점 기회", "초기 등록 지원", "기존 포트폴리오 이전 · 세팅 지원", "기본 입점 초기비용 면제"];
-
-/** Founding Partner — what early adopters get if the interior platform launches. The only future-facing block on the page. */
+/**
+ * Founding Partner — sits right under the hero: once the product is understood, "adopting now
+ * comes with more". The only future-facing block on the page; see lib/partner.ts for what is fixed.
+ */
 export function Partner() {
   return (
-    <Section id="partner" aria-labelledby="partner-title" pt="pt-20 mobile:pt-10">
-      <div
-        data-reveal
-        className="rounded-2xl bg-inverse px-20 py-24 text-center text-white mobile:rounded-xl mobile:px-6 mobile:py-12 mobile:text-left"
-      >
-        <p className="m-0 text-[15px] leading-[1.4] font-bold text-blue-300">Founding Partner · 초기 파트너 모집</p>
-        <h2
-          id="partner-title"
-          className="mt-3 mb-0 text-[52px] leading-[1.2] font-bold tracking-[-0.035em] text-balance narrow:text-[40px] mobile:text-[30px]"
-        >
-          {SITE_NAME} 초기 파트너를 모집하고 있습니다.
-        </h2>
-        <p className="mx-auto mt-4 mb-0 max-w-[760px] text-[20px] leading-[1.6] text-pretty text-gray-300 mobile:mx-0 mobile:text-[17px]">
-          {SITE_NAME} 초기 도입 업체에는 향후 인테리어 플랫폼 출시 시 우선 입점과 초기 등록 · 세팅 혜택을 제공할
-          예정입니다.
-        </p>
-        <div className="mt-10 mobile:mt-7">
-          <p id="partner-benefits" className="m-0 text-[13px] leading-[1.4] font-semibold tracking-[0.02em] text-gray-400">
-            플랫폼 출시 시 제공 예정
-          </p>
-          <ul
-            aria-labelledby="partner-benefits"
-            className="mt-3.5 mb-0 flex list-none flex-wrap items-center justify-center gap-2.5 p-0 mobile:justify-start"
+    <Section id={PARTNER_ID} aria-labelledby="partner-title" pt="pt-16 mobile:pt-12" pb="pb-10 mobile:pb-2">
+      <div data-reveal className="rounded-2xl bg-inverse px-14 py-16 text-white narrow:px-10 mobile:rounded-xl mobile:px-5 mobile:py-10">
+        <div className="mx-auto max-w-[820px] text-center mobile:mx-0 mobile:text-left">
+          <p className="m-0 text-[15px] leading-[1.4] font-bold text-blue-300">Founding Partner · 초기 파트너 혜택</p>
+          <h2
+            id="partner-title"
+            className="mt-3 mb-0 text-[44px] leading-[1.2] font-bold tracking-[-0.035em] text-balance narrow:text-[36px] mobile:text-[27px]"
           >
-            {BENEFITS.map((benefit) => (
-              <li
-                key={benefit}
-                className="inline-flex min-h-10 items-center rounded-pill border border-white/14 bg-white/8 px-4 py-2 text-[15px] leading-[1.3] font-semibold"
-              >
-                {benefit}
-              </li>
-            ))}
-          </ul>
+            지금 도입하는 업체는 <br className="mobile:hidden" />
+            초기 파트너 혜택을 먼저 받습니다.
+          </h2>
+          <p className="mt-4 mb-0 text-[19px] leading-[1.6] text-pretty text-gray-300 mobile:text-[16px]">
+            {SITE_NAME} 초기 도입 업체는 앞으로 추가되는 기능과 인테리어 플랫폼에서 먼저 혜택을 받는 파트너입니다.
+          </p>
         </div>
-        <p className="mt-6 mb-0 text-[13px] leading-[1.6] text-gray-400">
-          세부 혜택은 플랫폼 출시 시 운영정책에 따라 안내됩니다.
-        </p>
-        <div className="mt-10 mobile:mt-8">
-          <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="lg" arrow className="max-[480px]:w-full">
-            카카오톡 1:1 도입 상담
+
+        <ul className="mt-12 mb-0 grid list-none grid-cols-3 gap-4 p-0 narrow:grid-cols-2 mobile:mt-8 mobile:grid-cols-1 mobile:gap-3">
+          {PARTNER_BENEFITS.map((benefit) => (
+            <li
+              key={benefit.title}
+              className="rounded-xl border border-white/12 bg-white/6 p-7 mobile:flex mobile:gap-4 mobile:p-5"
+            >
+              <span className="grid size-11 flex-none place-items-center rounded-md bg-white/10 text-blue-300 mobile:size-10">
+                <Icon name={benefit.icon} />
+              </span>
+              <div className="mt-5 mobile:mt-0">
+                <p className="m-0 font-mono text-[12px] leading-none font-medium tracking-[0.02em] text-gray-400">
+                  {benefit.tag}
+                </p>
+                <h3 className="mt-2 mb-0 text-[20px] leading-[1.35] font-bold tracking-[-0.02em] text-balance mobile:text-[17px]">
+                  {benefit.title}
+                </h3>
+                <p className="mt-2 mb-0 text-[15px] leading-[1.6] text-pretty text-gray-300 mobile:text-[14px]">
+                  {benefit.text}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-10 flex items-center justify-between gap-8 narrow:flex-col narrow:items-start narrow:gap-6 mobile:mt-7">
+          <p className="m-0 max-w-[720px] text-[13px] leading-[1.6] text-gray-400">{PARTNER_TERMS}</p>
+          <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="lg" arrow className="flex-none max-[480px]:w-full">
+            초기 파트너로 도입 상담받기
           </ButtonLink>
         </div>
       </div>

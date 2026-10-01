@@ -10,27 +10,36 @@ const PATHS = [
   },
   {
     key: "B",
-    label: "홈페이지를 손봐야 한다면",
-    text: "상담과 문의로 이어지는 동선까지 함께 개선합니다.",
+    label: "새 홈페이지가 빨리 필요하다면",
+    text: `검증된 표준 구조로 홈페이지와 ${SITE_NAME}를 함께 만듭니다.`,
   },
   {
     key: "C",
-    label: "홈페이지도 새로 필요하다면",
-    text: `홈페이지 제작과 ${SITE_NAME}를 함께 구축합니다.`,
+    label: "지금 홈페이지를 고쳐 쓰고 싶다면",
+    text: "디자인과 상담 전환 동선을 맞춤 개선합니다.",
+  },
+  {
+    key: "D",
+    label: "브랜드부터 새로 설계한다면",
+    text: `맞춤 홈페이지와 ${SITE_NAME}를 함께 구축합니다.`,
   },
 ];
 
-/** 구축 방식 — follows the install scene: connect to the existing site, improve it, or build a new one. */
+/** 구축 방식 — follows the install scene: connect to the existing site, or build / improve / design one. */
 export function InstallPaths() {
   return (
     <Section id="install-paths" aria-label="구축 방식" pt="pt-10">
-      <div data-reveal className="grid grid-cols-3 border-t border-line-strong mobile:grid-cols-1">
+      <div data-reveal className="grid grid-cols-4 border-t border-line-strong narrow:grid-cols-2 mobile:grid-cols-1">
         {PATHS.map((path, i) => (
           <div
             key={path.key}
-            className={`pt-11 pb-2 mobile:px-0 mobile:py-7 ${
-              i ? "border-l border-line-strong px-10 narrow:px-6 mobile:border-t mobile:border-l-0" : "pr-10 narrow:pr-6"
-            }`}
+            className={[
+              "border-line-strong pt-11 pb-2 narrow:pb-10 mobile:px-0 mobile:py-7",
+              // 4 columns, then 2 × 2 at ≤1100px, then one column.
+              i ? "border-l px-8 mobile:border-t mobile:border-l-0" : "pr-8",
+              i % 2 ? "" : "narrow:border-l-0 narrow:pr-8 narrow:pl-0",
+              i > 1 ? "narrow:border-t" : "",
+            ].join(" ")}
           >
             <div className="flex items-center gap-3">
               <span
@@ -43,13 +52,13 @@ export function InstallPaths() {
               </span>
               <h3 className="m-0 text-[15px] leading-[1.4] font-bold text-muted">{path.label}</h3>
             </div>
-            <p className="mt-[18px] mb-0 text-[clamp(20px,2vw,26px)] leading-[1.4] font-bold tracking-[-0.025em] text-balance text-ink mobile:text-[22px]">
+            <p className="mt-[18px] mb-0 text-[clamp(19px,1.6vw,22px)] leading-[1.45] font-bold tracking-[-0.025em] text-balance text-ink narrow:text-[22px] mobile:text-[20px]">
               {path.text}
             </p>
           </div>
         ))}
       </div>
-      <p data-reveal className="mt-9 mb-0 mobile:mt-2">
+      <p data-reveal className="mt-9 mb-0 narrow:mt-7 mobile:mt-2">
         <a
           href={`#${PRICING_ID}`}
           className="group inline-flex items-center gap-1.5 text-[15px] leading-[1.4] font-semibold text-link no-underline"

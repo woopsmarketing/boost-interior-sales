@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "ghost" | "onImage" | "dark";
@@ -49,7 +50,10 @@ function Arrow() {
   );
 }
 
-/** Navigation — renders an <a>. External links open in a new tab and say so. */
+/**
+ * Navigation — renders an <a>. External links open in a new tab and say so;
+ * site routes ("/pricing") go through next/link, in-page anchors ("#pricing") stay plain.
+ */
 export function ButtonLink({
   variant,
   size,
@@ -60,8 +64,9 @@ export function ButtonLink({
   external,
   ...rest
 }: Common & AnchorHTMLAttributes<HTMLAnchorElement> & { href: string; external?: boolean }) {
+  const Anchor = !external && rest.href.startsWith("/") ? Link : "a";
   return (
-    <a
+    <Anchor
       {...rest}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       className={classes({ variant, size, full, className })}
@@ -69,7 +74,7 @@ export function ButtonLink({
       {children}
       {arrow && <Arrow />}
       {external && <span className="sr-only"> (새 창에서 열림)</span>}
-    </a>
+    </Anchor>
   );
 }
 
