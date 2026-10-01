@@ -1,0 +1,257 @@
+{
+ "fps": 30,
+ "canvas": "#F1F2F4",
+ "crf": 16,
+ "sources": {
+  "P": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/takes/typed-212405",
+  "A": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/admin/take-215209"
+ },
+ "segments": [
+  {
+   "name": "1 home",
+   "src": "P",
+   "from": 0.0,
+   "to": 4.205,
+   "speed": 1.0
+  },
+  {
+   "name": "2 open chat",
+   "src": "P",
+   "from": 4.205,
+   "to": 11.089,
+   "speed": 1.0
+  },
+  {
+   "name": "3 visitor types",
+   "src": "P",
+   "from": 11.089,
+   "to": 18.612,
+   "speed": 1.25
+  },
+  {
+   "name": "4 AI reply",
+   "src": "P",
+   "from": 18.612,
+   "to": 23.905,
+   "speed": 1.0
+  },
+  {
+   "name": "4b answer + card A",
+   "src": "P",
+   "from": 23.905,
+   "to": 33.335,
+   "speed": 1.0
+  },
+  {
+   "name": "5 viewer + gallery",
+   "src": "P",
+   "from": 33.335,
+   "to": 46.985,
+   "speed": 1.0
+  },
+  {
+   "name": "6 back to chat",
+   "src": "P",
+   "from": 46.985,
+   "to": 50.517,
+   "speed": 1.0
+  },
+  {
+   "name": "6b estimate intent typed",
+   "src": "P",
+   "from": 50.517,
+   "to": 54.989,
+   "speed": 1.25
+  },
+  {
+   "name": "6c remembered context",
+   "src": "P",
+   "from": 54.989,
+   "to": 63.781,
+   "speed": 1.0
+  },
+  {
+   "name": "7 consultation form",
+   "src": "P",
+   "from": 63.781,
+   "to": 70.54,
+   "speed": 1.0
+  },
+  {
+   "name": "8 business owner: inquiry",
+   "src": "A",
+   "from": 0.986,
+   "to": 13.957,
+   "speed": 1.0,
+   "xfade": 0.45,
+   "view": {
+    "cx": 0,
+    "cy": 900,
+    "z": 1.03567
+   }
+  },
+  {
+   "name": "9 end card",
+   "image": "/private/tmp/claude-501/-Users-woops-projects-boost-interior-sales/6314b5bc-8fe5-40ca-bfb1-a092fa52edf7/scratchpad/vid/pipeline/endcard.png",
+   "dur": 5.5,
+   "xfade": 0.6,
+   "insets": [
+    {
+     "src": "P",
+     "at": 30.13,
+     "rect": [
+      1210,
+      322,
+      372,
+      560
+     ],
+     "width": 540,
+     "x": 1180,
+     "y": 128,
+     "radius": 22
+    }
+   ]
+  }
+ ],
+ "camera": [
+  {
+   "t": 0,
+   "box": "framed",
+   "view": {
+    "cx": 800,
+    "cy": 450,
+    "z": 1
+   }
+  }
+ ],
+ "captions": [
+  {
+   "file": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/overlays/cap-c1.png",
+   "in": 0.5,
+   "out": 4.055
+  },
+  {
+   "file": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/overlays/cap-c2.png",
+   "in": 23.7,
+   "out": 26.825
+  },
+  {
+   "file": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/overlays/cap-c3.png",
+   "in": 27.525,
+   "out": 31.729999999999997
+  },
+  {
+   "file": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/overlays/cap-c4.png",
+   "in": 33.23,
+   "out": 44.58
+  },
+  {
+   "file": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/overlays/cap-c5.png",
+   "in": 57.759,
+   "out": 61.332
+  },
+  {
+   "file": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/overlays/cap-c6.png",
+   "in": 62.582,
+   "out": 68.04100000000001
+  },
+  {
+   "file": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/overlays/label-admin.png",
+   "in": 68.64100000000002,
+   "out": 81.012,
+   "pos": [
+    196,
+    12
+   ]
+  },
+  {
+   "file": "/private/tmp/claude-501/-Users-woops-projects-boost-chat/0daa23b1-fcc9-4f09-9e08-3b568759f23f/scratchpad/overlays/cap-c7.png",
+   "in": 69.14100000000002,
+   "out": 80.91199999999999
+  }
+ ],
+ "insets": [
+  {
+   "rect": [
+    1210,
+    322,
+    372,
+    560
+   ],
+   "scale": 1.5,
+   "pos": [
+    1245,
+    64
+   ],
+   "radius_css": 16,
+   "src": "P",
+   "in": 7.655,
+   "out": 32.13,
+   "in_dur": 0.75,
+   "out_dur": 0.35
+  },
+  {
+   "rect": [
+    1210,
+    322,
+    372,
+    560
+   ],
+   "scale": 1.5,
+   "pos": [
+    1245,
+    64
+   ],
+   "radius_css": 16,
+   "src": "P",
+   "in": 46.03,
+   "out": 73.141,
+   "in_dur": 0.75,
+   "out_dur": 0.4
+  },
+  {
+   "from": "brief",
+   "to": "contact",
+   "delay": 0.25,
+   "rect": [
+    441,
+    202,
+    942,
+    270
+   ],
+   "scale": 1.45,
+   "radius_css": 12,
+   "in_dur": 0.7,
+   "out_dur": 0.35,
+   "pos": [
+    264,
+    149
+   ],
+   "src": "A",
+   "in": 73.027,
+   "out": 78.61
+  },
+  {
+   "from": "contact",
+   "to": "end",
+   "delay": 0.15,
+   "rect": [
+    441,
+    468,
+    942,
+    122
+   ],
+   "scale": 1.45,
+   "radius_css": 12,
+   "in_dur": 0.6,
+   "out_dur": 0.4,
+   "pos": [
+    264,
+    412
+   ],
+   "src": "A",
+   "in": 78.76,
+   "out": 81.212
+  }
+ ]
+}
