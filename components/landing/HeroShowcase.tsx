@@ -10,7 +10,7 @@ import { ASSETS, CAPTURED_CONDITIONS, CHAT_WINDOW, cropStyles, type Asset, type 
 const FRAME = { w: 600, h: 640 };
 const SPLIT = "(min-width: 1024px)";
 
-const STEPS = ["자연어 상담", "시공사례 추천", "사진 확인", "견적 문의"] as const;
+const STEPS = ["대화로 상담", "시공사례 추천", "사진 확인", "견적 문의"] as const;
 
 interface Shot {
   asset: Asset;

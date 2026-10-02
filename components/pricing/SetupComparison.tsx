@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { DisclosureButton, useDisclosure } from "@/components/pricing/Disclosure";
 import { Letter, SetupPrice } from "@/components/pricing/SetupParts";
+import { Badge } from "@/components/ui/Badge";
 import { Check } from "@/components/ui/CheckList";
 import {
   COMMON_BOOSTINTERIOR_SCOPE,
@@ -88,7 +89,10 @@ export function SetupComparison() {
           >
             <span className="flex items-start gap-2">
               <Letter option={option} />
-              <span className="pt-[3px] text-[14px] leading-[1.35] font-bold tracking-[-0.01em] text-ink">{option.name}</span>
+              <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1 pt-[3px]">
+                <span className="text-[14px] leading-[1.35] font-bold tracking-[-0.01em] text-ink">{option.name}</span>
+                {option.badge && <Badge>{option.badge}</Badge>}
+              </span>
             </span>
             <SetupPrice option={option} className="text-[19px]" />
           </button>
@@ -109,12 +113,18 @@ export function SetupComparison() {
               </th>
               {SETUP_OPTIONS.map((option) => (
                 <th key={option.key} scope="col" className="border-l border-line px-6 py-7 align-top font-normal narrow:px-4">
-                  <a href={`#${option.id}`} className="group flex items-start gap-2.5 text-ink no-underline hover:text-ink">
+                  <span className="flex items-start gap-2.5">
                     <Letter option={option} />
-                    <span className="pt-0.5 text-[16px] leading-[1.35] font-bold tracking-[-0.01em] underline-offset-4 group-hover:underline">
-                      {option.name}
+                    <span className="flex flex-wrap items-center gap-x-2 pt-0.5">
+                      <a
+                        href={`#${option.id}`}
+                        className="text-[16px] leading-[1.35] font-bold tracking-[-0.01em] text-ink no-underline underline-offset-4 hover:text-ink hover:underline"
+                      >
+                        {option.name}
+                      </a>
+                      {option.badge && <Badge>{option.badge}</Badge>}
                     </span>
-                  </a>
+                  </span>
                   <span className="mt-4 block">
                     <SetupPrice option={option} className="text-[clamp(21px,2vw,28px)]" />
                   </span>

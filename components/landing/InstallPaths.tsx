@@ -11,7 +11,7 @@ const PATHS = [
   {
     key: "B",
     label: "새 홈페이지가 빨리 필요하다면",
-    text: `검증된 표준 구조로 홈페이지와 ${SITE_NAME}를 함께 만듭니다.`,
+    text: `새 홈페이지와 ${SITE_NAME}를 빠르게 시작합니다.`,
   },
   {
     key: "C",

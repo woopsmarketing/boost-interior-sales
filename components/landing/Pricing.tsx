@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { CheckList } from "@/components/ui/CheckList";
 import { Notice } from "@/components/ui/Notice";
@@ -81,9 +82,12 @@ export function Pricing() {
               >
                 {option.key}
               </span>
-              <h4 id={`setup-${option.key}`} className="m-0 text-[18px] leading-[1.3] font-bold tracking-[-0.02em] text-ink">
-                {option.name}
-              </h4>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5">
+                <h4 id={`setup-${option.key}`} className="m-0 text-[18px] leading-[1.3] font-bold tracking-[-0.02em] text-ink">
+                  {option.name}
+                </h4>
+                {option.badge && <Badge>{option.badge}</Badge>}
+              </div>
             </div>
             <p className="mt-5 mb-0 flex items-baseline whitespace-nowrap text-ink">
               <span className={AMOUNT}>{manwon(option.price)}</span>

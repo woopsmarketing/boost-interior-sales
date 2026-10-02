@@ -37,7 +37,7 @@ export function PricingHero() {
       <SceneHeader
         as="h1"
         titleId="pricing-hero-title"
-        eyebrow={`${SITE_NAME} Pricing`}
+        eyebrow={`${SITE_NAME} 가격`}
         className="max-w-[860px]"
         title={
           <>

@@ -1,6 +1,7 @@
 // Pricing regression checks: `npm test` (node --test, no dependencies).
 // lib/pricing.ts is the only price source, so the prices, the common build and the VAT wording
 // are checked there; the rest of the customer-facing source is scanned as text.
+// The copy is written for an owner who knows no web terms, so the wording is checked too.
 import assert from "node:assert/strict";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -26,6 +27,10 @@ const sourceFiles = (dir) =>
     .map((entry) => join(entry.parentPath, entry.name));
 /** Everything a customer can be shown: pages, components and the copy they read from. */
 const SOURCE = ["app", "components", "lib"].flatMap(sourceFiles).map((file) => ({ file, text: readFileSync(file, "utf8") }));
+/** The same source without comments: what is left can reach the page. */
+const code = (text) => text.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
+/** The two files all pricing copy lives in. */
+const COPY = SOURCE.filter(({ file }) => /pricing(-page)?\.ts$/.test(file));
 
 test("current prices", () => {
   assert.deepEqual(
@@ -62,16 +67,16 @@ test("the common build is defined once and covers the agreed scope", () => {
   for (const required of [
     "업체 기본정보",
     "상담 전문정보",
-    "기존 포트폴리오 전체 수집",
+    "기존 시공사례 전체 수집",
     "시공사례 구조화",
     "AI 시공사례 검색",
-    "포트폴리오 추천",
+    "관련 시공사례 추천",
     "AI 상담 흐름",
     "견적 문의 흐름",
     "BoostInterior 관리 화면",
-    "위젯",
-    "도메인",
-    "기본 동작 QA",
+    "AI 상담창 연결",
+    "홈페이지 주소",
+    "기본 동작 점검",
     "초기 데이터 검수",
   ]) {
     assert.ok(all.includes(required), `common build is missing "${required}"`);
@@ -110,7 +115,7 @@ test("the plan cards are short, and nothing they left out is missing from the co
     "상담 전문지식 관리 기능",
     "방문자의 공사 조건 이해",
     "실제 시공사례 검색",
-    "관련 포트폴리오 추천",
+    "관련 시공사례 추천",
     "사진 · 시공사례 연결",
     "상담 맥락 유지",
     "견적 문의 수집",
@@ -119,19 +124,19 @@ test("the plan cards are short, and nothing they left out is missing from the co
     "방문자 행동 분석",
     "방문 페이지",
     "주요 클릭 분석",
-    "체류 · 이탈 흐름 분석",
+    "얼마나 머물고 어디에서 나가는지 분석",
     "상담 시작",
-    "포트폴리오 확인",
-    "견적 문의 전환 흐름",
+    "시공사례 확인",
+    "견적 문의로 이어지는 흐름",
     "AI Portfolio Video 제작 지원 · 건수 제한 없음",
-    "월 1회 방문 · 상담 데이터 리뷰",
-    "AI 상담 응답 흐름 점검",
+    "월 1회 방문 · 상담 데이터 함께 확인",
+    "AI 상담 답변 흐름 점검",
     "자주 묻는 질문",
-    "응답 개선",
+    "답변 개선",
     "전문 상담지식",
-    "포트폴리오 업데이트 지원",
-    "상담 · 견적 CTA 흐름 점검",
-    "전환 동선 개선 제안",
+    "시공사례 업데이트 지원",
+    "상담 · 견적 문의 버튼과 동선 점검",
+    "개선 제안",
     "월간 개선 포인트 정리",
     "우선 지원",
   ]) {
@@ -155,20 +160,60 @@ test("no obsolete price, and no amount written outside lib/pricing.ts", () => {
     }
     if (file.endsWith(join("lib", "pricing.ts"))) continue;
     // Comments may name an amount; a string or JSX text may not.
-    const code = text.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "");
-    assert.ok(!/\d{2,3}[,_]\d{3}\s*원|\d+\s*만\s*원/.test(code), `${file} hardcodes a price`);
+    assert.ok(!/\d{2,3}[,_]\d{3}\s*원|\d+\s*만\s*원/.test(code(text)), `${file} hardcodes a price`);
   }
 });
 
-test("CMS: the homepage CMS is never sold, and never confused with the BoostInterior 관리 화면", () => {
+test("homepage management is never sold, and never confused with the BoostInterior 관리 화면", () => {
   for (const { file, text } of SOURCE) {
-    assert.ok(!/BoostChat/.test(text.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, "")), `${file} shows BoostChat`);
-    assert.ok(!/관리자 CMS|CMS\s*(기본\s*)?제공|CMS\s*·\s*SEO|SEO\s*·\s*속도\s*·\s*CMS/.test(text), `${file} sells a homepage CMS`);
+    assert.ok(!/BoostChat/.test(code(text)), `${file} shows BoostChat`);
   }
+  // There is no homepage management feature to sell: an option may only name it as work quoted separately.
   for (const option of SETUP_OPTIONS) {
-    assert.ok(!scopeItems(option).some((item) => /CMS/.test(item)), `${option.key} includes CMS work`);
-    assert.ok(!option.highlights.some((item) => /CMS/.test(item)), `${option.key} highlights a CMS`);
+    for (const item of [...scopeItems(option), ...option.highlights, option.summary, option.website]) {
+      assert.ok(!/홈페이지 관리|관리자/.test(item), `${option.key} sells homepage management: "${item}"`);
+    }
   }
-  const [, , improvement] = SETUP_OPTIONS;
-  assert.match(improvement.beyond, /CMS 재개발.*별도 견적/);
+  const [, , improvement, custom] = SETUP_OPTIONS;
+  assert.match(improvement.beyond, /홈페이지 관리 기능 재개발.*별도 견적/);
+  assert.match(custom.beyond, /홈페이지 관리 기능 개발.*별도 견적/);
+  assert.ok(COMMON_SCOPE_ITEMS.some((item) => item.startsWith("BoostInterior 관리 화면")));
+});
+
+test("Quick Start: the customer-facing name, and the only badge", () => {
+  assert.deepEqual(
+    SETUP_OPTIONS.map((option) => [option.key, option.name, option.badge]),
+    [
+      ["A", "기존 홈페이지 연동", undefined],
+      ["B", "Quick Start", "인기상품"],
+      ["C", "기존 홈페이지 맞춤 개선", undefined],
+      ["D", "맞춤 홈페이지 제작", undefined],
+    ],
+  );
+  for (const { file, text } of SOURCE) {
+    assert.ok(!/Quick Website|Custom Website|빠른 홈페이지 제작/.test(code(text)), `${file} still shows an old product name`);
+    assert.ok(!/빠른 시작 추천|추천 상품|\bBEST\b|\bPOPULAR\b/.test(code(text)), `${file} uses another badge wording`);
+  }
+});
+
+test("customer language: no web jargon in what a customer reads", () => {
+  for (const { file, text } of SOURCE) {
+    const jargon = code(text).match(/\b(SEO|HTTPS|SSL|CMS|UX|CTA|QA)\b|Responsive|반응형|템플릿|[Tt]emplate/);
+    assert.ok(!jargon, `${file} shows "${jargon?.[0]}"`);
+  }
+  for (const { file, text } of COPY) {
+    const copy = code(text);
+    const jargon = copy.match(/\bURL\b|위젯|도메인|전환|성능|스크립트|백엔드|인터랙션|정보구조|자연어|섹션/);
+    assert.ok(!jargon, `${file} shows "${jargon?.[0]}"`);
+    // 시공사례, not 포트폴리오 — except the feature names and the one-line description of the video.
+    const portfolio = copy.match(/(?<!영상 )포트폴리오|(?<!AI |3D |\+ )Portfolio(?! Video)/);
+    assert.ok(!portfolio, `${file} says "${portfolio?.[0]}" for 시공사례`);
+  }
+});
+
+test("no promise the page cannot keep: search ranking, speed, security", () => {
+  for (const { file, text } of COPY) {
+    const promise = code(text).match(/상위\s*노출|무조건|최고 속도|완벽한 보안|해킹|100\s*%/);
+    assert.ok(!promise, `${file} promises "${promise?.[0]}"`);
+  }
 });

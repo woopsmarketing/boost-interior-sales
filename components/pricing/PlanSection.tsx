@@ -28,11 +28,11 @@ function PortfolioVideo() {
           <span className={ROLE_TAG}>Growth부터</span>
         </p>
         <p className="mt-2.5 mb-0 max-w-[820px] text-[16px] leading-[1.7] text-pretty text-body mobile:text-[15px]">
-          완성된 시공사진을 단순한 갤러리로 끝내지 않고, 공간을 따라 이동하는 형태의 영상 포트폴리오로 보여줄 수 있도록
-          지원합니다.
+          시공사진을 공간의 흐름에 따라 보여주는 영상 포트폴리오입니다. 완성된 시공사진을 사진 목록으로만 두지 않고,
+          공간을 따라 이동하는 영상으로 보여줄 수 있도록 지원합니다.
         </p>
         <p className="mt-3 mb-0 text-[14px] leading-[1.6] font-semibold text-ink">
-          시공 포트폴리오 영상 제작 · 건수 제한 없음
+          시공사례 영상 제작 · 건수 제한 없음
           <span className="font-normal text-muted"> — 업체가 제공하는 실제 시공 자료 기준</span>
         </p>
         {sample && (
@@ -66,7 +66,7 @@ export function PlanSection() {
           eyebrow="운영 플랜 · 매월"
           titleId="plans-title"
           title="필요한 기능과 운영 수준을 선택합니다."
-          sub="Core는 핵심 기능, Growth는 분석과 Portfolio Video, Managed는 사람이 함께하는 운영입니다."
+          sub="Core는 핵심 기능, Growth는 방문자 분석과 시공사진 영상(AI Portfolio Video), Managed는 사람이 함께하는 운영입니다."
         />
       </div>
 

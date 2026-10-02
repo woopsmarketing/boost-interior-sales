@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Check } from "@/components/ui/CheckList";
 
-/** A fact that holds for everything around it (VAT, the portfolio policy), set apart from the body copy. */
+/** A fact that holds for everything around it (VAT, the 시공사례 policy), set apart from the body copy. */
 export function Notice({ children, className = "" }: { children: ReactNode; className?: string }) {
   return (
     <p

@@ -3,6 +3,7 @@ import { CommonScope } from "@/components/pricing/CommonScope";
 import { Disclosure } from "@/components/pricing/Disclosure";
 import { SetupComparison } from "@/components/pricing/SetupComparison";
 import { Letter, SetupPrice } from "@/components/pricing/SetupParts";
+import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { CheckList } from "@/components/ui/CheckList";
 import { Icon } from "@/components/ui/Icon";
@@ -39,6 +40,7 @@ function Head({ option }: { option: SetupOption }) {
         <h3 id={`${option.id}-title`} className="m-0 text-[20px] leading-[1.3] font-bold tracking-[-0.02em] text-ink mobile:text-[18px]">
           {option.name}
         </h3>
+        {option.badge && <Badge>{option.badge}</Badge>}
       </div>
       <SetupPrice option={option} className="text-[28px] mobile:text-[24px]" />
     </div>
@@ -131,7 +133,7 @@ function Integration() {
   );
 }
 
-/** Quick Website — six things the standard structure already covers; its homepage work item by item on demand. */
+/** Quick Start — six things the new homepage gives the customer; its homepage work item by item on demand. */
 function Quick() {
   return (
     <Block option={QUICK} className="mt-6 mobile:mt-4">
@@ -172,7 +174,7 @@ function Quick() {
   );
 }
 
-/** Quick Website vs 기존 홈페이지 맞춤 개선 — answered between the two prices it is about. */
+/** Quick Start vs 기존 홈페이지 맞춤 개선 — answered between the two prices it is about. */
 function QuickVsImprovement() {
   const { question, quick, improvement } = QUICK_VS_IMPROVEMENT;
   return (
@@ -209,7 +211,7 @@ function QuickVsImprovement() {
   );
 }
 
-/** 맞춤 개선 / Custom Website — priced per site, so: what it is, the main work, and what is quoted separately. */
+/** 맞춤 개선 / 맞춤 홈페이지 제작 — priced per site, so: what it is, the main work, and what is quoted separately. */
 function Tailored({ option }: { option: SetupOption }) {
   return (
     <Block option={option} className="row-span-5 grid grid-rows-subgrid gap-y-0">
