@@ -1,5 +1,5 @@
 import type { IconName } from "@/components/ui/Icon";
-import { COMMON_BUILD, manwon, SETUP_OPTIONS } from "@/lib/pricing";
+import { BASIC_CONNECTIONS_SHORT, COMMON_BUILD, manwon, SETUP_OPTIONS } from "@/lib/pricing";
 
 /**
  * Copy for the /pricing page that is not a price: what every setup option shares, what the
@@ -133,7 +133,7 @@ export const PRICING_FAQ: readonly { q: string; a: string }[] = [
   },
   {
     q: `${QUICK.name}와 ${CUSTOM.name}은 무엇이 다른가요?`,
-    a: `빠르게 시작하는 것과 처음부터 맞춰 만드는 것의 차이입니다. ${QUICK.name}(${spoken(QUICK)})는 인테리어 업체에 필요한 기본 기능을 갖춘 홈페이지를 빠르게 제작합니다. 휴대폰에서도 보기 편한 화면, 네이버·구글 노출을 위한 기본 설정, 빠른 페이지 로딩, 고객이 안심하고 접속할 수 있는 보안 연결, 시공사례 구성, 상담 · 견적 문의로 이어지는 버튼과 동선을 기본으로 갖춥니다. ${CUSTOM.name}(${spoken(CUSTOM)})은 브랜드, 메뉴와 화면 구성, 주요 페이지를 업체에 맞춰 처음부터 설계합니다. ${COMMON_BUILD}은 두 방식 모두 동일하게 포함됩니다.`,
+    a: `빠르게 시작하는 것과 처음부터 맞춰 만드는 것의 차이입니다. ${QUICK.name}(${spoken(QUICK)})는 인테리어 업체에 필요한 기본 기능을 갖춘 홈페이지를 빠르게 제작합니다. 휴대폰에서도 보기 편한 화면, 네이버·구글 노출을 위한 기본 설정, 빠른 페이지 로딩, 고객이 안심하고 접속할 수 있는 보안 연결, 시공사례 구성, 상담 · 견적 문의로 이어지는 버튼과 동선을 기본으로 갖춥니다. ${CUSTOM.name}(${spoken(CUSTOM)})은 브랜드, 메뉴와 화면 구성, 주요 페이지를 업체에 맞춰 처음부터 설계합니다. ${BASIC_CONNECTIONS_SHORT}과 ${COMMON_BUILD}은 두 방식 모두 동일하게 포함됩니다.`,
   },
   {
     q: `${QUICK.name}로 만든 홈페이지는 나중에 수정할 수 있나요?`,

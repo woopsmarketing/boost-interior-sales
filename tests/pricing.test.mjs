@@ -7,6 +7,8 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import {
+  BASIC_CONNECTIONS,
+  BASIC_CONNECTIONS_SHORT,
   COMMON_BOOSTINTERIOR_SCOPE,
   COMMON_BUILD,
   COMMON_SCOPE_ITEMS,
@@ -223,16 +225,42 @@ test("customer language: one spelling of 시공사례, and no data terms for wha
   }
 });
 
-test("scope wording says what is included: basic connections named, improvement bounded", () => {
-  const [, quick, improvement, custom] = SETUP_OPTIONS;
-  const connection = scopeItems(quick).find((item) => item.includes("기본 연결"));
-  assert.match(connection, /카카오톡.*지도.*전화.*SNS 등/);
+test("basic connections: B / C / D include the same ones, only complex integration is quoted separately", () => {
+  const [integration, quick, improvement, custom] = SETUP_OPTIONS;
+  assert.match(BASIC_CONNECTIONS, /카카오톡.*지도.*전화.*SNS 등.*기본 연결 지원/);
+  assert.match(BASIC_CONNECTIONS_SHORT, /카카오톡.*지도.*전화.*SNS 등 기본 연결/);
+  // A higher-priced option must never read as connecting less than Quick Start.
+  for (const option of [quick, improvement, custom]) {
+    const connections = scopeItems(option).filter((item) => item.includes("기본 연결"));
+    assert.deepEqual(connections, [BASIC_CONNECTIONS], `${option.key} does not carry the basic connections as the others do`);
+    assert.ok(option.includes.launch.includes(BASIC_CONNECTIONS), `${option.key} lists the basic connections outside "보안 연결 · 점검"`);
+    assert.match(option.beyond, /복잡한 외부 시스템 연동.*별도 견적/);
+    // A link or a button is basic; nothing basic may be listed as separately quoted.
+    assert.ok(!/카카오|지도|전화|SNS/.test(option.beyond), `${option.key} quotes a basic connection separately`);
+  }
+  // 기존 홈페이지 연동 leaves the homepage as it is: no homepage work, so no connection work either.
+  assert.ok(!scopeItems(integration).some((item) => item.includes("기본 연결")));
+  for (const option of [improvement, custom]) assert.match(option.note, /예약 · 결제 등 복잡한 외부 시스템 연동.*별도 견적/);
+  // On an existing homepage the connections go as far as the homepage allows, and the copy says so.
+  assert.match(improvement.note, /기본 연결은 현재 홈페이지에서 연결 가능한 범위에서 지원/);
+  assert.match(improvement.beyond, /추가 개발이 필요한 연결은 범위 확인 후 안내/);
+  const faq = SOURCE.find(({ file }) => file.endsWith("pricing-page.ts")).text;
+  assert.match(faq, /\$\{BASIC_CONNECTIONS_SHORT\}과 \$\{COMMON_BUILD\}은 두 방식 모두 동일하게 포함됩니다/);
+  for (const { file, text } of SOURCE) {
+    assert.ok(!/외부 서비스/.test(code(text)), `${file} still says "외부 서비스"`);
+    // The names of how the connections are built stay out of the sales copy.
+    const internal = code(text).match(/Contact Channels?|Launcher/);
+    assert.ok(!internal, `${file} shows "${internal?.[0]}"`);
+  }
+});
+
+test("scope wording says what is included: improvement bounded", () => {
+  const [, , improvement] = SETUP_OPTIONS;
   for (const option of SETUP_OPTIONS) {
     const all = [...scopeItems(option), option.beyond, option.note ?? ""].join("\n");
     assert.ok(!/외부 서비스/.test(all), `${option.key} still says "외부 서비스"`);
     assert.ok(!/기본적인 문제점|모든 문제/.test(all), `${option.key} promises to fix everything`);
   }
-  for (const option of [quick, improvement, custom]) assert.match(option.beyond, /복잡한 외부 시스템 연동.*별도 견적/);
   assert.ok(scopeItems(improvement).some((item) => /주요 페이지 오류 등 필요한 범위를 확인해 개선/.test(item)));
   assert.ok(!SETUP_COMPARISON.some((row) => row.values.some((value) => /문제점/.test(value))));
 });
