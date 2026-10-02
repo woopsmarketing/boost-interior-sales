@@ -28,7 +28,7 @@ function PortfolioVideo() {
           <span className={ROLE_TAG}>Growth부터</span>
         </p>
         <p className="mt-2.5 mb-0 max-w-[820px] text-[16px] leading-[1.7] text-pretty text-body mobile:text-[15px]">
-          시공사진을 공간의 흐름에 따라 보여주는 영상 포트폴리오입니다. 완성된 시공사진을 사진 목록으로만 두지 않고,
+          시공사진을 공간의 흐름에 따라 보여주는 AI 시공사례 영상입니다. 완성된 시공사진을 사진 목록으로만 두지 않고,
           공간을 따라 이동하는 영상으로 보여줄 수 있도록 지원합니다.
         </p>
         <p className="mt-3 mb-0 text-[14px] leading-[1.6] font-semibold text-ink">

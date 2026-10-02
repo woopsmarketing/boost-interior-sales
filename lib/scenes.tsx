@@ -69,7 +69,7 @@ export const STORY_SCENES: readonly StorySceneData[] = [
     id: "recommend",
     rail: "사례 추천",
     ar: FRAME,
-    title: "조건에 맞는 우리 업체 시공 사례를 바로 보여줍니다.",
+    title: "조건에 맞는 우리 업체 시공사례를 바로 보여줍니다.",
     sub: "지역 · 평형 · 공사 범위가 비슷한 사례를 카드로 추천합니다.",
     composite: ASSETS.scenePortfolio,
     layers: [

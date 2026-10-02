@@ -85,7 +85,7 @@ export const ASSETS = {
     "layer-chat-widget.png",
     500,
     745,
-    "대구 32평 아파트 주방·욕실 리모델링 요청에 비슷한 시공 사례를 추천하는 BoostInterior 상담창",
+    "대구 32평 아파트 주방·욕실 리모델링 요청에 비슷한 시공사례를 추천하는 BoostInterior 상담창",
     CHAT_WINDOW,
   ),
   chatMemory: p(
@@ -106,9 +106,9 @@ export const ASSETS = {
     "layer-portfolio-card.png",
     405,
     428,
-    "추천 시공 사례 카드: 32평 주방·욕실 중심 리뉴얼, 대구 북구 · 공급 32평",
+    "추천 시공사례 카드: 32평 주방·욕실 중심 리뉴얼, 대구 북구 · 공급 32평",
   ),
-  viewerModal: p("layer-viewer-modal.png", 878, 622, "상담창에서 연 시공 사례 사진 뷰어"),
+  viewerModal: p("layer-viewer-modal.png", 878, 622, "상담창에서 연 시공사례 사진 뷰어"),
   viewerCard: p(
     "layer-viewer-card.png",
     482,
@@ -126,28 +126,28 @@ export const ASSETS = {
     "정리된 상담 요청: 고객이 원하는 공사 요약과 지역 · 주거 유형 · 면적 · 공사 범위 · 선호 스타일 · 관심 사례",
   ),
   phoneChat: p("layer-phone-chat.png", 380, 788, "휴대폰 화면에서 열린 BoostInterior 상담창"),
-  phoneViewer: p("layer-phone-viewer.png", 380, 788, "휴대폰 화면 전체로 열린 시공 사례 뷰어"),
+  phoneViewer: p("layer-phone-viewer.png", 380, 788, "휴대폰 화면 전체로 열린 시공사례 뷰어"),
 
   sceneConversation: p(
     "scene-01-conversation.png",
     1400,
     790,
-    "부스트 인테리어 데모 홈페이지와, 방문자 요청에 시공 사례를 추천하는 BoostInterior 상담창",
+    "부스트 인테리어 데모 홈페이지와, 방문자 요청에 시공사례를 추천하는 BoostInterior 상담창",
     COMPOSITE,
   ),
   scenePortfolio: p(
     "scene-02-portfolio.png",
     1320,
     690,
-    "데모 홈페이지 위에 표시된 추천 시공 사례 카드",
+    "데모 홈페이지 위에 표시된 추천 시공사례 카드",
   ),
   sceneViewer: p(
     "scene-03-viewer.png",
     1520,
     760,
-    "상담창을 떠나지 않고 연 시공 사례 사진 뷰어와 사례 정보",
+    "상담창을 떠나지 않고 연 시공사례 사진 뷰어와 사례 정보",
   ),
-  scenePhotos: p("scene-04-photos.png", 1420, 720, "한 시공 사례의 주방 · 싱크대 · 욕실 사진"),
+  scenePhotos: p("scene-04-photos.png", 1420, 720, "한 시공사례의 주방 · 싱크대 · 욕실 사진"),
   sceneMemory: p(
     "scene-05-memory.png",
     1400,
@@ -173,7 +173,7 @@ export const ASSETS = {
     "scene-08-mobile.png",
     860,
     830,
-    "휴대폰에서 화면 전체로 열린 상담창과 시공 사례 뷰어",
+    "휴대폰에서 화면 전체로 열린 상담창과 시공사례 뷰어",
   ),
   sceneInstall: p(
     "scene-09-install.png",

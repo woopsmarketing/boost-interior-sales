@@ -12,7 +12,9 @@ export function PartnerBand() {
   return (
     <Section id="founding-partner" aria-labelledby="founding-partner-title" pt="pt-32 mobile:pt-20" pb="pb-0">
       <div data-reveal className="rounded-2xl bg-inverse px-14 py-14 text-white narrow:px-10 mobile:rounded-xl mobile:px-5 mobile:py-9">
-        <p className="m-0 text-[15px] leading-[1.4] font-bold text-blue-300">Founding Partner · 초기 파트너 혜택</p>
+        <p className="m-0 text-[15px] leading-[1.4] font-bold text-blue-300">
+          초기 파트너 혜택 <span className="ml-1 text-[13px] font-medium text-gray-400">Founding Partner</span>
+        </p>
         <h2
           id="founding-partner-title"
           className="mt-3 mb-0 max-w-[820px] text-[36px] leading-[1.25] font-bold tracking-[-0.035em] text-balance narrow:text-[30px] mobile:text-[24px]"

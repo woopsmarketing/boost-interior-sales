@@ -82,15 +82,12 @@ export function Disclosure({
   show,
   hide,
   context,
-  actions,
   className = "",
   children,
 }: {
   show: string;
   hide: string;
   context?: string;
-  /** Sits next to the toggle, e.g. a link */
-  actions?: ReactNode;
   className?: string;
   children: ReactNode;
 }) {
@@ -100,7 +97,6 @@ export function Disclosure({
     <div className={className}>
       <div className="flex flex-wrap items-center gap-3 max-[480px]:grid">
         <DisclosureButton ref={ref} open={open} controls={id} show={show} hide={hide} context={context} onClick={toggle} />
-        {actions}
       </div>
       <div id={id} hidden={!open} className="motion-safe:animate-disclose">
         {children}

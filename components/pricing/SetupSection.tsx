@@ -14,11 +14,12 @@ import {
   INTEGRATION_GROUPS,
   INTEGRATION_PROCESS,
   INTEGRATION_VALUE,
+  QUICK_EXAMPLE,
   QUICK_FEATURES,
   QUICK_VALUE,
   QUICK_VS_IMPROVEMENT,
 } from "@/lib/pricing-page";
-import { DEMO_URL, SITE_NAME } from "@/lib/site";
+import { DEMO_URL, KAKAO_OPEN_CHAT_URL } from "@/lib/site";
 
 const [INTEGRATION, QUICK, IMPROVEMENT, CUSTOM] = SETUP_OPTIONS;
 
@@ -133,7 +134,10 @@ function Integration() {
   );
 }
 
-/** Quick Start — six things the new homepage gives the customer; its homepage work item by item on demand. */
+/**
+ * Quick Start — six things the new homepage gives the customer, the example site to see them on,
+ * and its homepage work item by item on demand.
+ */
 function Quick() {
   return (
     <Block option={QUICK} className="mt-6 mobile:mt-4">
@@ -154,16 +158,23 @@ function Quick() {
         ))}
       </ul>
 
-      <Disclosure
-        {...SCOPE_TOGGLE}
-        context={QUICK.name}
-        className="mt-7"
-        actions={
-          <ButtonLink href={DEMO_URL} external variant="ghost" size="md" arrow className="h-11 px-4 text-[15px]">
-            {SITE_NAME} 실제 데모 보기
+      <div className="mt-7 flex flex-wrap items-center justify-between gap-x-8 gap-y-4 rounded-lg bg-accent-soft px-6 py-5 mobile:px-5">
+        <div>
+          <p className={SUBHEAD}>{QUICK_EXAMPLE.title}</p>
+          <p className="mt-1.5 mb-0 text-[16px] leading-[1.6] font-semibold text-pretty text-ink">{QUICK_EXAMPLE.text}</p>
+          <p className="mt-0.5 mb-0 text-[13px] leading-[1.6] text-muted">{QUICK_EXAMPLE.note}</p>
+        </div>
+        <div className="flex flex-none flex-wrap gap-3 max-[480px]:grid max-[480px]:w-full">
+          <ButtonLink href={DEMO_URL} external size="md" arrow>
+            {QUICK_EXAMPLE.cta}
           </ButtonLink>
-        }
-      >
+          <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="md" variant="secondary">
+            {QUICK_EXAMPLE.consult}
+          </ButtonLink>
+        </div>
+      </div>
+
+      <Disclosure {...SCOPE_TOGGLE} context={QUICK.name} className="mt-7">
         <div className="mt-7 border-t border-line pt-7">
           <Scope option={QUICK} className="min-[600px]:grid-cols-2 min-[600px]:gap-x-8 min-[1101px]:grid-cols-3" />
           <Fit option={QUICK} className="mt-6" />

@@ -19,6 +19,7 @@ import {
   VAT_NOTICE,
   scopeItems,
 } from "../lib/pricing.ts";
+import { PARTNER_BENEFITS, PARTNER_TERMS } from "../lib/partner.ts";
 
 const ROOT = join(import.meta.dirname, "..");
 const sourceFiles = (dir) =>
@@ -68,7 +69,7 @@ test("the common build is defined once and covers the agreed scope", () => {
     "업체 기본정보",
     "상담 전문정보",
     "기존 시공사례 전체 수집",
-    "시공사례 구조화",
+    "기존 시공사례를 AI가 찾아줄 수 있도록 정리",
     "AI 시공사례 검색",
     "관련 시공사례 추천",
     "AI 상담 흐름",
@@ -205,10 +206,72 @@ test("customer language: no web jargon in what a customer reads", () => {
     const copy = code(text);
     const jargon = copy.match(/\bURL\b|위젯|도메인|전환|성능|스크립트|백엔드|인터랙션|정보구조|자연어|섹션/);
     assert.ok(!jargon, `${file} shows "${jargon?.[0]}"`);
-    // 시공사례, not 포트폴리오 — except the feature names and the one-line description of the video.
-    const portfolio = copy.match(/(?<!영상 )포트폴리오|(?<!AI |3D |\+ )Portfolio(?! Video)/);
+    // 시공사례, not 포트폴리오 — except the two feature names.
+    const portfolio = copy.match(/포트폴리오|(?<!AI |3D |\+ )Portfolio(?! Video)/);
     assert.ok(!portfolio, `${file} says "${portfolio?.[0]}" for 시공사례`);
   }
+});
+
+test("customer language: one spelling of 시공사례, and no data terms for what is done with them", () => {
+  for (const { file, text } of SOURCE) {
+    assert.ok(!/시공 사례/.test(text), `${file} spells it "시공 사례"`);
+    const term = code(text).match(/구조화|데이터 구조|검색 데이터|포트폴리오/);
+    assert.ok(!term, `${file} shows "${term?.[0]}"`);
+  }
+  for (const name of ["opengraph-image.alt.txt", "twitter-image.alt.txt"]) {
+    assert.ok(!/시공 사례/.test(readFileSync(join(ROOT, "app", name), "utf8")), `${name} spells it "시공 사례"`);
+  }
+});
+
+test("scope wording says what is included: basic connections named, improvement bounded", () => {
+  const [, quick, improvement, custom] = SETUP_OPTIONS;
+  const connection = scopeItems(quick).find((item) => item.includes("기본 연결"));
+  assert.match(connection, /카카오톡.*지도.*전화.*SNS 등/);
+  for (const option of SETUP_OPTIONS) {
+    const all = [...scopeItems(option), option.beyond, option.note ?? ""].join("\n");
+    assert.ok(!/외부 서비스/.test(all), `${option.key} still says "외부 서비스"`);
+    assert.ok(!/기본적인 문제점|모든 문제/.test(all), `${option.key} promises to fix everything`);
+  }
+  for (const option of [quick, improvement, custom]) assert.match(option.beyond, /복잡한 외부 시스템 연동.*별도 견적/);
+  assert.ok(scopeItems(improvement).some((item) => /주요 페이지 오류 등 필요한 범위를 확인해 개선/.test(item)));
+  assert.ok(!SETUP_COMPARISON.some((row) => row.values.some((value) => /문제점/.test(value))));
+});
+
+test("Quick Start: edits are supported on request, the example site is never a customer case", () => {
+  const [, quick] = SETUP_OPTIONS;
+  assert.match(quick.note, /홈페이지 내용 수정이 필요한 경우 요청해주시면 반영을 지원합니다/);
+  const page = SOURCE.find(({ file }) => file.endsWith("pricing-page.ts")).text;
+  assert.match(page, /cta: `\$\{QUICK\.name\} 예시 보기`/);
+  assert.match(page, /가상 인테리어 업체를 기준으로 만든 예시 사이트입니다/);
+  for (const { file, text } of SOURCE) {
+    const claim = code(text).match(/고객 사례|고객 제작 사례|실제 고객 홈페이지|구축 사례|성공 사례|실제 구축 고객/);
+    assert.ok(!claim, `${file} presents the demo as "${claim?.[0]}"`);
+    // Customers do not edit the homepage themselves, and 시공사례 upload is not a feature yet.
+    const selfService = code(text).match(/고객이 직접|직접 (등록|업로드)|직접 수정할 수|시공사례 (등록|업로드) 기능/);
+    assert.ok(!selfService, `${file} sells self-service editing: "${selfService?.[0]}"`);
+  }
+});
+
+test("Founding Partner: six benefits in plain Korean, no amount invented", () => {
+  assert.deepEqual(
+    PARTNER_BENEFITS.map((benefit) => benefit.title),
+    [
+      "향후 플랫폼 우선 입점",
+      "기본 입점비 12개월 무료",
+      "AI 시공사례 영상 우선 혜택",
+      "3D 시공사례 우선 적용",
+      "신규 기능 먼저 이용",
+      "초기 파트너 전용 할인 · 무료 이용 혜택",
+    ],
+  );
+  const copy = PARTNER_BENEFITS.flatMap((benefit) => [benefit.tag, benefit.title, benefit.text]).join("\n");
+  const jargon = copy.match(/Platform|Early Access|Partner Benefits|Credit|크레딧|전환|포트폴리오|12 Months/);
+  assert.ok(!jargon, `Founding Partner copy shows "${jargon?.[0]}"`);
+  // English only as the product name and the two feature names.
+  const english = copy.replace(/AI Portfolio Video|3D Portfolio|BoostInterior|\bAI\b|\b3D\b/g, "").match(/[A-Za-z]{2,}/);
+  assert.ok(!english, `Founding Partner copy shows "${english?.[0]}"`);
+  assert.ok(!/\d\s*(%|원|만원)/.test(copy), "Founding Partner copy states an amount");
+  assert.match(PARTNER_TERMS, /광고 · 프리미엄 노출 등 추가 상품은 포함되지 않습니다/);
 });
 
 test("no promise the page cannot keep: search ranking, speed, security", () => {

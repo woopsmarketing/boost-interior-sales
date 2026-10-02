@@ -13,7 +13,9 @@ export function Partner() {
     <Section id={PARTNER_ID} aria-labelledby="partner-title" pt="pt-16 mobile:pt-12" pb="pb-10 mobile:pb-2">
       <div data-reveal className="rounded-2xl bg-inverse px-14 py-16 text-white narrow:px-10 mobile:rounded-xl mobile:px-5 mobile:py-10">
         <div className="mx-auto max-w-[820px] text-center mobile:mx-0 mobile:text-left">
-          <p className="m-0 text-[15px] leading-[1.4] font-bold text-blue-300">Founding Partner · 초기 파트너 혜택</p>
+          <p className="m-0 text-[15px] leading-[1.4] font-bold text-blue-300">
+            초기 파트너 혜택 <span className="ml-1 text-[13px] font-medium text-gray-400">Founding Partner</span>
+          </p>
           <h2
             id="partner-title"
             className="mt-3 mb-0 text-[44px] leading-[1.2] font-bold tracking-[-0.035em] text-balance narrow:text-[36px] mobile:text-[27px]"
@@ -36,7 +38,7 @@ export function Partner() {
                 <Icon name={benefit.icon} />
               </span>
               <div className="mt-5 mobile:mt-0">
-                <p className="m-0 font-mono text-[12px] leading-none font-medium tracking-[0.02em] text-gray-400">
+                <p className="m-0 text-[12px] leading-none font-medium tracking-[0.02em] text-gray-400">
                   {benefit.tag}
                 </p>
                 <h3 className="mt-2 mb-0 text-[20px] leading-[1.35] font-bold tracking-[-0.02em] text-balance mobile:text-[17px]">
