@@ -51,9 +51,14 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
+/**
+ * globals.css scrolls smoothly for in-page anchors. `data-scroll-behavior="smooth"` tells Next.js to
+ * switch that off while it moves to a new page: without it, a page opened from far down the landing
+ * renders at the old scroll position (the bottom of a shorter page) and then glides up to the top.
+ */
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="ko" className={`${pretendard.variable} ${jetbrainsMono.variable}`}>
+    <html lang="ko" data-scroll-behavior="smooth" className={`${pretendard.variable} ${jetbrainsMono.variable}`}>
       <body>{children}</body>
     </html>
   );

@@ -2,15 +2,43 @@ import type { IconName } from "@/components/ui/Icon";
 import { BASIC_CONNECTIONS_SHORT, COMMON_BUILD, manwon, SETUP_OPTIONS } from "@/lib/pricing";
 
 /**
- * Copy for the /pricing page that is not a price: what every setup option shares, what the
- * 290,000원 setup actually does, what Quick Start is, and the questions an owner asks before
- * paying. Prices and scope lists come from lib/pricing.ts.
+ * Copy for the two pricing pages that is not a price. /pricing: what holds whichever option and plan
+ * is picked. /pricing/details: what every setup option shares, what the 290,000원 setup actually does,
+ * what Quick Start is, and the questions an owner asks before paying. Prices and scope lists come
+ * from lib/pricing.ts.
  */
 
 const [INTEGRATION, QUICK, IMPROVEMENT, CUSTOM] = SETUP_OPTIONS;
 
 /** "29만원" / "120만원부터" — amounts inside sentences, read from the price list. */
 const spoken = (option: (typeof SETUP_OPTIONS)[number]) => `${manwon(option.price)}만원${option.from ? "부터" : ""}`;
+
+/** /pricing, under the cheapest way in: the doubt that price raises first. */
+export const STARTER_NOTE = `${spoken(INTEGRATION)}은 상담창 설치비가 아니라, 우리 업체에 BoostInterior를 처음 구축하는 기본 구축비입니다.`;
+
+/** /pricing: what is the same whichever setup option and plan an owner picks. */
+export const ASSURANCES: readonly { icon: IconName; title: string; text: string }[] = [
+  {
+    icon: "chat",
+    title: "AI 상담 기능은 모두 같습니다",
+    text: `어떤 구축 방식을 선택해도 ${COMMON_BUILD}은 동일하게 포함됩니다. 달라지는 것은 홈페이지 작업 범위입니다.`,
+  },
+  {
+    icon: "layers",
+    title: "시공사례 건수 제한 없음",
+    text: "지금 홈페이지에 공개된 기존 시공사례를 전체 정리해, AI가 조건에 맞게 찾아줄 수 있도록 만듭니다.",
+  },
+  {
+    icon: "sliders",
+    title: "관리 화면 기본 제공",
+    text: "상담 기록과 상담 요청은 BoostInterior 관리 화면에서 바로 확인합니다.",
+  },
+  {
+    icon: "ticket",
+    title: "표시 가격이 최종 금액",
+    text: "구축비와 월 이용료 모두 부가세(VAT)가 포함된 금액입니다.",
+  },
+];
 
 /**
  * The common build, above the setup comparison: the four options carry the same BoostInterior,

@@ -2,12 +2,12 @@ import type { IconName } from "@/components/ui/Icon";
 
 /**
  * BoostInterior pricing — the only prices this site shows (KRW), shared by the landing summary
- * and the /pricing page. Two independent choices: how the system is built (one-time setup)
+ * and the two pricing pages. Two independent choices: how the system is built (one-time setup)
  * and how it is run (monthly plan).
  * Every amount is what the customer pays, VAT included. Monthly only: there is no annual plan.
  */
 
-/** VAT wording. `all` is said once per page; the setup and monthly areas of /pricing add their own line. */
+/** VAT wording. `all` is said once per page; the setup and monthly areas of the pricing pages add their own line. */
 export const VAT_NOTICE = {
   all: "모든 표시 가격은 부가세(VAT)가 포함된 최종 금액입니다.",
   setup: "모든 구축비는 부가세(VAT)가 포함된 최종 금액입니다.",
@@ -62,7 +62,7 @@ export const BASIC_CONNECTIONS = "카카오톡 상담 · 지도 · 전화 · SNS
 /** The same scope inside a sentence. */
 export const BASIC_CONNECTIONS_SHORT = "카카오톡 · 지도 · 전화 · SNS 등 기본 연결";
 
-/** /pricing: the areas of homepage work the setup options are compared by, in display order. */
+/** /pricing/details: the areas of homepage work the setup options are compared by, in display order. */
 export const SETUP_SCOPE_GROUPS = [
   { key: "site", label: "홈페이지 디자인 · 구성" },
   { key: "portfolio", label: "시공사례 페이지" },
@@ -76,7 +76,7 @@ export type SetupScopeKey = (typeof SETUP_SCOPE_GROUPS)[number]["key"];
 export interface SetupOption {
   /** Same letter as the matching path in InstallPaths */
   key: "A" | "B" | "C" | "D";
-  /** Anchor of the option's detail block on /pricing */
+  /** Anchor of the option's block on both pricing pages */
   id: string;
   name: string;
   /** Compact label shown next to the name wherever the option is listed */
@@ -86,13 +86,15 @@ export interface SetupOption {
   from?: boolean;
   /** What happens to the homepage — the one thing the options differ in, and what the price follows */
   website: string;
+  /** The owner's situation it answers, as the landing's install paths and the /pricing cards say it */
+  situation: string;
   summary: string;
   /** Who it is for */
   fit: string;
   /** Landing card: the homepage work that matters most */
   highlights: readonly string[];
   /**
-   * /pricing: the homepage work by area, on top of the common build. A string instead of a list
+   * /pricing/details: the homepage work by area, on top of the common build. A string instead of a list
    * means the homepage is left as it is there, and says so.
    */
   includes: Readonly<Record<SetupScopeKey, readonly string[] | string>>;
@@ -109,7 +111,7 @@ export interface Plan {
   summary: string;
   /** The plan this one contains in full */
   base?: "Core" | "Growth";
-  /** The card, on the landing and on /pricing: the few things that define the plan. Every feature is in COMPARISON. */
+  /** The card, on the landing and on both pricing pages: the few things that define the plan. Every feature is in COMPARISON. */
   highlights: readonly string[];
   note?: string;
 }
@@ -121,6 +123,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
     name: "기존 홈페이지 연동",
     price: 290_000,
     website: "지금 홈페이지 그대로 사용",
+    situation: "이미 홈페이지가 있다면",
     summary: "현재 홈페이지는 그대로 사용하면서, 우리 업체에 맞춘 BoostInterior AI 상담 시스템을 연결합니다.",
     fit: "이미 홈페이지가 있고, 디자인은 그대로 두고 싶은 업체",
     highlights: ["지금 홈페이지 그대로 사용", "디자인 · 구성 변경 없음"],
@@ -135,12 +138,13 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
   },
   {
     key: "B",
-    // The id is also the /pricing anchor, so it keeps the name the option had before "Quick Start".
+    // The id is also the pricing pages' anchor, so it keeps the name the option had before "Quick Start".
     id: "quick-website",
     name: "Quick Start",
     badge: "인기상품",
     price: 490_000,
     website: "새 홈페이지 빠르게 제작",
+    situation: "새 홈페이지가 빨리 필요하다면",
     summary: "새 홈페이지가 필요하고, 복잡한 제작 과정 없이 빠르게 시작하고 싶은 업체를 위한 상품입니다.",
     fit: "홈페이지가 없거나 새로 만들고 싶고, 오래 기다리지 않고 빠르게 시작하고 싶은 업체",
     highlights: ["휴대폰에서도 보기 편한 화면", "네이버·구글 노출 기본 설정 · 빠른 로딩", "기존 공개 시공사례 이전"],
@@ -161,6 +165,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
     price: 1_200_000,
     from: true,
     website: "지금 홈페이지 맞춤 개선",
+    situation: "지금 홈페이지를 고쳐 쓰고 싶다면",
     summary: "현재 홈페이지를 살리면서 보기 불편한 화면과 시공사례 구성, 모바일 화면, 상담·견적 문의 동선을 업체에 맞게 개선합니다.",
     fit: "현재 홈페이지를 버리고 싶지는 않지만, 디자인과 상담 · 견적 문의 동선은 제대로 개선하고 싶은 업체",
     highlights: ["기존 홈페이지 진단 후 범위 확정", "보기 불편한 화면 · 모바일 화면 개선", "시공사례 → 상담 연결 개선"],
@@ -189,6 +194,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
     price: 2_500_000,
     from: true,
     website: "완전 맞춤 홈페이지 새로 제작",
+    situation: "브랜드부터 새로 설계한다면",
     summary: "업체의 브랜드와 원하는 구성에 맞춰 홈페이지를 처음부터 맞춤 제작합니다.",
     fit: "브랜드부터 홈페이지 구성까지 완전히 맞춰 제작하고 싶은 업체",
     highlights: ["브랜드에 맞춘 맞춤 디자인", "메뉴 · 화면 구성 맞춤 설계", "네이버·구글 노출 기본 설정 · 빠른 로딩"],
@@ -215,7 +221,7 @@ type PerSetup = readonly [string, string, string, string];
 const SAME: PerSetup = ["동일하게 포함", "동일하게 포함", "동일하게 포함", "동일하게 포함"];
 
 /**
- * /pricing setup comparison, collapsed: the common build in one row — the same in all four —
+ * /pricing/details setup comparison, collapsed: the common build in one row — the same in all four —
  * and then the homepage work, which is where the four differ and what the price follows.
  * Short status words rather than ✓ / ✗ — the options differ in kind, not in how much they include.
  * `included` rows are part of every option.
@@ -280,7 +286,7 @@ const ALL: Included = [true, true, true];
 const GROWTH_UP: Included = [false, true, true];
 const MANAGED_ONLY: Included = [false, false, true];
 
-/** /pricing comparison, collapsed: one row per category below — the six differences that decide a plan. */
+/** /pricing/details comparison, collapsed: one row per category below — the six differences that decide a plan. */
 export const COMPARISON_CORE: readonly { label: string; plans: Included }[] = [
   { label: "24시간 AI 상담", plans: ALL },
   { label: "시공사례 검색 · 추천", plans: ALL },
@@ -291,7 +297,7 @@ export const COMPARISON_CORE: readonly { label: string; plans: Included }[] = [
 ];
 
 /**
- * /pricing comparison, expanded: everything each monthly plan carries, grouped by what the owner
+ * /pricing/details comparison, expanded: everything each monthly plan carries, grouped by what the owner
  * cares about. The plan cards only show highlights, so this is where every feature is listed.
  */
 export const COMPARISON: readonly { category: string; rows: readonly { label: string; plans: Included }[] }[] = [

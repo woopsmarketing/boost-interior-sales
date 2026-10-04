@@ -15,9 +15,10 @@ const LINK = "text-[15px] leading-none font-medium no-underline hover:text-ink m
 /**
  * Fixed 64px nav. Turns solid (86% page color + 14px blur) after 40px of scroll —
  * the MotionController toggles `data-solid`.
- * On the landing the section links are in-page anchors; on /pricing they lead back to it.
+ * On the landing the section links are in-page anchors; on the pricing pages they lead back to it.
+ * "가격" stays marked on /pricing/details, which is part of the pricing it links to.
  */
-export function SiteHeader({ page = "home" }: { page?: "home" | "pricing" }) {
+export function SiteHeader({ page = "home" }: { page?: "home" | "pricing" | "pricing-details" }) {
   const home = page === "home";
   return (
     <header
@@ -58,7 +59,7 @@ export function SiteHeader({ page = "home" }: { page?: "home" | "pricing" }) {
           <li>
             <Link
               href={PRICING_PATH}
-              aria-current={home ? undefined : "page"}
+              aria-current={page === "pricing" ? "page" : page === "pricing-details" ? "true" : undefined}
               className={`${LINK} ${home ? "text-muted" : "font-semibold text-ink"}`}
             >
               가격

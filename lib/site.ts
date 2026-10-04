@@ -39,12 +39,18 @@ export const SITE_DESCRIPTION =
 
 /** Anchor of the landing's pricing summary. The full scope lives on the pricing page. */
 export const PRICING_ID = "pricing";
-/** Dedicated pricing page (header "가격" link). */
+/** Pricing at a glance (header "가격" link): every price, and which one fits. */
 export const PRICING_PATH = "/pricing";
 export const PRICING_TITLE = "BoostInterior 가격 | 인테리어 AI 상담 시스템 구축·운영 비용";
 /** Amounts come from the price list, so the search snippet cannot fall behind the page. */
-export const PRICING_DESCRIPTION = `${INTEGRATION.name} ${manwon(INTEGRATION.price)}만원부터, ${QUICK.name} ${manwon(QUICK.price)}만원, ${CORE.name} 월 ${won(CORE.price)}원부터. 모든 가격은 부가세(VAT) 포함. BoostInterior 구축 방식과 운영 플랜의 포함 범위를 확인하세요.`;
-/** /pricing: anchor of the plan comparison table. The plan cards link to it. */
+export const PRICING_DESCRIPTION = `${INTEGRATION.name} ${manwon(INTEGRATION.price)}만원부터, ${QUICK.name} ${manwon(QUICK.price)}만원, ${CORE.name} 월 ${won(CORE.price)}원부터. 모든 가격은 부가세(VAT) 포함. BoostInterior 구축 방식과 운영 플랜을 한눈에 비교하세요.`;
+
+/** The full scope behind every price: what each option and plan includes, and the FAQ. */
+export const PRICING_DETAILS_PATH = "/pricing/details";
+export const PRICING_DETAILS_TITLE = "BoostInterior 상세 가격 | 구축 방식별 포함 범위 · 운영 플랜별 기능 비교";
+export const PRICING_DETAILS_DESCRIPTION =
+  "BoostInterior 구축 방식 4가지의 전체 포함 범위, 운영 플랜 3가지의 전체 기능 비교, 결정 전에 가장 많이 묻는 질문. 모든 가격은 부가세(VAT) 포함.";
+/** /pricing/details: anchor of the plan comparison table. The plan cards on both pricing pages link to it. */
 export const COMPARISON_ID = "comparison";
 
 /** Anchor of the Founding Partner block on the landing. */
@@ -66,7 +72,7 @@ export const VIDEOS = {
 } as const;
 
 /**
- * AI Portfolio Video sample for /pricing. There is no real sample yet, and nothing is shown
+ * AI Portfolio Video sample for /pricing/details. There is no real sample yet, and nothing is shown
  * until there is one: set this to a real asset under public/ and the block appears.
  */
 export const PORTFOLIO_VIDEO_SAMPLE: { src: string; poster: string; width: number; height: number } | null = null;

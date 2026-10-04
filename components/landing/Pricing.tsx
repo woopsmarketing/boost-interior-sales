@@ -6,7 +6,7 @@ import { Notice } from "@/components/ui/Notice";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
 import { COMMON_BUILD, manwon, PLANS, SETUP_OPTIONS, VAT_NOTICE, won } from "@/lib/pricing";
-import { KAKAO_OPEN_CHAT_URL, PRICING_ID, PRICING_PATH } from "@/lib/site";
+import { KAKAO_OPEN_CHAT_URL, PRICING_DETAILS_PATH, PRICING_ID } from "@/lib/site";
 
 /** Cards share their row tracks (subgrid), so prices, copy and lists line up across a row. */
 const CARD = "grid grid-rows-subgrid gap-y-0 rounded-xl bg-white p-7 shadow-md mobile:p-6";
@@ -49,7 +49,7 @@ function Step({
 /**
  * 도입 비용 — the landing's price summary: four ways to build (one-time) and three ways to
  * run (monthly), a few lines each. Every setup card opens with the same line — the common build —
- * and then says what happens to the homepage. The full scope of every option lives on /pricing.
+ * and then says what happens to the homepage. The full scope of every option lives on /pricing/details.
  */
 export function Pricing() {
   return (
@@ -140,7 +140,7 @@ export function Pricing() {
           </p>
         </div>
         <div className="flex flex-none flex-wrap gap-3 max-[480px]:grid max-[480px]:w-full">
-          <ButtonLink href={PRICING_PATH} size="lg" arrow>
+          <ButtonLink href={PRICING_DETAILS_PATH} size="lg" arrow>
             가격과 포함 범위 자세히 보기
           </ButtonLink>
           <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="lg" variant="secondary">

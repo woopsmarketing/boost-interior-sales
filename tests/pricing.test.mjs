@@ -302,6 +302,26 @@ test("Founding Partner: six benefits in plain Korean, no amount invented", () =>
   assert.match(PARTNER_TERMS, /광고 · 프리미엄 노출 등 추가 상품은 포함되지 않습니다/);
 });
 
+test("a page opened from the landing starts at the top", () => {
+  // globals.css scrolls smoothly; without the attribute Next.js 16 keeps that on while it changes pages,
+  // so /pricing opened from far down the landing showed its bottom first and then glided up.
+  assert.match(readFileSync(join(ROOT, "app", "globals.css"), "utf8"), /scroll-behavior:\s*smooth/);
+  assert.match(readFileSync(join(ROOT, "app", "layout.tsx"), "utf8"), /<html[^>]*\bdata-scroll-behavior="smooth"/);
+});
+
+test("/pricing stays a summary: every price, one card each, the full scope one link away", () => {
+  const page = readFileSync(join(ROOT, "app", "pricing", "page.tsx"), "utf8");
+  const summary = readFileSync(join(ROOT, "components", "pricing", "PricingSummary.tsx"), "utf8");
+  for (const detail of ["SetupSection", "PlanSection", "PricingFaq", "TwoPrices"]) {
+    assert.ok(!page.includes(detail), `/pricing shows ${detail} again; it belongs on /pricing/details`);
+  }
+  assert.ok(!/use client|Disclosure|<table|<details/.test(summary), "/pricing has toggles or tables again");
+  assert.match(summary, /PRICING_DETAILS_PATH/);
+  const situations = SETUP_OPTIONS.map((option) => option.situation);
+  assert.equal(new Set(situations).size, SETUP_OPTIONS.length, "two options answer the same situation");
+  for (const situation of situations) assert.match(situation, /다면$/);
+});
+
 test("no promise the page cannot keep: search ranking, speed, security", () => {
   for (const { file, text } of COPY) {
     const promise = code(text).match(/상위\s*노출|무조건|최고 속도|완벽한 보안|해킹|100\s*%/);

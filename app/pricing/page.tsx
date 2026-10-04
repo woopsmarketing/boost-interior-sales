@@ -1,45 +1,19 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type { ResolvingMetadata } from "next";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { MotionController } from "@/components/motion/MotionController";
-import { PartnerBand, PricingCta, PricingFaq } from "@/components/pricing/PricingClosing";
-import { PricingHero, TwoPrices } from "@/components/pricing/PricingIntro";
-import { PlanSection } from "@/components/pricing/PlanSection";
-import { SetupSection } from "@/components/pricing/SetupSection";
-import { PRICING_DESCRIPTION, PRICING_PATH, PRICING_TITLE, SITE_NAME } from "@/lib/site";
+import { PartnerBand, PricingCta } from "@/components/pricing/PricingClosing";
+import { Assurances, DetailsLink, PlanSummary, SetupSummary, SummaryHero } from "@/components/pricing/PricingSummary";
+import { pageMetadata } from "@/lib/page-metadata";
+import { PRICING_DESCRIPTION, PRICING_PATH, PRICING_TITLE } from "@/lib/site";
 
-/**
- * Metadata merges shallowly: a page that sets `openGraph` / `twitter` replaces the layout's,
- * including the share image from app/opengraph-image.jpg. So both are restated here and the
- * parent's images are carried over.
- */
-export async function generateMetadata(_props: PageProps<"/pricing">, parent: ResolvingMetadata): Promise<Metadata> {
-  const { openGraph, twitter } = await parent;
-  return {
-    title: PRICING_TITLE,
-    description: PRICING_DESCRIPTION,
-    alternates: { canonical: PRICING_PATH },
-    openGraph: {
-      type: "website",
-      locale: "ko_KR",
-      url: PRICING_PATH,
-      siteName: SITE_NAME,
-      title: PRICING_TITLE,
-      description: PRICING_DESCRIPTION,
-      images: openGraph?.images ?? [],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: PRICING_TITLE,
-      description: PRICING_DESCRIPTION,
-      images: twitter?.images ?? [],
-    },
-  };
+export function generateMetadata(_props: PageProps<"/pricing">, parent: ResolvingMetadata) {
+  return pageMetadata(parent, { path: PRICING_PATH, title: PRICING_TITLE, description: PRICING_DESCRIPTION });
 }
 
 /**
- * 가격 — the full scope behind every price: why there are two prices, what each of the four
- * setups includes, what each monthly plan carries, and the questions asked before deciding.
+ * 가격 — every price on one short page: the cheapest way in, one card per setup option and plan,
+ * and what holds whichever is picked. The full scope behind each price is on /pricing/details.
  */
 export default function PricingPage() {
   return (
@@ -52,12 +26,12 @@ export default function PricingPage() {
       </a>
       <SiteHeader page="pricing" />
       <main id="main">
-        <PricingHero />
-        <TwoPrices />
-        <SetupSection />
-        <PlanSection />
+        <SummaryHero />
+        <SetupSummary />
+        <PlanSummary />
+        <Assurances />
+        <DetailsLink />
         <PartnerBand />
-        <PricingFaq />
         <PricingCta />
       </main>
       <SiteFooter note={null} />

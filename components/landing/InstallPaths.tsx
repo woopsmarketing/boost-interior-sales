@@ -1,29 +1,15 @@
 import { Section } from "@/components/ui/Section";
+import { SETUP_OPTIONS } from "@/lib/pricing";
 import { PRICING_ID, SITE_NAME } from "@/lib/site";
 
-/** Same letters and order as SETUP_OPTIONS in lib/pricing.ts. */
-const PATHS = [
-  {
-    key: "A",
-    label: "이미 홈페이지가 있다면",
-    text: `기존 디자인은 그대로 두고 ${SITE_NAME}를 구축합니다.`,
-  },
-  {
-    key: "B",
-    label: "새 홈페이지가 빨리 필요하다면",
-    text: `새 홈페이지와 ${SITE_NAME}를 빠르게 시작합니다.`,
-  },
-  {
-    key: "C",
-    label: "지금 홈페이지를 고쳐 쓰고 싶다면",
-    text: `디자인과 상담 동선을 맞춤 개선하고 ${SITE_NAME}를 함께 구축합니다.`,
-  },
-  {
-    key: "D",
-    label: "브랜드부터 새로 설계한다면",
-    text: `맞춤 홈페이지와 ${SITE_NAME}를 함께 구축합니다.`,
-  },
+/** Same letters, order and situations as SETUP_OPTIONS in lib/pricing.ts. */
+const TEXT = [
+  `기존 디자인은 그대로 두고 ${SITE_NAME}를 구축합니다.`,
+  `새 홈페이지와 ${SITE_NAME}를 빠르게 시작합니다.`,
+  `디자인과 상담 동선을 맞춤 개선하고 ${SITE_NAME}를 함께 구축합니다.`,
+  `맞춤 홈페이지와 ${SITE_NAME}를 함께 구축합니다.`,
 ];
+const PATHS = SETUP_OPTIONS.map((option, i) => ({ key: option.key, label: option.situation, text: TEXT[i] }));
 
 /** 구축 방식 — follows the install scene: connect to the existing site, or build / improve / design one. */
 export function InstallPaths() {

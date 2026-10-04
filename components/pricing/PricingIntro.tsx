@@ -1,10 +1,11 @@
+import Link from "next/link";
 import { Br } from "@/components/ui/Br";
 import { ButtonLink } from "@/components/ui/Button";
 import { Notice } from "@/components/ui/Notice";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
 import { COMMON_BUILD, PLANS, SETUP_OPTIONS, VAT_NOTICE, won } from "@/lib/pricing";
-import { DEMO_URL, KAKAO_OPEN_CHAT_URL, SITE_NAME } from "@/lib/site";
+import { DEMO_URL, KAKAO_OPEN_CHAT_URL, PRICING_PATH, SITE_NAME } from "@/lib/site";
 
 const [INTEGRATION] = SETUP_OPTIONS;
 const [CORE] = PLANS;
@@ -26,29 +27,40 @@ const KINDS = [
   },
 ];
 
-/** /pricing hero — what the page answers, and the two ways out: 상담 and the live demo. */
-export function PricingHero() {
+/** /pricing/details hero — what the page answers, the way back to the summary, and the two ways out: 상담 and the live demo. */
+export function DetailsHero() {
   return (
     <section
       id="top"
       aria-labelledby="pricing-hero-title"
-      className="mx-auto max-w-[1440px] px-20 pt-[148px] pb-4 mobile:px-5 mobile:pt-[104px] mobile:pb-0"
+      className="mx-auto max-w-[1440px] px-20 pt-[132px] pb-4 mobile:px-5 mobile:pt-[96px] mobile:pb-0"
     >
+      <p className="mt-0 mb-7 mobile:mb-5">
+        <Link
+          href={PRICING_PATH}
+          className="group inline-flex items-center gap-1.5 text-[15px] leading-[1.4] font-semibold text-muted no-underline hover:text-ink"
+        >
+          <span aria-hidden="true" className="transition-transform duration-160 ease-out group-hover:-translate-x-0.5">
+            ←
+          </span>
+          <span className="underline-offset-4 group-hover:underline">가격 한눈에 보기</span>
+        </Link>
+      </p>
       <SceneHeader
         as="h1"
         titleId="pricing-hero-title"
-        eyebrow={`${SITE_NAME} 가격`}
+        eyebrow={`${SITE_NAME} 상세 가격`}
         className="max-w-[860px]"
         title={
           <>
-            필요한 만큼만 구축하고, <br />
-            필요한 만큼만 운영하세요.
+            구축 방식과 운영 플랜, <br />
+            포함 범위를 모두 확인하세요.
           </>
         }
         sub={
           <>
             {SITE_NAME}는 초기 구축과 월 운영을 분리합니다. <Br />
-            현재 홈페이지 상태에 맞는 구축 방식을 선택하고, 필요한 기능과 운영 수준에 맞는 플랜을 선택할 수 있습니다.
+            구축 방식마다 무엇이 포함되는지, 플랜은 어떻게 다른지, 결정하기 전에 가장 많이 묻는 질문까지 정리했습니다.
           </>
         }
         subClassName="mobile:text-[17px]"
