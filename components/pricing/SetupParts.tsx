@@ -25,7 +25,7 @@ export function SetupPrice({ option, className = "text-[24px]" }: { option: Setu
         <span className="leading-none font-bold tracking-[-0.035em]">{won(option.price)}</span>
         <span className="ml-0.5 text-[0.62em] leading-none font-bold">원</span>
       </span>
-      {option.from && <span className="ml-1 text-[0.54em] leading-none font-semibold text-body">부터</span>}
+      {option.from && <span className="ml-1 text-[max(0.54em,12px)] leading-none font-semibold text-body">부터</span>}
     </span>
   );
 }

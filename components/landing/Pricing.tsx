@@ -6,7 +6,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
 import { ENTRY_HEADLINE } from "@/lib/home";
-import { KAKAO_OPEN_CHAT_URL, KAKAO_RECOMMEND_LABEL, PRICING_ID, PRICING_PATH } from "@/lib/site";
+import { KAKAO_NOTE, KAKAO_OPEN_CHAT_URL, KAKAO_RECOMMEND_LABEL, PRICING_ID, PRICING_PATH } from "@/lib/site";
 
 /**
  * 가격 — the landing does not repeat the price list. It says how little it takes to start, lets the
@@ -53,13 +53,16 @@ export function Pricing() {
             확인 후 맞는 구축 방식을 안내드립니다.
           </span>
         </p>
-        <div className="flex flex-none flex-wrap gap-3 max-[480px]:grid max-[480px]:w-full">
-          <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="lg" arrow>
-            {KAKAO_RECOMMEND_LABEL}
-          </ButtonLink>
-          <ButtonLink href={PRICING_PATH} size="lg" variant="secondary">
-            가격 자세히 보기
-          </ButtonLink>
+        <div className="flex-none max-[480px]:w-full">
+          <div className="flex flex-wrap gap-3 max-[480px]:grid">
+            <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="lg" arrow>
+              {KAKAO_RECOMMEND_LABEL}
+            </ButtonLink>
+            <ButtonLink href={PRICING_PATH} size="lg" variant="secondary">
+              가격 자세히 보기
+            </ButtonLink>
+          </div>
+          <p className="mt-3 mb-0 text-[13px] leading-[1.6] text-muted">{KAKAO_NOTE}</p>
         </div>
       </div>
     </Section>

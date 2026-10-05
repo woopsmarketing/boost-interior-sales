@@ -279,7 +279,7 @@ export const PLANS: readonly Plan[] = [
     summary: "방문자가 어디를 보고 어떻게 움직이는지 확인하고, 시공사진을 공간의 흐름에 따라 영상으로 보여줍니다.",
     base: "Core",
     highlights: ["방문자가 어디를 보고 어떻게 움직이는지 확인", "AI Portfolio Video (시공사진 영상) · 건수 제한 없음"],
-    note: "AI Portfolio Video는 업체가 제공하는 실제 시공 자료로 제작합니다.",
+    note: "AI Portfolio Video는 새롭게 등록되는 실제 시공사례를 기준으로, 업체가 제공하는 실제 시공 자료로 제작합니다.",
   },
   {
     name: "Managed",
@@ -289,7 +289,7 @@ export const PLANS: readonly Plan[] = [
     summary: "기능만 사용하는 것이 아니라, 매달 실제 데이터를 함께 보면서 개선합니다.",
     base: "Growth",
     // The Managed-only rows of COMPARISON, two to a line: what the owner gets every month.
-    highlights: ["월 1회 방문 · 상담 데이터 함께 확인", "자주 묻는 질문 답변 개선 · 시공사례 업데이트 지원", "월간 개선 포인트 정리 · 우선 지원"],
+    highlights: ["월 1회 방문자 · 상담 데이터 함께 확인", "자주 묻는 질문 답변 개선 · 시공사례 업데이트 지원", "월간 개선 포인트 정리 · 우선 지원"],
     note: "실제 작업 범위는 계약 및 운영정책에 따라 정해집니다.",
   },
 ];
@@ -357,7 +357,7 @@ export const COMPARISON: readonly { category: string; rows: readonly { label: st
     category: "운영 지원",
     rows: [
       { label: "기본 시스템 운영", plans: ALL },
-      { label: "월 1회 방문 · 상담 데이터 함께 확인", plans: MANAGED_ONLY },
+      { label: "월 1회 방문자 · 상담 데이터 함께 확인", plans: MANAGED_ONLY },
       { label: "AI 상담 답변 흐름 점검 · 자주 묻는 질문 답변 개선", plans: MANAGED_ONLY },
       { label: "전문 상담지식 · 시공사례 업데이트 지원", plans: MANAGED_ONLY },
       { label: "상담 · 견적 문의 버튼과 동선 점검 · 개선 제안", plans: MANAGED_ONLY },

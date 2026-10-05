@@ -4,7 +4,7 @@ import { FaqList } from "@/components/ui/FaqList";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
 import { PRICING_FAQ } from "@/lib/pricing-page";
-import { DEMO_LABEL, DEMO_URL, KAKAO_OPEN_CHAT_URL, KAKAO_RECOMMEND_LABEL, PRICING_FAQ_ID, SITE_NAME } from "@/lib/site";
+import { DEMO_LABEL, DEMO_URL, KAKAO_NOTE, KAKAO_OPEN_CHAT_URL, KAKAO_RECOMMEND_LABEL, PRICING_FAQ_ID, SITE_NAME } from "@/lib/site";
 
 /** FAQ — every question about price and scope. The landing keeps five of its own and links here for the rest. */
 export function PricingFaq() {
@@ -44,13 +44,16 @@ export function PricingCta({ back = false }: { back?: boolean }) {
             업체명과 홈페이지 주소만 보내주세요. 현재 홈페이지를 확인한 뒤 맞는 구축 방식과 {SITE_NAME} 운영 플랜을 안내드립니다.
           </p>
         </div>
-        <div className="flex flex-none flex-wrap gap-3 max-[480px]:grid max-[480px]:w-full">
-          <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="lg" arrow>
-            {KAKAO_RECOMMEND_LABEL}
-          </ButtonLink>
-          <ButtonLink href={DEMO_URL} external size="lg" variant="secondary">
-            {DEMO_LABEL}
-          </ButtonLink>
+        <div className="flex-none max-[480px]:w-full">
+          <div className="flex flex-wrap gap-3 max-[480px]:grid">
+            <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="lg" arrow>
+              {KAKAO_RECOMMEND_LABEL}
+            </ButtonLink>
+            <ButtonLink href={DEMO_URL} external size="lg" variant="secondary">
+              {DEMO_LABEL}
+            </ButtonLink>
+          </div>
+          <p className="mt-3 mb-0 text-[13px] leading-[1.6] text-muted">{KAKAO_NOTE}</p>
         </div>
       </div>
       {back && (

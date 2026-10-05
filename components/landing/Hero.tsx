@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Br } from "@/components/ui/Br";
 import { ButtonLink } from "@/components/ui/Button";
 import { SceneHeader } from "@/components/ui/SceneHeader";
@@ -12,6 +13,11 @@ import { HeroShowcase } from "./HeroShowcase";
 const PHONE = { x: 2, y: 2, w: 375, h: 784, r: 52 };
 /** Rows of the phone shown below 1024px: its top, down to the recommended case. */
 const PHONE_SHOWN = 430;
+
+/** One clause of the title. Where the title flows (481–1279px) it wraps between clauses, never inside one. */
+function Clause({ children }: { children: ReactNode }) {
+  return <span className="whitespace-nowrap">{children}</span>;
+}
 
 /**
  * Who it is for, what it does and what comes of it, in the title. One filled button: the demo.
@@ -36,10 +42,10 @@ export function Hero() {
           subClassName="text-[19px] split:narrow:text-[17px] mobile:text-[16.5px]"
           title={
             <>
-              홈페이지 방문자를 <Br on="phone" />
-              24시간 상담하고, <Br on="ends" />
-              우리 시공사례로 답하고, <Br on="ends" />
-              견적 문의까지 받습니다.
+              <Clause>홈페이지 방문자를</Clause> <Br on="phone" />
+              <Clause>24시간 상담하고,</Clause> <Br on="ends" />
+              <Clause>우리 시공사례로 답하고,</Clause> <Br on="ends" />
+              <Clause>견적 문의까지 받습니다.</Clause>
             </>
           }
           sub={
@@ -70,16 +76,16 @@ export function Hero() {
         </div>
 
         <p className="mt-5 mb-0 text-[15px] leading-[1.6] text-muted mobile:mt-4 mobile:text-[14px]">
-          데모에서 이렇게 물어보세요: <span className="font-semibold text-ink">“{DEMO_PROMPT}”</span>
+          데모 화면 오른쪽 아래 상담 버튼을 누르고 이렇게 물어보세요: <span className="font-semibold text-ink">“{DEMO_PROMPT}”</span>
         </p>
 
         <p className="mt-4 mb-0 flex flex-wrap items-center gap-x-2.5 gap-y-1 border-t border-line-strong pt-4 text-[15px] leading-[1.5] font-semibold text-ink mobile:text-[14px]">
           {ENTRY_PRICE.map((part, i) => (
             <span key={part} className="flex items-center gap-2.5 whitespace-nowrap">
               <span className={i === ENTRY_PRICE.length - 1 ? "font-medium text-muted" : ""}>{part}</span>
-              {/* The dot trails its item, so a wrapped line never starts with one. */}
+              {/* The dot trails its item, so a wrapped line never starts with one; phones wrap before the last item, so its dot goes. */}
               {i < ENTRY_PRICE.length - 1 && (
-                <span aria-hidden="true" className="text-faint">
+                <span aria-hidden="true" className={`text-faint ${i === ENTRY_PRICE.length - 2 ? "max-[480px]:hidden" : ""}`}>
                   ·
                 </span>
               )}

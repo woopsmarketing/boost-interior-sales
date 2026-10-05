@@ -8,7 +8,7 @@ const LINK = "inline-flex min-h-11 min-w-11 items-center text-[14px] leading-non
  * none, and nothing is put in their place.
  * `note` — the landing's captures show a made-up company; pages without captures leave it out.
  */
-export function SiteFooter({ note = `${DEMO_SCREEN_NOTE} 화면 속 문의도 촬영용 데모 데이터입니다.` }: { note?: string | null }) {
+export function SiteFooter({ note = `${DEMO_SCREEN_NOTE} 화면 속 시공사례와 문의도 촬영용 데모 데이터입니다.` }: { note?: string | null }) {
   return (
     <footer className="border-t border-line">
       <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-x-8 gap-y-2 px-20 py-7 mobile:px-5 mobile:py-6">

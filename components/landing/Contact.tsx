@@ -1,7 +1,7 @@
 import { Br } from "@/components/ui/Br";
 import { ButtonLink } from "@/components/ui/Button";
 import { SceneHeader } from "@/components/ui/SceneHeader";
-import { DEMO_LABEL, DEMO_URL, KAKAO_OPEN_CHAT_URL, KAKAO_RECOMMEND_LABEL, OPERATOR } from "@/lib/site";
+import { DEMO_LABEL, DEMO_URL, KAKAO_NOTE, KAKAO_OPEN_CHAT_URL, KAKAO_RECOMMEND_LABEL } from "@/lib/site";
 
 /**
  * 문의 — the final step. It happens in the KakaoTalk 1:1 open chat and stays there: nothing is
@@ -42,7 +42,7 @@ export function Contact() {
           </ButtonLink>
         </div>
         <p className="m-0 text-[13px] leading-[1.6] text-muted">
-          {OPERATOR} 카카오톡 1:1 오픈채팅으로 연결되며, 안내도 카카오톡으로 드립니다.
+          {KAKAO_NOTE} 안내도 카카오톡으로 드립니다.
         </p>
       </div>
     </section>

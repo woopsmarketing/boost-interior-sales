@@ -17,7 +17,7 @@ export const DEMO_PROMPT = "32평인데 주방과 욕실을 리모델링하고 �
 /** The made-up company in the demo and in every capture. It is not the product, and the page says so. */
 export const DEMO_COMPANY = "부스트 인테리어";
 /** Said wherever the demo company's screens are shown. */
-export const DEMO_SCREEN_NOTE = `화면 속 ‘${DEMO_COMPANY}’는 데모용 가상 업체입니다.`;
+export const DEMO_SCREEN_NOTE = `화면 속 ‘${DEMO_COMPANY}’는 데모용 가상 업체이며, 시공사례 사진은 AI로 만든 예시 이미지입니다.`;
 
 /** 문의 channel: the KakaoTalk 1:1 open chat, whose room is titled BoostWorks. Every 문의 link goes here. */
 export const KAKAO_OPEN_CHAT_URL = "https://open.kakao.com/o/sAS9ebQi";
@@ -29,6 +29,8 @@ export const KAKAO_LABEL = "카카오톡 문의";
 export const KAKAO_RECOMMEND_LABEL = "내 홈페이지 기준으로 추천받기";
 /** Who runs BoostInterior, as the footer and the 문의 notes name it. */
 export const OPERATOR = "BoostWorks";
+/** Where the 문의 buttons lead, said next to the one whose label does not name KakaoTalk. */
+export const KAKAO_NOTE = `${OPERATOR} 카카오톡 1:1 오픈채팅으로 연결됩니다.`;
 
 /**
  * Anchor of the 86s full demo video section. Outbound emails link straight to

@@ -141,7 +141,7 @@ export const QUICK_VS_IMPROVEMENT = {
 export const PORTFOLIO_VIDEO = {
   text: "시공사진을 공간의 흐름에 따라 보여주는 AI 시공사례 영상입니다. 완성된 시공사진을 사진 목록으로만 두지 않고, 공간을 따라 이동하는 영상으로 보여줄 수 있도록 지원합니다.",
   terms: "시공사례 영상 제작 · 건수 제한 없음",
-  source: "업체가 제공하는 실제 시공 자료 기준",
+  source: "새롭게 등록되는 실제 시공사례 · 업체가 제공하는 실제 시공 자료 기준",
 } as const;
 
 export const PRICING_FAQ: readonly { q: string; a: string }[] = [

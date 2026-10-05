@@ -10,12 +10,22 @@ export interface Chapter {
   at: number;
 }
 
+/** Up to this width the 16:9 desktop recording plays about 350px wide, too small to read its text inline. */
+const PHONE = "(max-width: 820px)";
+
+/** Full screen on the player itself. An iPhone has no element full screen; it opens its own player instead (see `inline`). */
+const expand = (video: HTMLVideoElement) => {
+  if (document.fullscreenElement || typeof video.requestFullscreen !== "function") return;
+  video.requestFullscreen().catch(() => {});
+};
+
 const clock = (seconds: number) => `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, "0")}`;
 
 /**
  * Click-to-play facade for the 86s walkthrough: nothing is downloaded and nothing plays until the
  * viewer presses play, then the native player (with controls) takes over. The chapters under it
  * start the same video at a scene, so the flow can be checked without watching all of it.
+ * On a phone, play opens the video full screen: it is a desktop recording.
  */
 export function DemoVideoPlayer({
   src,
@@ -29,6 +39,7 @@ export function DemoVideoPlayer({
   chapters: readonly Chapter[];
 }) {
   const [playing, setPlaying] = useState(false);
+  const [inline, setInline] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const startAt = useRef(0);
 
@@ -38,13 +49,16 @@ export function DemoVideoPlayer({
   };
 
   const play = (at: number) => {
+    const phone = window.matchMedia(PHONE).matches;
     const video = videoRef.current;
     if (video) {
       seek(video, at);
       void video.play();
+      if (phone) expand(video);
       return;
     }
     startAt.current = at;
+    setInline(!phone);
     setPlaying(true);
   };
 
@@ -54,7 +68,8 @@ export function DemoVideoPlayer({
     if (!playing || !video) return;
     video.focus();
     if (startAt.current) seek(video, startAt.current);
-  }, [playing]);
+    if (!inline) expand(video);
+  }, [playing, inline]);
 
   // Zoom the facade from its top edge so the rows below the poster's crop fall outside the frame.
   const zoom = poster.crop ? poster.height / poster.crop.h : 1;
@@ -77,7 +92,7 @@ export function DemoVideoPlayer({
             poster={posterUrl}
             controls
             autoPlay
-            playsInline
+            playsInline={inline}
             preload="auto"
             aria-label={`BoostInterior 실제 작동 영상 (${duration})`}
             className="block size-full object-contain"
@@ -117,6 +132,10 @@ export function DemoVideoPlayer({
           </>
         )}
       </div>
+
+      <p className="mt-3 mb-0 hidden text-[13px] leading-[1.5] text-muted mobile:block">
+        재생하면 전체 화면으로 열립니다. 휴대폰을 가로로 돌리면 화면 속 글자가 잘 보입니다.
+      </p>
 
       <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 mobile:mt-4 mobile:gap-y-2.5">
         <p id="demo-video-chapters" className="m-0 text-[14px] leading-[1.4] font-bold text-muted">

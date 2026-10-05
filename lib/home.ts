@@ -163,7 +163,7 @@ export const WHY = {
     {
       icon: "window",
       title: "화면은 모두 실제 제품입니다",
-      text: "이 페이지의 화면과 영상은 작동하는 제품을 그대로 담았습니다. 화면 속 업체와 문의만 데모용 가상 데이터입니다.",
+      text: "이 페이지의 화면과 영상은 작동하는 제품을 그대로 담았습니다. 화면 속 업체와 시공사례, 문의는 데모용 예시이고, 사진은 AI로 만든 예시 이미지입니다.",
     },
   ],
 } as const satisfies { body: readonly string[]; checks: readonly { icon: IconName; title: string; text: string }[] };

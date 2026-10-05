@@ -133,7 +133,7 @@ test("the plan cards are short, and nothing they left out is missing from the co
     "시공사례 확인",
     "견적 문의로 이어지는 흐름",
     "AI Portfolio Video 제작 지원 · 건수 제한 없음",
-    "월 1회 방문 · 상담 데이터 함께 확인",
+    "월 1회 방문자 · 상담 데이터 함께 확인",
     "AI 상담 답변 흐름 점검",
     "자주 묻는 질문",
     "답변 개선",
@@ -401,6 +401,20 @@ test("V3 honesty: no customer count, review, result figure, deadline or delivery
     const filler = code(text).match(/곧 (출시|제공|공개)|출시 예정일|준비\s*중|XXX|000-00-00000/);
     assert.ok(!filler, `${file} shows "${filler?.[0]}"`);
   }
+});
+
+test("V3 review: demo data is named for what it is, and the 추천 button says where it leads", () => {
+  // The demo's cases and photos are examples too (its photos are AI-made), so "only the company is fictional" is not true.
+  const site = read("lib", "site.ts");
+  assert.match(site, /DEMO_SCREEN_NOTE = `[^`]*가상 업체[^`]*AI로 만든 예시 이미지/);
+  assert.match(HOME_COPY, /업체와 시공사례, 문의는 데모용 예시이고, 사진은 AI로 만든 예시 이미지/);
+  for (const { file, text } of SOURCE) {
+    assert.ok(!/(업체와 문의만|업체만) 데모/.test(code(text)), `${file} says only part of the demo data is fictional`);
+    // "내 홈페이지 기준으로 추천받기" does not name KakaoTalk, so every place it is shown says so next to it.
+    if (/\{KAKAO_RECOMMEND_LABEL\}/.test(code(text))) assert.match(code(text), /\{KAKAO_NOTE\}/, `${file} shows the 추천 button without saying it opens KakaoTalk`);
+  }
+  // Managed reviews visitor and consultation data monthly. It is not a monthly visit.
+  assert.ok(!/월 1회 방문 ·/.test(code(read("lib", "pricing.ts"))), "Managed reads as a monthly on-site visit");
 });
 
 test("V3 onboarding and FAQ: customer words only, and only what is decided", () => {

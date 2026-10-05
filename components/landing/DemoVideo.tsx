@@ -18,7 +18,7 @@ export function DemoVideo() {
     <Section id={DEMO_VIDEO_ID} aria-labelledby="demo-video-title" pt="pt-32 mobile:pt-16" pb="pb-0" className="scroll-mt-4">
       <div data-reveal>
         <SceneHeader
-          eyebrow="실제 작동 영상 · 1분 26초"
+          eyebrow={`실제 작동 영상 · ${VIDEOS.master.seconds}초`}
           titleId="demo-video-title"
           titleClassName="mobile:text-[28px]"
           title={

@@ -10,6 +10,7 @@ import {
   COMPARISON_ID,
   DEMO_LABEL,
   DEMO_URL,
+  KAKAO_NOTE,
   KAKAO_OPEN_CHAT_URL,
   KAKAO_RECOMMEND_LABEL,
   PORTFOLIO_VIDEO_ID,
@@ -82,6 +83,7 @@ export function DetailsHero() {
           {DEMO_LABEL}
         </ButtonLink>
       </div>
+      <p className="mt-3 mb-0 text-[13px] leading-[1.6] text-muted">{KAKAO_NOTE}</p>
     </section>
   );
 }
