@@ -18,7 +18,7 @@ function Row({ href, need, name, children }: { href: string; need: string; name:
         <span className="text-[17px] leading-[1.45] font-semibold tracking-[-0.01em] text-balance text-ink mobile:text-[15.5px]">
           “{need}”
         </span>
-        <span className="flex items-baseline justify-between gap-4 min-[601px]:flex-col min-[601px]:items-end min-[601px]:gap-2">
+        <span className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1.5 min-[601px]:flex-col min-[601px]:items-end min-[601px]:gap-2">
           <span className="flex items-center gap-1.5 text-[14px] leading-none font-bold whitespace-nowrap text-accent">
             <span aria-hidden="true" className="transition-transform duration-160 ease-out group-hover:translate-x-0.5">
               →
