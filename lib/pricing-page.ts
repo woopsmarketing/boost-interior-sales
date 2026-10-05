@@ -1,5 +1,5 @@
 import type { IconName } from "@/components/ui/Icon";
-import { BASIC_CONNECTIONS_SHORT, COMMON_BUILD, manwon, SETUP_OPTIONS } from "@/lib/pricing";
+import { BASIC_CONNECTIONS_SHORT, COMMON_BUILD, manwon, SETUP_OPTIONS, VIDEO } from "@/lib/pricing";
 
 /**
  * Copy for the two pricing pages that is not a price. /pricing: what holds whichever option and plan
@@ -25,7 +25,7 @@ export const ASSURANCES: readonly { icon: IconName; title: string; text: string 
   },
   {
     icon: "layers",
-    title: "시공사례 건수 제한 없음",
+    title: "기존 시공사례 건수 제한 없음",
     text: "지금 홈페이지에 공개된 기존 시공사례를 전체 정리해, AI가 조건에 맞게 찾아줄 수 있도록 만듭니다.",
   },
   {
@@ -47,9 +47,12 @@ export const ASSURANCES: readonly { icon: IconName; title: string; text: string 
 export const COMMON_SCOPE = {
   title: `어떤 구축 방식을 선택해도 ${COMMON_BUILD}은 동일하게 포함됩니다.`,
   text: "가격 차이는 AI 상담 기능의 차이가 아니라, 현재 홈페이지를 그대로 사용할지, 새 홈페이지를 빠르게 만들지, 기존 홈페이지를 맞춤 개선할지, 처음부터 맞춤 제작할지에 따라 결정됩니다.",
-  /** 시공사례 policy: everything public on the current homepage, and nothing implied beyond it */
+  /**
+   * 시공사례 policy: everything public on the current homepage, and nothing implied beyond it. "기존" keeps it
+   * apart from AI Portfolio Video, which is counted per plan.
+   */
   portfolio: {
-    lead: "시공사례 건수 제한 없음.",
+    lead: "기존 시공사례 건수 제한 없음.",
     text: "현재 홈페이지에 공개된 기존 시공사례 전체를 수집해 AI가 찾아줄 수 있도록 정리합니다. 홈페이지에 없는 별도 자료의 정리는 범위를 확인한 뒤 안내해드립니다.",
   },
 } as const;
@@ -137,11 +140,19 @@ export const QUICK_VS_IMPROVEMENT = {
   },
 } as const;
 
-/** AI Portfolio Video in customer terms: what it is, and what it is made from. Said wherever Growth is explained. */
+/**
+ * The three plans in one sentence, above the plan cards on both pricing pages: the basics, then more
+ * video and the analysis, then people working on it with you. The video is in all three.
+ */
+export const PLAN_LADDER = `Core는 AI 상담과 ${VIDEO.name} ${VIDEO.core.text}을 담은 운영 기본형, Growth는 영상 활용 범위를 넓히고 방문자 분석을 더한 강화형, Managed는 매달 함께 확인하고 개선하는 관리형입니다.`;
+
+/**
+ * AI Portfolio Video in customer terms: what it is and where it is used, and what it is made from.
+ * Said wherever the feature is explained. How much each plan carries is VIDEO_AMOUNTS (lib/pricing.ts).
+ */
 export const PORTFOLIO_VIDEO = {
-  text: "시공사진을 공간의 흐름에 따라 보여주는 AI 시공사례 영상입니다. 완성된 시공사진을 사진 목록으로만 두지 않고, 공간을 따라 이동하는 영상으로 보여줄 수 있도록 지원합니다.",
-  terms: "시공사례 영상 제작 · 건수 제한 없음",
-  source: "새롭게 등록되는 실제 시공사례 · 업체가 제공하는 실제 시공 자료 기준",
+  text: "시공사진을 공간의 흐름에 맞춰 AI 시공사례 영상으로 만듭니다. 완성된 시공사진을 사진 목록으로만 두지 않고, 홈페이지 · 인스타그램 · 유튜브 · 블로그 등에 영상으로 활용할 수 있습니다.",
+  source: "영상은 업체가 제공하는 실제 시공 자료로 제작합니다.",
 } as const;
 
 export const PRICING_FAQ: readonly { q: string; a: string }[] = [
@@ -190,7 +201,7 @@ export const PRICING_FAQ: readonly { q: string; a: string }[] = [
     a: "3D 시공사례(3D Portfolio)는 현재 월 운영 플랜의 제공 기능에 포함되어 있지 않습니다. 준비되는 대로 초기 파트너(Founding Partner)에게 먼저 적용 · 사용 기회를 드릴 예정이며, 출시 일정은 확정되면 안내해드립니다.",
   },
   {
-    q: "AI Portfolio Video는 몇 개까지 가능한가요?",
-    a: "AI Portfolio Video는 시공사진을 공간의 흐름에 따라 보여주는 AI 시공사례 영상입니다. Growth 플랜부터 제공합니다. 업체를 운영하면서 새롭게 등록되는 실제 시공사례를 기준으로 건수 제한 없이 지원하며, 업체가 제공하는 실제 시공 자료로 제작합니다.",
+    q: `${VIDEO.name}는 어떤 플랜에서 사용할 수 있나요?`,
+    a: `모든 플랜에서 사용할 수 있습니다. Core는 ${VIDEO.core.text}, Growth와 Managed는 새롭게 등록되는 실제 시공사례를 기준으로 더 넉넉하게 제공합니다. 영상은 업체가 제공하는 실제 시공 자료로 제작합니다.`,
   },
 ];

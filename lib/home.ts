@@ -1,5 +1,5 @@
 import type { IconName } from "@/components/ui/Icon";
-import { manwon, PLANS, SETUP_OPTIONS, won } from "@/lib/pricing";
+import { manwon, PLANS, SETUP_OPTIONS, VIDEO, VIDEO_FROM, won } from "@/lib/pricing";
 import { SITE_NAME } from "@/lib/site";
 
 /**
@@ -29,8 +29,8 @@ export const ENTRY_HEADLINE = {
 } as const;
 
 /**
- * 02 — what one homepage gets, in four. The first three are in every plan; `plan` marks the one
- * that is not, so it never reads as part of Core.
+ * 02 — what one homepage gets, in four. All four are in every plan. The video is the one whose amount
+ * differs by plan, so `plan` says where it starts and how much that is.
  */
 export const QUICK_VALUES: readonly { icon: IconName; title: string; text: string; plan?: string }[] = [
   { icon: "chat", title: "24시간 상담", text: "방문자가 원하는 공사를 편하게 물어볼 수 있습니다." },
@@ -38,9 +38,9 @@ export const QUICK_VALUES: readonly { icon: IconName; title: string; text: strin
   { icon: "form", title: "견적 문의 정리", text: "상담한 조건과 연락처가 관리 화면에 정리됩니다." },
   {
     icon: "video",
-    title: "AI Portfolio Video",
-    text: "시공사진을 영상으로 만들어 인스타그램 · 유튜브 · 블로그에도 활용할 수 있습니다.",
-    plan: "Growth 플랜",
+    title: VIDEO.name,
+    text: "시공사진을 공간의 흐름에 맞춰 영상으로 만들어 홈페이지 · 인스타그램 · 유튜브 · 블로그 등에 활용할 수 있습니다.",
+    plan: VIDEO_FROM,
   },
 ];
 

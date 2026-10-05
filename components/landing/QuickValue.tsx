@@ -5,7 +5,7 @@ import { QUICK_VALUES } from "@/lib/home";
 
 /**
  * 한눈에 — what one homepage gets, in four, right under the hero: it is more than a chat window.
- * Three of the four are in every plan. The fourth is not, and its card says which plan it is in.
+ * All four are in every plan. The fourth comes in a different amount per plan, and its card says where it starts.
  */
 export function QuickValue() {
   return (
@@ -45,7 +45,7 @@ export function QuickValue() {
   );
 }
 
-/** The plan a value starts at, said in words next to it. `className` sets where it shows. */
+/** The plan a value starts at and how much of it that is, said in words next to it. `className` sets where it shows. */
 function PlanTag({ children, className = "" }: { children: string; className?: string }) {
   return (
     <span

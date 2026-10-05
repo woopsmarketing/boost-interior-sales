@@ -6,8 +6,11 @@ import { DECISION_SETUP_KEYS, PLANS, SETUP_OPTIONS, won } from "@/lib/pricing";
 
 const PRICE = "text-[20px] leading-none font-bold tracking-[-0.03em] text-ink";
 
-/** One answer: what the owner would say, and the option it leads to. The whole row is the link. */
-function Row({ href, need, name, children }: { href: string; need: string; name: string; children: ReactNode }) {
+/**
+ * One answer: what the owner would say, and the option it leads to. The whole row is the link.
+ * `detail` is the line under the sentence: what that answer gets, where the sentence alone does not say.
+ */
+function Row({ href, need, detail, name, children }: { href: string; need: string; detail?: string; name: string; children: ReactNode }) {
   const Anchor = href.startsWith("/") ? Link : "a";
   return (
     <li>
@@ -15,8 +18,11 @@ function Row({ href, need, name, children }: { href: string; need: string; name:
         href={href}
         className="group grid items-center gap-x-6 gap-y-2.5 rounded-xl bg-white px-6 py-[18px] no-underline shadow-md transition-shadow duration-160 ease-out hover:shadow-window min-[601px]:grid-cols-[minmax(0,1fr)_auto] mobile:gap-y-2 mobile:px-5 mobile:py-3.5"
       >
-        <span className="text-[17px] leading-[1.45] font-semibold tracking-[-0.01em] text-balance text-ink mobile:text-[15.5px]">
-          “{need}”
+        <span>
+          <span className="block text-[17px] leading-[1.45] font-semibold tracking-[-0.01em] text-balance text-ink mobile:text-[15.5px]">
+            “{need}”
+          </span>
+          {detail && <span className="mt-1.5 block text-[13.5px] leading-[1.5] font-medium text-balance text-muted mobile:mt-1 mobile:text-[13px]">{detail}</span>}
         </span>
         <span className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1.5 min-[601px]:flex-col min-[601px]:items-end min-[601px]:gap-2">
           <span className="flex items-center gap-1.5 text-[14px] leading-none font-bold whitespace-nowrap text-accent">
@@ -53,7 +59,8 @@ function Group({ id, when, title, note, children }: { id: string; when: string; 
 /**
  * 내 상황에 맞는 선택 — the two choices put the way an owner would say them, so the price list is
  * read as "which one is mine" rather than card by card. Every row leads to that option's card on
- * /pricing: `base` is the path to it from another page, and empty on /pricing itself.
+ * /pricing: `base` is the path to it from another page, and empty on /pricing itself. A plan row also
+ * says what the plan holds: the plans build on each other, and one feature differs only in amount.
  */
 export function DecisionHelper({ base = "", className = "" }: { base?: string; className?: string }) {
   const options = DECISION_SETUP_KEYS.map((key) => SETUP_OPTIONS.find((option) => option.key === key)!);
@@ -68,7 +75,7 @@ export function DecisionHelper({ base = "", className = "" }: { base?: string; c
       </Group>
       <Group id="decide-plan" title="운영은 어디까지 필요한가요?" when="운영 플랜 · 매월" note={PLANS[0].assurance}>
         {PLANS.map((plan) => (
-          <Row key={plan.name} href={`${base}#plan-${plan.name.toLowerCase()}`} need={plan.need} name={plan.name}>
+          <Row key={plan.name} href={`${base}#plan-${plan.name.toLowerCase()}`} need={plan.need} detail={plan.scope} name={plan.name}>
             <span className="flex items-baseline gap-1 whitespace-nowrap">
               <span className="text-[13px] leading-none font-semibold text-body">월</span>
               <span className={PRICE}>{won(plan.price)}</span>

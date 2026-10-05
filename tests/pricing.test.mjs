@@ -19,7 +19,11 @@ import {
   SETUP_OPTIONS,
   SETUP_SCOPE_GROUPS,
   VAT_NOTICE,
+  VIDEO,
+  VIDEO_AMOUNTS,
+  VIDEO_FROM,
   scopeItems,
+  won,
 } from "../lib/pricing.ts";
 import { PARTNER_BENEFITS, PARTNER_TERMS } from "../lib/partner.ts";
 import { DECISION_SETUP_KEYS, planAdditions } from "../lib/pricing.ts";
@@ -132,7 +136,7 @@ test("the plan cards are short, and nothing they left out is missing from the co
     "상담 시작",
     "시공사례 확인",
     "견적 문의로 이어지는 흐름",
-    "AI Portfolio Video 제작 지원 · 건수 제한 없음",
+    "AI Portfolio Video 제공 범위",
     "월 1회 방문자 · 상담 데이터 함께 확인",
     "AI 상담 답변 흐름 점검",
     "자주 묻는 질문",
@@ -291,7 +295,7 @@ test("Founding Partner: six benefits in plain Korean, no amount invented", () =>
     [
       "향후 플랫폼 우선 입점",
       "기본 입점비 12개월 무료",
-      "AI 시공사례 영상 우선 혜택",
+      "AI 시공사례 영상 추가 혜택",
       "3D 시공사례 우선 적용",
       "신규 기능 먼저 이용",
       "초기 파트너 전용 할인 · 무료 이용 혜택",
@@ -305,6 +309,11 @@ test("Founding Partner: six benefits in plain Korean, no amount invented", () =>
   assert.ok(!english, `Founding Partner copy shows "${english?.[0]}"`);
   assert.ok(!/\d\s*(%|원|만원)/.test(copy), "Founding Partner copy states an amount");
   assert.match(PARTNER_TERMS, /광고 · 프리미엄 노출 등 추가 상품은 포함되지 않습니다/);
+  // AI Portfolio Video is in every plan today: the benefit is an extra on it, never the feature arriving later.
+  const video = PARTNER_BENEFITS.find((benefit) => benefit.tag === VIDEO.name);
+  assert.match(video.text, /지금 모든 플랜에서 제공하는 기능/);
+  const later = `${video.title}\n${video.text}`.match(/준비되면|출시|향후|예정|먼저 (이용|사용)|우선 (적용|이용|혜택)/);
+  assert.ok(!later, `Founding Partner sells AI Portfolio Video as something still to come: "${later?.[0]}"`);
 });
 
 test("a page opened from the landing starts at the top", () => {
@@ -471,3 +480,134 @@ test("V3 motion: no pinned scroll scenes", () => {
   }
 });
 
+// ---------------------------------------------------------------- AI Portfolio Video by plan
+
+const [CORE, GROWTH, MANAGED] = PLANS;
+/** Everything a plan says about itself: its cards on both pricing pages and its row in the decision helper. */
+const planCopy = (plan) => [plan.role, plan.need, plan.scope, plan.summary, ...plan.highlights, plan.assurance ?? "", plan.note ?? ""];
+/** Every comparison row, and the two that carry the video: the collapsed table's and the full table's. */
+const ALL_ROWS = [...COMPARISON_CORE, ...COMPARISON.flatMap((group) => group.rows)];
+const VIDEO_ROWS = [COMPARISON_CORE.find((row) => row.label === VIDEO.name), ...COMPARISON.find((group) => group.category === VIDEO.name).rows];
+const PLAN_CARDS = [["components", "pricing", "PricingSummary.tsx"], ["components", "pricing", "PlanSection.tsx"]];
+
+test("PRICING-VIDEO-1 Core carries AI Portfolio Video, 월 1건", () => {
+  assert.equal(VIDEO.name, "AI Portfolio Video");
+  assert.equal(VIDEO.core.text, "월 1건");
+  assert.ok(CORE.highlights.includes("AI Portfolio Video 월 1건"), "the Core card does not list the video");
+  assert.match(CORE.scope, /\+ AI Portfolio Video 월 1건$/);
+  assert.match(CORE.summary, /AI Portfolio Video도 월 1건/);
+  assert.equal(VIDEO_ROWS.length, 2);
+  for (const row of VIDEO_ROWS) assert.equal(row.plans[0], VIDEO.core, `"${row.label}" does not give Core its amount`);
+  assert.deepEqual(VIDEO_AMOUNTS[0], { plan: "Core", text: "월 1건" });
+  // The card on both pricing pages and the row on the landing show those lines as they are.
+  for (const where of PLAN_CARDS) assert.match(read(...where), /<CheckList items=\{plan\.highlights\}/, `${where.at(-1)} lost the plan's list`);
+  assert.match(read("components", "pricing", "DecisionHelper.tsx"), /detail=\{plan\.scope\}/);
+});
+
+test("PRICING-VIDEO-2 Growth contains Core in full", () => {
+  assert.equal(GROWTH.base, "Core");
+  assert.equal(GROWTH.scope, "Core 전체 포함 + 방문자 분석 + AI Portfolio Video 활용 범위 확대");
+  for (const where of PLAN_CARDS) {
+    assert.match(read(...where), /lead=\{plan\.base && `\$\{plan\.base\} 전체 포함`\}/, `${where.at(-1)} lost "Core 전체 포함"`);
+  }
+  for (const row of ALL_ROWS) assert.ok(!row.plans[0] || row.plans[1], `Growth is missing Core's "${row.label}"`);
+});
+
+test("PRICING-VIDEO-3 Growth widens the video, it does not introduce it", () => {
+  const video = planCopy(GROWTH).filter((line) => /Video|영상/.test(line));
+  assert.ok(video.length >= 4, "Growth no longer says what happens to the video");
+  // Every Growth line that names the video says "more", so none reads as "Growth is where it starts".
+  for (const line of video) assert.match(line, /확대|넉넉|넓어|강화/, `Growth reads as the plan that has the video: "${line}"`);
+  assert.match(GROWTH.note, /Core의 월 1건에서/);
+  for (const row of VIDEO_ROWS) {
+    assert.equal(row.plans[1], VIDEO.growth);
+    assert.notEqual(row.plans[1], row.plans[0]);
+  }
+  assert.match(VIDEO.growth.text, /^신규 시공사례 기준/);
+  // What Growth adds is listed as a wider video, next to Core's amount.
+  assert.deepEqual(planAdditions("Growth").map((group) => group.category), ["방문자 분석", VIDEO.name]);
+  const summary = read("components", "pricing", "PricingSummary.tsx");
+  assert.match(summary, /`\$\{group\.category\} 활용 범위 확대`/);
+  assert.match(summary, /VIDEO_AMOUNTS\[i\]\.text[\s\S]*VIDEO_AMOUNTS\[i \+ 1\]\.text/);
+  for (const { file, text } of SOURCE) {
+    const first = code(text).match(/Growth\s*(플랜)?\s*(부터|전용|에서만|이상)|Portfolio Video까지|분석 \+ Portfolio Video/);
+    assert.ok(!first, `${file} gives the video to Growth first: "${first?.[0]}"`);
+  }
+});
+
+test("PRICING-VIDEO-4 Managed is Growth in full, with no video amount of its own", () => {
+  assert.equal(MANAGED.base, "Growth");
+  assert.match(MANAGED.scope, /^Growth 전체 포함 \+ /);
+  for (const row of ALL_ROWS) assert.ok(!row.plans[1] || row.plans[2], `Managed is missing Growth's "${row.label}"`);
+  // The same cell, not the same words: Managed cannot be given a quota Growth does not have.
+  for (const row of VIDEO_ROWS) assert.equal(row.plans[2], row.plans[1], `"${row.label}" gives Managed its own amount`);
+  assert.deepEqual(VIDEO_AMOUNTS[2], { plan: "Managed", text: "Growth와 동일" });
+  for (const line of planCopy(MANAGED)) assert.ok(!/Video|영상|월 \d+건/.test(line), `Managed promises video of its own: "${line}"`);
+  assert.ok(!planAdditions("Managed").some((group) => group.category === VIDEO.name));
+});
+
+test("PRICING-VIDEO-5 HOME Quick Value: the video starts at Core, not at Growth", () => {
+  assert.equal(VIDEO_FROM, "Core 월 1건부터");
+  assert.match(HOME_COPY, /title: VIDEO\.name,\s*text: "[^"]*",\s*plan: VIDEO_FROM,/);
+  assert.ok(!/Growth/.test(code(HOME_COPY)), "lib/home.ts names Growth");
+  const quick = code(read("components", "landing", "QuickValue.tsx"));
+  assert.ok(!/Growth|Managed/.test(quick), "the Quick Value cards name a higher plan");
+  assert.match(quick, /\{value\.plan\}/);
+  // The other two places that tag the feature with a plan take the same words.
+  assert.match(read("components", "pricing", "PlanSection.tsx"), /<span className=\{ROLE_TAG\}>\{VIDEO_FROM\}<\/span>/);
+  assert.match(read("components", "pricing", "PortfolioSample.tsx"), /\{VIDEO_FROM\} 제공/);
+});
+
+test("PRICING-VIDEO-6 FAQ: every plan has the video, in the amounts of the price list", () => {
+  const page = read("lib", "pricing-page.ts");
+  const item = page.match(/q: `\$\{VIDEO\.name\}는 어떤 플랜에서 사용할 수 있나요\?`,\s*a: `([^`]*)`/);
+  assert.ok(item, "the FAQ lost the question about which plans have the video");
+  const [, answer] = item;
+  assert.match(answer, /^모든 플랜에서 사용할 수 있습니다\./);
+  assert.match(answer, /Core는 \$\{VIDEO\.core\.text\}, Growth와 Managed는 새롭게 등록되는 실제 시공사례를 기준으로 더 넉넉하게 제공합니다/);
+  assert.ok(answer.length <= 150, "the answer is long again");
+  assert.ok(!/몇 개까지|Growth 플랜부터|건수 제한 없이 지원/.test(code(page)), "the FAQ still carries the old answer");
+  // One question about the video, and the 3D question stays about a different, later feature.
+  assert.equal((page.match(/q: [`"][^`"]*(VIDEO|Video|영상)/g) ?? []).length, 1);
+  assert.match(page, /3D 시공사례\(3D Portfolio\)는 현재 월 운영 플랜의 제공 기능에 포함되어 있지 않습니다/);
+});
+
+test("PRICING-VIDEO-7 no \"무제한\", no Growth-only wording, no count-free video", () => {
+  for (const { file, text } of SOURCE) {
+    const copy = code(text);
+    const unlimited = copy.match(/무제한|제한 없는|unlimited/i);
+    assert.ok(!unlimited, `${file} says "${unlimited?.[0]}"`);
+    const only = copy.match(/Growth\s*(플랜)?\s*(부터|전용|에서만|이상)|Growth 플랜"/);
+    assert.ok(!only, `${file} still ties a feature to Growth: "${only?.[0]}"`);
+    // AI Portfolio Video / AI 시공사례 영상 is its name. It is not a 3D feature, and nothing says it is made by itself.
+    const name = copy.match(/3D Portfolio Video|3D (시공사례 )?영상|자동\s*(제작|생성)|영상 생성/);
+    assert.ok(!name, `${file} says "${name?.[0]}"`);
+    // "건수 제한 없음" is the setup promise about the 시공사례 already public on the homepage, and only that.
+    for (const line of copy.split("\n").filter((line) => /건수 제한 없/.test(line))) {
+      assert.ok(!/Video|영상/.test(line), `${file} leaves the video uncounted: ${line.trim()}`);
+      assert.match(line, /기존|공개/, `${file} does not say which 시공사례 are uncounted: ${line.trim()}`);
+    }
+  }
+  // Growth's own amount has no number and no "unlimited": it follows the newly registered 시공사례.
+  assert.ok(!/\d/.test(VIDEO.growth.text) && !/\d/.test(VIDEO.growth.short));
+});
+
+test("PRICING-VIDEO-8 no price moved", () => {
+  assert.deepEqual(
+    SETUP_OPTIONS.map((option) => `${option.name} ${won(option.price)}원${option.from ? "부터" : ""}`),
+    ["기존 홈페이지 연동 290,000원", "Quick Start 490,000원", "기존 홈페이지 맞춤 개선 1,200,000원부터", "맞춤 홈페이지 제작 2,500,000원부터"],
+  );
+  assert.deepEqual(
+    PLANS.map((plan) => `${plan.name} 월 ${won(plan.price)}원`),
+    ["Core 월 88,000원", "Growth 월 198,000원", "Managed 월 297,000원"],
+  );
+  assert.match(VAT_NOTICE.all, /부가세\(VAT\)가 포함된 최종 금액/);
+});
+
+test("AI Portfolio Video: copy only — the site counts nothing, so it ships no quota, credit or usage screen", () => {
+  for (const { file, text } of SOURCE) {
+    const system = code(text).match(/quota|usage|credit|counter|크레딧|차감|잔여|남은\s*(건수|횟수)|사용량/i);
+    assert.ok(!system, `${file} has "${system?.[0]}"`);
+  }
+  assert.ok(!readdirSync(join(ROOT, "app")).includes("api"), "the sales site has an API route");
+});

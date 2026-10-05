@@ -1,7 +1,8 @@
+import { VIDEO, VIDEO_FROM } from "@/lib/pricing";
 import { PORTFOLIO_VIDEO_SAMPLE } from "@/lib/site";
 
 /**
- * A real AI Portfolio Video result, wherever Growth is explained. While there is no sample this
+ * A real AI Portfolio Video result, wherever the feature is explained. While there is no sample this
  * renders nothing at all: no empty frame and no stand-in video.
  */
 export function PortfolioSample({ className = "" }: { className?: string }) {
@@ -17,11 +18,11 @@ export function PortfolioSample({ className = "" }: { className?: string }) {
         controls
         playsInline
         preload="none"
-        aria-label="AI Portfolio Video 실제 예시"
+        aria-label={`${VIDEO.name} 실제 예시`}
         className="block h-auto w-full max-w-[720px] rounded-lg bg-gray-900"
       />
       <figcaption className="mt-3 text-[13px] leading-[1.6] text-muted">
-        AI Portfolio Video 실제 예시 · Growth 플랜부터 제공
+        {VIDEO.name} 실제 예시 · {VIDEO_FROM} 제공
       </figcaption>
     </figure>
   );

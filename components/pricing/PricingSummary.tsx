@@ -9,8 +9,18 @@ import { Check, CheckList } from "@/components/ui/CheckList";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
-import { COMMON_BOOSTINTERIOR_SCOPE, COMMON_BUILD, planAdditions, PLANS, SETUP_OPTIONS, VAT_NOTICE, won } from "@/lib/pricing";
-import { ASSURANCES, PORTFOLIO_VIDEO, PRICING_FAQ } from "@/lib/pricing-page";
+import {
+  COMMON_BOOSTINTERIOR_SCOPE,
+  COMMON_BUILD,
+  planAdditions,
+  PLANS,
+  SETUP_OPTIONS,
+  VAT_NOTICE,
+  VIDEO,
+  VIDEO_AMOUNTS,
+  won,
+} from "@/lib/pricing";
+import { ASSURANCES, PLAN_LADDER, PORTFOLIO_VIDEO, PRICING_FAQ } from "@/lib/pricing-page";
 import {
   COMPARISON_ID,
   DEMO_LABEL,
@@ -200,7 +210,7 @@ export function PlanSummary() {
           eyebrow="운영 플랜 · 매월"
           titleId="plans-title"
           title="필요한 기능만큼 매월 고르세요."
-          sub="Core는 핵심 기능, Growth는 방문자 분석과 시공사진 영상, Managed는 매달 함께 확인하고 개선하는 운영 지원입니다."
+          sub={PLAN_LADDER}
           subClassName="text-[18px] mobile:text-[16px]"
         />
       </div>
@@ -279,15 +289,16 @@ export function Assurances() {
   );
 }
 
-const ADDITION_ICONS: Record<string, IconName> = { "방문자 분석": "search", "AI Portfolio Video": "video", "운영 지원": "sliders" };
+const ADDITION_ICONS: Record<string, IconName> = { "방문자 분석": "search", [VIDEO.name]: "video", "운영 지원": "sliders" };
 
 /**
  * What the two higher plans add, item by item, read from the comparison: Growth's price difference
- * is the analysis and the video, Managed's is the monthly work done together. A real AI Portfolio
- * Video sample plays inside the Growth card once there is one; until then nothing stands in for it.
+ * is the analysis and more of the video (Core has it too, at its own amount, and the card says so),
+ * Managed's is the monthly work done together. A real AI Portfolio Video sample plays inside the
+ * Growth card once there is one; until then nothing stands in for it.
  */
 export function PlanAdditions() {
-  const upgrades = PLANS.slice(1).map((plan, i) => ({ plan, below: PLANS[i], groups: planAdditions(plan.name) }));
+  const upgrades = PLANS.slice(1).map((plan, i) => ({ plan, below: PLANS[i], i, groups: planAdditions(plan.name) }));
   return (
     <Section id="plan-additions" aria-labelledby="plan-additions-title" pt="pt-28 mobile:pt-16" pb="pb-0" className="scroll-mt-8">
       <h2
@@ -298,7 +309,7 @@ export function PlanAdditions() {
         플랜을 올리면 이것이 더해집니다.
       </h2>
       <div data-reveal className="mt-7 grid grid-cols-2 items-start gap-5 narrow:grid-cols-1 mobile:mt-5 mobile:gap-4">
-        {upgrades.map(({ plan, below, groups }) => (
+        {upgrades.map(({ plan, below, i, groups }) => (
           <article key={plan.name} aria-labelledby={`adds-${plan.name}`} className="rounded-xl bg-white p-8 shadow-md mobile:p-6">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 id={`adds-${plan.name}`} className="m-0 text-[22px] leading-[1.3] font-bold tracking-[-0.02em] text-ink mobile:text-[20px]">
@@ -315,15 +326,24 @@ export function PlanAdditions() {
                   <span className="grid size-9 flex-none place-items-center rounded-md bg-accent-soft text-accent">
                     <Icon name={ADDITION_ICONS[group.category] ?? "spark"} className="size-5" />
                   </span>
-                  {group.category}
+                  {group.category === VIDEO.name ? `${group.category} 활용 범위 확대` : group.category}
                 </p>
-                {group.category === "AI Portfolio Video" ? (
+                {group.category === VIDEO.name ? (
                   <>
-                    <p className="mt-3 mb-0 text-[15px] leading-[1.65] text-pretty text-body">{PORTFOLIO_VIDEO.text}</p>
-                    <p className="mt-2.5 mb-0 text-[14px] leading-[1.6] font-semibold text-ink">
-                      {PORTFOLIO_VIDEO.terms}
-                      <span className="font-normal text-muted"> — {PORTFOLIO_VIDEO.source}</span>
+                    <p className="mt-4 mb-0 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-[15px] leading-[1.5] font-semibold text-ink">
+                      <span>
+                        {VIDEO_AMOUNTS[i].plan} {VIDEO_AMOUNTS[i].text}
+                      </span>
+                      <span aria-hidden="true" className="text-muted">
+                        →
+                      </span>
+                      <span className="sr-only">에서</span>
+                      <span className="text-blue-700">
+                        {VIDEO_AMOUNTS[i + 1].plan} {VIDEO_AMOUNTS[i + 1].text}
+                      </span>
                     </p>
+                    <p className="mt-2.5 mb-0 text-[15px] leading-[1.65] text-pretty text-body">{PORTFOLIO_VIDEO.text}</p>
+                    <p className="mt-2 mb-0 text-[14px] leading-[1.6] text-muted">{PORTFOLIO_VIDEO.source}</p>
                     <PortfolioSample className="mt-5" />
                   </>
                 ) : (

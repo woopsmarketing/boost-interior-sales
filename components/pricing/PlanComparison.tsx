@@ -2,7 +2,7 @@
 
 import { DisclosureButton, useDisclosure } from "@/components/pricing/Disclosure";
 import { Check } from "@/components/ui/CheckList";
-import { COMPARISON, COMPARISON_CORE, PLANS, won } from "@/lib/pricing";
+import { COMPARISON, COMPARISON_CORE, planAmount, type PlanAmount, PLANS, won } from "@/lib/pricing";
 import { COMPARISON_ID } from "@/lib/site";
 
 const FULL_ID = "comparison-full";
@@ -26,17 +26,36 @@ function Mark({ on }: { on: boolean }) {
   );
 }
 
+/** How much of a feature a plan carries, in words. A phone's column is too narrow for some: those have a short form. */
+function Amount({ text, short = text }: PlanAmount) {
+  return (
+    <span className="block text-[14px] leading-[1.4] font-semibold text-balance text-ink mobile:text-[11px] mobile:leading-[1.35]">
+      {short === text ? (
+        text
+      ) : (
+        <>
+          <span className="mobile:hidden">{text}</span>
+          <span className="hidden mobile:inline">{short}</span>
+        </>
+      )}
+    </span>
+  );
+}
+
 function Row({ row }: { row: (typeof COMPARISON_CORE)[number] }) {
   return (
     <tr>
       <th scope="row" className={ROW_LABEL}>
         {row.label}
       </th>
-      {row.plans.map((on, i) => (
-        <td key={PLANS[i].name} className={CELL}>
-          <Mark on={on} />
-        </td>
-      ))}
+      {row.plans.map((cell, i) => {
+        const amount = planAmount(row.plans, i);
+        return (
+          <td key={PLANS[i].name} className={CELL}>
+            {amount ? <Amount {...amount} /> : <Mark on={cell === true} />}
+          </td>
+        );
+      })}
     </tr>
   );
 }

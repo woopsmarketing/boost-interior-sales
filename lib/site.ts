@@ -106,9 +106,9 @@ export const VIDEOS = {
 } as const;
 
 /**
- * AI Portfolio Video sample: a real result made with the feature, and nothing else. There is none yet,
- * and nothing is shown until there is one. Set this to a real asset under public/ and the sample
- * appears in the three places wired for it: the landing's price summary, the Growth block on /pricing
- * and the AI Portfolio Video block on /pricing/details.
+ * AI Portfolio Video sample: a real result made with the feature, and nothing else. No such asset is
+ * in this repo yet, and nothing is shown until there is one. Set this to a real asset under public/
+ * and the sample appears in the three places wired for it: the landing's price summary, the AI
+ * Portfolio Video part of the Growth card on /pricing and the AI Portfolio Video block on /pricing/details.
  */
 export const PORTFOLIO_VIDEO_SAMPLE: { src: string; poster: string; width: number; height: number } | null = null;

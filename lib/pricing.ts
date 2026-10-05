@@ -106,11 +106,13 @@ export interface SetupOption {
 
 export interface Plan {
   name: "Core" | "Growth" | "Managed";
-  /** What sets the plan apart, in a few words: core → analysis and video → people */
+  /** What kind of plan it is, in a few words: the basics → more video and analysis → people working on it with you */
   role: string;
   price: number;
   /** What the owner wants from it, as the decision helper says it */
   need: string;
+  /** The plan in one line, under that sentence: the plan below in full, and what this one puts on top */
+  scope: string;
   summary: string;
   /** The plan this one contains in full */
   base?: "Core" | "Growth";
@@ -120,6 +122,27 @@ export interface Plan {
   assurance?: string;
   note?: string;
 }
+
+/** Where the plans differ in how much rather than whether: the amount in words. `short` is for a column too narrow for `text`. */
+export interface PlanAmount {
+  text: string;
+  short?: string;
+}
+
+/**
+ * AI Portfolio Video — the one feature every plan carries in a different amount. Core's is a number.
+ * Growth's has none: it follows the 시공사례 a company newly registers, and is never called unlimited.
+ * Managed carries Growth's and promises no amount of its own. Usage is counted by hand for now (there
+ * is no quota system), so the copy says nothing a person could not keep track of.
+ */
+export const VIDEO = {
+  name: "AI Portfolio Video",
+  core: { text: "월 1건" },
+  growth: { text: "신규 시공사례 기준 확대 제공", short: "확대 제공" },
+} as const satisfies { name: string; core: PlanAmount; growth: PlanAmount };
+
+/** Where the feature starts, as the badge next to its name says it. */
+export const VIDEO_FROM = `Core ${VIDEO.core.text}부터`;
 
 export const SETUP_OPTIONS: readonly SetupOption[] = [
   {
@@ -264,28 +287,32 @@ export const SETUP_COMPARISON: readonly { label: string; values: PerSetup; inclu
 export const PLANS: readonly Plan[] = [
   {
     name: "Core",
-    role: "핵심 기능",
+    role: "운영 기본형",
     price: 88_000,
     need: "상담 · 시공사례 추천 · 견적 문의부터",
-    summary: "BoostInterior의 핵심 기능을 사용합니다.",
-    highlights: ["24시간 AI 상담", "조건에 맞는 실제 시공사례 추천", "견적 문의와 상담 기록 확인"],
+    scope: `AI 상담 · 시공사례 추천 · 견적 문의 + ${VIDEO.name} ${VIDEO.core.text}`,
+    summary: `AI 상담부터 견적 문의까지 핵심 기능을 모두 사용하고, ${VIDEO.name}도 ${VIDEO.core.text} 사용합니다.`,
+    highlights: ["24시간 AI 상담", "조건에 맞는 실제 시공사례 추천", "견적 문의와 상담 기록 확인", `${VIDEO.name} ${VIDEO.core.text}`],
     assurance: "AI 상담 · 시공사례 추천 · 견적 문의는 Core부터 모두 포함됩니다.",
   },
   {
     name: "Growth",
-    role: "분석 + Portfolio Video",
+    role: "영상 활용 + 분석 강화형",
     price: 198_000,
-    need: "방문자 분석과 AI Portfolio Video까지",
-    summary: "방문자가 어디를 보고 어떻게 움직이는지 확인하고, 시공사진을 공간의 흐름에 따라 영상으로 보여줍니다.",
+    need: "방문자 분석과 더 넉넉한 영상 활용까지",
+    scope: `Core 전체 포함 + 방문자 분석 + ${VIDEO.name} 활용 범위 확대`,
+    summary: "방문자가 어디를 보고 어떻게 움직이는지 확인하고, 새롭게 등록되는 시공사례를 영상으로 더 넉넉하게 활용합니다.",
     base: "Core",
-    highlights: ["방문자가 어디를 보고 어떻게 움직이는지 확인", "AI Portfolio Video (시공사진 영상) · 건수 제한 없음"],
-    note: "AI Portfolio Video는 새롭게 등록되는 실제 시공사례를 기준으로, 업체가 제공하는 실제 시공 자료로 제작합니다.",
+    // The video is Core's too. What Growth adds is how much of it, so the line says "more", never "has".
+    highlights: ["방문자가 어디를 보고 어떻게 움직이는지 확인", `${VIDEO.name} 활용 범위 확대`],
+    note: `${VIDEO.name}는 Core의 ${VIDEO.core.text}에서, 새롭게 등록되는 실제 시공사례 기준으로 제공 범위가 넓어집니다. 영상은 업체가 제공하는 실제 시공 자료로 제작합니다.`,
   },
   {
     name: "Managed",
-    role: "매달 함께 검토 · 개선",
+    role: "함께 검토 · 개선하는 관리형",
     price: 297_000,
     need: "매달 함께 확인하고 개선할 운영 지원까지",
+    scope: "Growth 전체 포함 + 매달 함께 검토 · 개선하는 운영 지원",
     summary: "기능만 사용하는 것이 아니라, 매달 실제 데이터를 함께 보면서 개선합니다.",
     base: "Growth",
     // The Managed-only rows of COMPARISON, two to a line: what the owner gets every month.
@@ -294,19 +321,23 @@ export const PLANS: readonly Plan[] = [
   },
 ];
 
-/** Which plans carry a row, in PLANS order: Core, Growth, Managed. */
-type Included = readonly [boolean, boolean, boolean];
-const ALL: Included = [true, true, true];
-const GROWTH_UP: Included = [false, true, true];
-const MANAGED_ONLY: Included = [false, false, true];
+/** What a plan carries of a row: all of it, none of it, or — where the plans differ in amount — how much. */
+type Cell = boolean | PlanAmount;
+/** One cell per plan, in PLANS order: Core, Growth, Managed. */
+type Cells = readonly [Cell, Cell, Cell];
+const ALL: Cells = [true, true, true];
+const GROWTH_UP: Cells = [false, true, true];
+const MANAGED_ONLY: Cells = [false, false, true];
+/** Managed's cell is Growth's own, not a copy of its words: the two cannot drift, and the table says "Growth와 동일". */
+const VIDEO_PLANS: Cells = [VIDEO.core, VIDEO.growth, VIDEO.growth];
 
 /** /pricing/details comparison, collapsed: one row per category below — the six differences that decide a plan. */
-export const COMPARISON_CORE: readonly { label: string; plans: Included }[] = [
+export const COMPARISON_CORE: readonly { label: string; plans: Cells }[] = [
   { label: "24시간 AI 상담", plans: ALL },
   { label: "시공사례 검색 · 추천", plans: ALL },
   { label: "견적 문의 · 상담 기록", plans: ALL },
   { label: "방문자 행동 분석", plans: GROWTH_UP },
-  { label: "AI Portfolio Video", plans: GROWTH_UP },
+  { label: VIDEO.name, plans: VIDEO_PLANS },
   { label: "월간 운영 · 개선", plans: MANAGED_ONLY },
 ];
 
@@ -314,7 +345,7 @@ export const COMPARISON_CORE: readonly { label: string; plans: Included }[] = [
  * /pricing/details comparison, expanded: everything each monthly plan carries, grouped by what the owner
  * cares about. The plan cards only show highlights, so this is where every feature is listed.
  */
-export const COMPARISON: readonly { category: string; rows: readonly { label: string; plans: Included }[] }[] = [
+export const COMPARISON: readonly { category: string; rows: readonly { label: string; plans: Cells }[] }[] = [
   {
     category: "AI 상담",
     rows: [
@@ -350,8 +381,8 @@ export const COMPARISON: readonly { category: string; rows: readonly { label: st
     ],
   },
   {
-    category: "AI Portfolio Video",
-    rows: [{ label: "AI Portfolio Video 제작 지원 · 건수 제한 없음", plans: GROWTH_UP }],
+    category: VIDEO.name,
+    rows: [{ label: `${VIDEO.name} 제공 범위`, plans: VIDEO_PLANS }],
   },
   {
     category: "운영 지원",
@@ -371,14 +402,27 @@ export const COMPARISON: readonly { category: string; rows: readonly { label: st
 export const DECISION_SETUP_KEYS: readonly SetupOption["key"][] = ["A", "C", "B", "D"];
 
 /**
- * What a plan adds to the one below it: the comparison rows that start at that plan, by category.
- * Growth → 방문자 분석 and AI Portfolio Video; Managed → 운영 지원.
+ * A plan's cell in words, where the row is an amount: its own, or "Growth와 동일" where it carries
+ * the plan below's unchanged. Null for a row a plan simply has or does not have.
+ */
+export const planAmount = (plans: Cells, i: number): PlanAmount | null => {
+  const cell = plans[i];
+  if (typeof cell === "boolean") return null;
+  return i > 0 && cell === plans[i - 1] ? { text: `${PLANS[i - 1].name}와 동일` } : cell;
+};
+
+/** AI Portfolio Video plan by plan, as the comparison has it: 월 1건 → 신규 시공사례 기준 확대 제공 → Growth와 동일. */
+export const VIDEO_AMOUNTS = PLANS.map((plan, i) => ({ plan: plan.name, text: planAmount(VIDEO_PLANS, i)!.text }));
+
+/**
+ * What a plan adds to the one below it: the comparison rows that start at that plan or grow there,
+ * by category. Growth → 방문자 분석 and more AI Portfolio Video; Managed → 운영 지원.
  */
 export const planAdditions = (name: Plan["name"]) => {
   const i = PLANS.findIndex((plan) => plan.name === name);
   return COMPARISON.map((group) => ({
     category: group.category,
-    labels: group.rows.filter((row) => row.plans[i] && !(i > 0 && row.plans[i - 1])).map((row) => row.label),
+    labels: group.rows.filter((row) => row.plans[i] && !(i > 0 && row.plans[i] === row.plans[i - 1])).map((row) => row.label),
   })).filter((group) => group.labels.length > 0);
 };
 

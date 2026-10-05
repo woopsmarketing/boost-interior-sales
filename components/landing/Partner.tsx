@@ -6,7 +6,8 @@ import { PARTNER_ID, SITE_NAME } from "@/lib/site";
 
 /**
  * 초기 파트너 혜택 — a short band near the end, after the product and its price: what adopting now
- * adds, and nothing that reads as available today. It carries no button of its own; the final
+ * adds on top of the plans. A feature the plans already carry (AI Portfolio Video) is named here only
+ * for the extra on it, never as something still to come. It carries no button of its own; the final
  * 문의 block follows it on every page.
  * `detail` (the landing) gives each benefit its one line and owns the `#partner` anchor; without it
  * (the pricing pages) the band lists the titles and links back to the landing's.
@@ -35,7 +36,7 @@ export function Partner({ detail = false }: { detail?: boolean }) {
           </div>
           {detail && (
             <p className="m-0 max-w-[400px] text-[15px] leading-[1.6] text-pretty text-gray-300 mobile:text-[14px]">
-              앞으로 추가되는 기능과 {SITE_NAME} 인테리어 플랫폼에서 먼저 받는 혜택입니다.
+              지금 제공하는 기능의 추가 혜택과, 앞으로 추가되는 기능 · {SITE_NAME} 인테리어 플랫폼에서 먼저 받는 혜택입니다.
             </p>
           )}
         </div>

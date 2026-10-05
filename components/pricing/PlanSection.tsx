@@ -4,14 +4,14 @@ import { CheckList } from "@/components/ui/CheckList";
 import { Icon } from "@/components/ui/Icon";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
-import { PLANS, VAT_NOTICE, won } from "@/lib/pricing";
-import { PORTFOLIO_VIDEO } from "@/lib/pricing-page";
+import { PLANS, VAT_NOTICE, VIDEO, VIDEO_AMOUNTS, VIDEO_FROM, won } from "@/lib/pricing";
+import { PLAN_LADDER, PORTFOLIO_VIDEO } from "@/lib/pricing-page";
 import { COMPARISON_ID, PORTFOLIO_VIDEO_ID } from "@/lib/site";
 
 const ROLE_TAG =
   "inline-flex h-[26px] items-center rounded-pill bg-accent-soft px-2.5 text-[12px] leading-none font-semibold whitespace-nowrap text-blue-700";
 
-/** What AI Portfolio Video is, in customer terms. A real sample plays here once one exists. */
+/** What AI Portfolio Video is, in customer terms, and how much of it each plan carries. A real sample plays here once one exists. */
 function PortfolioVideo() {
   return (
     <div
@@ -25,17 +25,25 @@ function PortfolioVideo() {
       <div>
         <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-2">
           <span className="text-[20px] leading-[1.35] font-bold tracking-[-0.02em] text-ink mobile:text-[18px]">
-            AI Portfolio Video
+            {VIDEO.name}
           </span>
-          <span className={ROLE_TAG}>Growth부터</span>
+          <span className={ROLE_TAG}>{VIDEO_FROM}</span>
         </p>
         <p className="mt-2.5 mb-0 max-w-[820px] text-[16px] leading-[1.7] text-pretty text-body mobile:text-[15px]">
           {PORTFOLIO_VIDEO.text}
         </p>
-        <p className="mt-3 mb-0 text-[14px] leading-[1.6] font-semibold text-ink">
-          {PORTFOLIO_VIDEO.terms}
-          <span className="font-normal text-muted"> — {PORTFOLIO_VIDEO.source}</span>
-        </p>
+        <dl
+          aria-label={`플랜별 ${VIDEO.name}`}
+          className="mt-4 mb-0 grid w-fit grid-cols-[auto_minmax(0,1fr)] gap-x-5 gap-y-1.5 text-[15px] leading-[1.5] mobile:text-[14.5px]"
+        >
+          {VIDEO_AMOUNTS.map(({ plan, text }) => (
+            <div key={plan} className="contents">
+              <dt className="font-bold text-ink">{plan}</dt>
+              <dd className="m-0 font-medium text-body">{text}</dd>
+            </div>
+          ))}
+        </dl>
+        <p className="mt-3 mb-0 text-[14px] leading-[1.6] text-muted">{PORTFOLIO_VIDEO.source}</p>
         <PortfolioSample className="mt-6" />
       </div>
     </div>
@@ -55,7 +63,7 @@ export function PlanSection() {
           eyebrow="운영 플랜 · 매월"
           titleId="plans-title"
           title="필요한 기능과 운영 수준을 선택합니다."
-          sub="Core는 핵심 기능, Growth는 방문자 분석과 시공사진 영상(AI Portfolio Video), Managed는 매달 함께 확인하고 개선하는 운영 지원입니다."
+          sub={PLAN_LADDER}
         />
       </div>
 

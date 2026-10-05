@@ -25,9 +25,9 @@ export const PARTNER_BENEFITS: readonly { icon: IconName; tag: string; title: st
   {
     icon: "video",
     tag: "AI Portfolio Video",
-    title: "AI 시공사례 영상 우선 혜택",
-    // AI Portfolio Video is sold today (Growth), so this is a benefit on it, not early access to it.
-    text: "시공사진을 영상으로 보여주는 AI Portfolio Video 관련 혜택을 초기 파트너에게 먼저 드립니다.",
+    title: "AI 시공사례 영상 추가 혜택",
+    // AI Portfolio Video is in every plan today. The benefit is something extra on it, never the feature itself.
+    text: "AI Portfolio Video는 지금 모든 플랜에서 제공하는 기능입니다. 초기 파트너에게는 영상 관련 추가 혜택을 먼저 드립니다.",
   },
   {
     icon: "cube",
