@@ -5,7 +5,8 @@ import type { IconName } from "@/components/ui/Icon";
  * interior platform, and the platform's basic listing fee waived for 12 months after launch.
  * The rest have no numbers on purpose: discount rates, free-use amounts and release dates
  * are not decided yet, so the copy must not invent any.
- * `tag` is the small line above the title. It is Korean wherever the title needs context; the two
+ * The landing lists them in short, after the price (title and one line each); the pricing pages list
+ * the titles only. `tag` is the small line above the title. It is Korean wherever the title needs context; the two
  * features that have an English name (AI Portfolio Video, 3D Portfolio) carry it there, under a Korean title.
  */
 export const PARTNER_BENEFITS: readonly { icon: IconName; tag: string; title: string; text: string }[] = [
@@ -25,7 +26,8 @@ export const PARTNER_BENEFITS: readonly { icon: IconName; tag: string; title: st
     icon: "video",
     tag: "AI Portfolio Video",
     title: "AI 시공사례 영상 우선 혜택",
-    text: "시공사진을 공간의 흐름에 따라 영상으로 보여주는 기능을 초기 파트너가 먼저 사용합니다.",
+    // AI Portfolio Video is sold today (Growth), so this is a benefit on it, not early access to it.
+    text: "시공사진을 영상으로 보여주는 AI Portfolio Video 관련 혜택을 초기 파트너에게 먼저 드립니다.",
   },
   {
     icon: "cube",

@@ -1,61 +1,91 @@
 import { Br } from "@/components/ui/Br";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
+import { PROBLEM } from "@/lib/home";
 
-const JOURNEY = ["시공사례 찾기", "우리 집과 비슷한지 판단", "공사 범위 고민", "문의 방법 찾기", "견적 작성"];
-
-/** 문제 — the judgments a visitor makes before leaving a quote request. */
-export function Problem() {
+function FlowColumn({
+  title,
+  lead,
+  steps,
+  on = false,
+}: {
+  title: string;
+  lead: string;
+  steps: readonly string[];
+  on?: boolean;
+}) {
   return (
-    <Section id="problem" aria-labelledby="problem-title">
+    <div
+      className={`rounded-xl border p-10 narrow:p-8 mobile:px-5 mobile:py-5 ${
+        on ? "border-blue-200 bg-white shadow-window" : "border-line-strong bg-transparent"
+      }`}
+    >
+      <h3 className={`m-0 text-[15px] leading-[1.4] font-bold ${on ? "text-accent" : "text-muted"}`}>{title}</h3>
+      <p className={`mt-1.5 mb-0 text-[15px] leading-[1.4] font-medium ${on ? "text-body" : "text-muted"}`}>{lead}</p>
+      <ol className="mt-6 mb-0 list-none p-0 mobile:mt-4">
+        {steps.map((step, i) => {
+          const last = i === steps.length - 1;
+          const dot = on
+            ? last
+              ? "size-3.5 mt-[7px] bg-accent"
+              : "size-2.5 mt-[9px] border-2 border-accent bg-white"
+            : last
+              ? "size-3.5 mt-[7px] bg-gray-400"
+              : "size-2.5 mt-[9px] border-2 border-gray-400 bg-page";
+          const text = on
+            ? last
+              ? "font-bold text-accent"
+              : "font-medium text-ink"
+            : last
+              ? "font-bold text-muted"
+              : "font-medium text-muted";
+          return (
+            <li key={step} className="flex items-stretch gap-4">
+              <div aria-hidden="true" className="flex w-3.5 flex-none flex-col items-center">
+                <span className={`flex-none rounded-pill ${dot}`} />
+                {!last && (
+                  <span
+                    className={`my-1 w-0 flex-1 border-l-2 ${on ? "border-solid border-blue-200" : "border-dashed border-gray-300"}`}
+                  />
+                )}
+              </div>
+              <span className={`pt-1 text-[20px] leading-[1.4] tracking-[-0.02em] mobile:text-[16px] ${last ? "" : "pb-[18px] mobile:pb-2.5"} ${text}`}>
+                {step}
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
+/**
+ * 왜 필요한가 — one section for the problem and the difference: what a visitor has to do alone on a
+ * homepage today, next to the same visit with BoostInterior. No statistic and no promised result.
+ */
+export function Problem() {
+  const { before, after } = PROBLEM;
+  return (
+    <Section id="problem" aria-labelledby="problem-title" pt="pt-36 mobile:pt-16" pb="pb-0">
       <div data-reveal>
         <SceneHeader
-          eyebrow="견적 문의 전까지"
+          eyebrow="왜 필요한가"
           titleId="problem-title"
+          titleClassName="mobile:text-[28px]"
           title={
             <>
               고객은 견적 문의를 남기기 전까지 <Br />
               생각보다 많은 판단을 해야 합니다.
             </>
           }
+          sub="홈페이지를 새로 만드는 것이 아니라, 지금 홈페이지에 상담까지의 흐름을 연결합니다."
+          subClassName="mobile:text-[16px]"
         />
       </div>
-
-      <div data-reveal className="mt-18 mobile:mt-10">
-        <ol className="m-0 grid list-none grid-cols-5 gap-4 p-0 mobile:grid-cols-1 mobile:gap-0">
-          {JOURNEY.map((step, i) => (
-            <li
-              key={step}
-              className={`flex flex-col items-start gap-[18px] mobile:flex-row mobile:items-center mobile:gap-4 mobile:py-3.5 ${
-                i ? "mobile:border-t mobile:border-line" : ""
-              }`}
-            >
-              <div className="flex w-full items-center gap-3 mobile:w-auto">
-                <span className="font-mono text-[13px] leading-none font-medium text-muted">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span aria-hidden="true" className="h-px flex-1 bg-line-strong mobile:hidden" />
-                {i < JOURNEY.length - 1 && (
-                  <span aria-hidden="true" className="-ml-1 text-[14px] text-faint mobile:hidden">
-                    →
-                  </span>
-                )}
-              </div>
-              <span className="text-[22px] leading-[1.35] font-semibold tracking-[-0.02em] text-ink mobile:text-[18px]">
-                {step}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      <div data-reveal className="mt-14 mobile:mt-8">
-        <p className="m-0 flex items-center gap-4 rounded-pill border border-blue-200 bg-white px-8 py-[22px] shadow-window mobile:rounded-xl mobile:px-[22px] mobile:py-[18px]">
-          <span aria-hidden="true" className="size-2.5 flex-none rounded-pill bg-accent" />
-          <span className="text-[22px] leading-[1.4] font-semibold tracking-[-0.02em] text-ink mobile:text-[17px]">
-            BoostInterior는 이 과정을 <span className="text-accent">하나의 대화</span> 안에서 이어줍니다.
-          </span>
-        </p>
+      <div data-reveal className="mt-12 grid grid-cols-2 items-stretch gap-8 narrow:gap-5 mobile:mt-6 mobile:grid-cols-1 mobile:gap-3">
+        <FlowColumn title={before.title} lead={before.lead} steps={before.items} />
+        <FlowColumn title={after.title} lead={after.lead} steps={after.items} on />
       </div>
     </Section>
   );

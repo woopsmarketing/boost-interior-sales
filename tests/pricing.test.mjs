@@ -22,6 +22,7 @@ import {
   scopeItems,
 } from "../lib/pricing.ts";
 import { PARTNER_BENEFITS, PARTNER_TERMS } from "../lib/partner.ts";
+import { DECISION_SETUP_KEYS, planAdditions } from "../lib/pricing.ts";
 
 const ROOT = join(import.meta.dirname, "..");
 const sourceFiles = (dir) =>
@@ -183,12 +184,14 @@ test("homepage management is never sold, and never confused with the BoostInteri
   assert.ok(COMMON_SCOPE_ITEMS.some((item) => item.startsWith("BoostInterior 관리 화면")));
 });
 
-test("Quick Start: the customer-facing name, and the only badge", () => {
+test("Quick Start: the customer-facing name, and a badge that recommends without claiming sales", () => {
+  // V3: "인기상품" said the option sells best, and there is no sales record behind that. The badge
+  // now says who the option is for.
   assert.deepEqual(
     SETUP_OPTIONS.map((option) => [option.key, option.name, option.badge]),
     [
       ["A", "기존 홈페이지 연동", undefined],
-      ["B", "Quick Start", "인기상품"],
+      ["B", "Quick Start", "홈페이지가 없다면 추천"],
       ["C", "기존 홈페이지 맞춤 개선", undefined],
       ["D", "맞춤 홈페이지 제작", undefined],
     ],
@@ -196,6 +199,8 @@ test("Quick Start: the customer-facing name, and the only badge", () => {
   for (const { file, text } of SOURCE) {
     assert.ok(!/Quick Website|Custom Website|빠른 홈페이지 제작/.test(code(text)), `${file} still shows an old product name`);
     assert.ok(!/빠른 시작 추천|추천 상품|\bBEST\b|\bPOPULAR\b/.test(code(text)), `${file} uses another badge wording`);
+    const claim = code(text).match(/인기\s*상품|가장 많이 (선택|찾는|팔린)|베스트셀러|판매 1위/);
+    assert.ok(!claim, `${file} claims popularity without a sales record: "${claim?.[0]}"`);
   }
 });
 
@@ -328,3 +333,127 @@ test("no promise the page cannot keep: search ranking, speed, security", () => {
     assert.ok(!promise, `${file} promises "${promise?.[0]}"`);
   }
 });
+
+// ---------------------------------------------------------------- Landing V3
+
+const read = (...path) => readFileSync(join(ROOT, ...path), "utf8");
+/** Text a customer can read in a file: string literals and JSX text, with the code around them gone. */
+const HOME_COPY = read("lib", "home.ts");
+
+test("V3 landing: sections in the order an owner decides, with the anchors other pages and emails use", () => {
+  const page = read("app", "page.tsx");
+  const main = page.slice(page.indexOf("<main"), page.indexOf("</main>"));
+  assert.deepEqual(
+    [...main.matchAll(/<([A-Z]\w+)/g)].map((match) => match[1]),
+    ["Hero", "QuickValue", "DemoVideo", "Problem", "HowItWorks", "OwnerResult", "LiveDemo", "Onboarding", "Pricing", "Faq", "Why", "Partner", "Contact"],
+  );
+  const site = read("lib", "site.ts");
+  for (const anchor of ['DEMO_VIDEO_ID = "demo-video"', 'PARTNER_ID = "partner"', 'PRICING_ID = "pricing"', 'HOW_ID = "how"', 'LIVE_ID = "live"']) {
+    assert.ok(site.includes(anchor), `lib/site.ts lost ${anchor}`);
+  }
+  // No section is kept in the DOM and moved or hidden with CSS: what was merged is gone.
+  for (const gone of ["BeforeAfter", "InstallPaths", "MobileScene", "StoryRail", "StoryScene"]) {
+    assert.ok(!SOURCE.some(({ file, text }) => file.endsWith(`${gone}.tsx`) || code(text).includes(`<${gone}`)), `${gone} is back`);
+  }
+  assert.ok(!/\border-(first|last|\d)|flex-(col|row)-reverse/.test(main), "the landing reorders sections with CSS");
+});
+
+test("V3 hero: one filled button (the demo), the video and the price next to it, no 문의 and no partner offer", () => {
+  const hero = code(read("components", "landing", "Hero.tsx"));
+  assert.ok(!/KAKAO|PARTNER|Partner/.test(hero), "the hero links to 문의 or the partner benefits again");
+  const buttons = [...hero.matchAll(/<ButtonLink([^>]*)>/g)].map((match) => match[1]);
+  assert.equal(buttons.length, 2);
+  assert.equal(buttons.filter((props) => !/variant=/.test(props)).length, 1, "the hero needs exactly one filled button");
+  assert.match(buttons.find((props) => !/variant=/.test(props)), /href=\{DEMO_URL\}/);
+  assert.match(hero, /href=\{PRICING_PATH\}/);
+  assert.match(hero, /DEMO_PROMPT/);
+  assert.match(hero, /ENTRY_PRICE/);
+  // The header's 문의 is outlined, so it does not compete with the hero's button.
+  assert.match(code(read("components", "landing", "SiteHeader.tsx")), /<ButtonLink[^>]*variant="secondary"[^>]*>\s*\{KAKAO_LABEL\}/);
+});
+
+test("V3 labels: 문의 has two names, the demo has one", () => {
+  const site = read("lib", "site.ts");
+  assert.match(site, /KAKAO_LABEL = "카카오톡 문의"/);
+  assert.match(site, /KAKAO_RECOMMEND_LABEL = "내 홈페이지 기준으로 추천받기"/);
+  assert.match(site, /DEMO_LABEL = "실제 데모 체험하기"/);
+  for (const { file, text } of SOURCE) {
+    const old = code(text).match(/도입 상담|상담받기|상담 신청|1:1 상담|실제 데모 보기|데모 보기/);
+    assert.ok(!old, `${file} uses another label: "${old?.[0]}"`);
+    // "카카오톡 상담" stays in the price list as homepage work (a link on the customer's own homepage), never as our button.
+    if (!file.endsWith(join("lib", "pricing.ts"))) assert.ok(!/카카오톡 상담/.test(code(text)), `${file} uses another label: "카카오톡 상담"`);
+    // 문의 happens in the chat room. Nobody is called, and the page must not suggest it.
+    const call = code(text).match(/전화\s*(드리|드립|상담|로 안내)|연락\s*드리겠|콜백/);
+    assert.ok(!call, `${file} suggests a sales call: "${call?.[0]}"`);
+    if (file.endsWith(join("lib", "site.ts"))) continue;
+    // Each link to the chat room or the demo takes its words from lib/site.ts.
+    assert.ok(!/>\s*(카카오톡 문의|내 홈페이지 기준으로 추천받기|실제 데모 체험하기)\s*</.test(code(text)), `${file} hardcodes a link label`);
+  }
+});
+
+test("V3 honesty: no customer count, review, result figure, deadline or delivery time", () => {
+  for (const { file, text } of SOURCE) {
+    const claim = code(text).match(
+      /\d[\d,]*\s*(개|곳)?\s*(업체|고객사|고객)\s*(가|이)?\s*(도입|사용|이용|선택)|후기|리뷰|별점|만족도|전환율|문의\s*\d+\s*(%|배)|매출\s*\d|마감 임박|선착순|오늘만|한정 (수량|특가)|\d+\s*(일|영업일|주)\s*(만에|이내|안에)/,
+    );
+    assert.ok(!claim, `${file} makes a claim nothing backs: "${claim?.[0]}"`);
+    // Nothing unreleased is dated, and no placeholder stands where a fact is missing.
+    const filler = code(text).match(/곧 (출시|제공|공개)|출시 예정일|준비\s*중|XXX|000-00-00000/);
+    assert.ok(!filler, `${file} shows "${filler?.[0]}"`);
+  }
+});
+
+test("V3 onboarding and FAQ: customer words only, and only what is decided", () => {
+  const internal = code(HOME_COPY).match(/tenant|origin|Site Lead|schema|\bAPI\b|widget|테넌트|스키마|위젯|스크립트|키 발급/i);
+  assert.ok(!internal, `lib/home.ts shows "${internal?.[0]}"`);
+  // Contract length, cancellation, refunds, billing start and reply time are not decided: no answer may imply one.
+  const undecided = code(HOME_COPY).match(/약정|해지|환불|위약금|과금 시작|결제일|영업일|시간 (이내|안에)|당일 답변/);
+  assert.ok(!undecided, `lib/home.ts answers an undecided policy: "${undecided?.[0]}"`);
+  assert.equal((HOME_COPY.match(/^\s*q: /gm) ?? []).length, 5, "the landing keeps five questions");
+  assert.equal((HOME_COPY.match(/by: "owner"/g) ?? []).length - 1, 1, "onboarding has exactly one step for the owner");
+});
+
+test("V3 price flow: the landing leads to /pricing, and only /pricing leads to the full scope", () => {
+  const home = code(read("components", "landing", "Pricing.tsx"));
+  assert.ok(!/PRICING_DETAILS_PATH|SETUP_OPTIONS\.map|PLANS\.map/.test(home), "the landing repeats the price cards or skips /pricing");
+  assert.match(home, /href=\{PRICING_PATH\}/);
+  assert.match(home, /KAKAO_RECOMMEND_LABEL/);
+  // The decision helper asks owners with a homepage first, and covers every option and plan once.
+  assert.deepEqual([...DECISION_SETUP_KEYS], ["A", "C", "B", "D"]);
+  for (const option of SETUP_OPTIONS) assert.match(option.need, /(싶어요)$/);
+  assert.equal(new Set(PLANS.map((plan) => plan.need)).size, PLANS.length);
+  // Core is never read as a cut-down plan, and what the higher plans add comes from the comparison itself.
+  assert.match(PLANS[0].assurance, /AI 상담 · 시공사례 추천 · 견적 문의는 Core부터 모두 포함됩니다/);
+  assert.deepEqual(planAdditions("Growth").map((group) => group.category), ["방문자 분석", "AI Portfolio Video"]);
+  assert.deepEqual(planAdditions("Managed").map((group) => group.category), ["운영 지원"]);
+  assert.equal(planAdditions("Managed")[0].labels.length, 6);
+  const pricing = read("app", "pricing", "page.tsx");
+  const order = ["SummaryHero", "Decision", "SetupSummary", "PlanSummary", "Assurances", "PlanAdditions", "DetailsLink", "Partner", "PricingCta"];
+  const main = pricing.slice(pricing.indexOf("<main"), pricing.indexOf("</main>"));
+  assert.deepEqual([...main.matchAll(/<([A-Z]\w+)/g)].map((match) => match[1]), order);
+});
+
+test("V3 AI Portfolio Video: a sample is shown only when there is a real one", () => {
+  const site = read("lib", "site.ts");
+  const sample = read("components", "pricing", "PortfolioSample.tsx");
+  assert.match(sample, /if \(!sample\) return null/);
+  if (/PORTFOLIO_VIDEO_SAMPLE:[^=]*= null/.test(site)) {
+    // No sample: no other file may render a video in its place.
+    for (const { file, text } of SOURCE) {
+      if (/PortfolioSample\.tsx$|DemoVideoPlayer\.tsx$/.test(file)) continue;
+      assert.ok(!/<video/.test(code(text)), `${file} renders a video while there is no AI Portfolio Video sample`);
+    }
+  }
+  for (const where of [["components", "landing", "Pricing.tsx"], ["components", "pricing", "PricingSummary.tsx"], ["components", "pricing", "PlanSection.tsx"]]) {
+    assert.match(read(...where), /<PortfolioSample/, `${where.at(-1)} lost the sample hook`);
+  }
+});
+
+test("V3 motion: no pinned scroll scenes", () => {
+  const css = read("app", "globals.css");
+  assert.ok(!/@custom-variant (pinned|unpinned|desktop-static)/.test(css), "globals.css has the pinned variants again");
+  for (const { file, text } of SOURCE) {
+    assert.ok(!/\bsticky\b[^"`]*\bh-\[\d+s?vh\]|h-\[2\d\ds?vh\]|pinned:/.test(code(text)), `${file} pins a scene to the scroll`);
+  }
+});
+

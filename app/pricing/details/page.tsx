@@ -2,7 +2,8 @@ import type { ResolvingMetadata } from "next";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
 import { MotionController } from "@/components/motion/MotionController";
-import { PartnerBand, PricingCta, PricingFaq } from "@/components/pricing/PricingClosing";
+import { Partner } from "@/components/landing/Partner";
+import { PricingCta, PricingFaq } from "@/components/pricing/PricingClosing";
 import { DetailsHero, TwoPrices } from "@/components/pricing/PricingIntro";
 import { PlanSection } from "@/components/pricing/PlanSection";
 import { SetupSection } from "@/components/pricing/SetupSection";
@@ -18,8 +19,9 @@ export function generateMetadata(_props: PageProps<"/pricing/details">, parent: 
 }
 
 /**
- * 상세 가격 — the full scope behind every price: why there are two prices, what each of the four
- * setups includes, what each monthly plan carries, and the questions asked before deciding.
+ * 상세 가격 — the page read right before deciding, for the exact scope: every price in one summary
+ * with the jumps into the page, what each of the four setups includes, what each monthly plan
+ * carries, and the questions about price and scope. The choice itself is made on /pricing.
  */
 export default function PricingDetailsPage() {
   return (
@@ -36,9 +38,9 @@ export default function PricingDetailsPage() {
         <TwoPrices />
         <SetupSection />
         <PlanSection />
-        <PartnerBand />
         <PricingFaq />
-        <PricingCta />
+        <Partner />
+        <PricingCta back />
       </main>
       <SiteFooter note={null} />
       <MotionController />

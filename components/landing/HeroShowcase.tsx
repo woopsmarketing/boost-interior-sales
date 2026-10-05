@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import { preload } from "react-dom";
 import { DepthStage } from "@/components/motion/DepthStage";
 import { ASSETS, CAPTURED_CONDITIONS, CHAT_WINDOW, cropStyles, type Asset, type Crop } from "@/lib/assets";
+import { DEMO_SCREEN_NOTE } from "@/lib/site";
 
 /** Layers are placed in px of the 600 × 640 frame they were composed at, rendered as %. */
 const FRAME = { w: 600, h: 640 };
@@ -66,6 +67,7 @@ const pct = (v: number, of: number) => `${(v / of) * 100}%`;
  * so pausing is just `animation-play-state`. Rotation holds on hover, focus, offscreen and
  * on the pause button; with reduced motion there is no bar animation, so step 1 stays.
  * Only step 1's captures are in the server HTML; the others mount once the page is idle.
+ * The line under the steps says whose screens these are: the demo company, not the product.
  */
 export function HeroShowcase() {
   const [active, setActive] = useState(0);
@@ -127,7 +129,7 @@ export function HeroShowcase() {
       }}
     >
       <div
-        className="relative ml-auto aspect-[600/640] w-[min(100%,calc((100svh-236px)*600/640))] [container-type:inline-size]"
+        className="relative ml-auto aspect-[600/640] w-[min(100%,calc((100svh-264px)*600/640))] [container-type:inline-size]"
         role="group"
         aria-roledescription="제품 화면 미리보기"
         aria-label={`BoostInterior 실제 상담 화면 — ${active + 1}단계 ${STEPS[active]}`}
@@ -144,7 +146,7 @@ export function HeroShowcase() {
         </DepthStage>
       </div>
 
-      <div className="mt-6 ml-auto flex w-[min(100%,calc((100svh-236px)*600/640))] items-start gap-4">
+      <div className="mt-6 ml-auto flex w-[min(100%,calc((100svh-264px)*600/640))] items-start gap-4">
         <ol aria-label="BoostInterior 상담 흐름" className="m-0 grid flex-1 list-none grid-cols-4 gap-3 p-0">
           {STEPS.map((label, i) => {
             const current = i === active;
@@ -201,6 +203,9 @@ export function HeroShowcase() {
           )}
         </button>
       </div>
+      <p className="mt-4 mb-0 ml-auto w-[min(100%,calc((100svh-264px)*600/640))] text-[12px] leading-[1.5] text-muted">
+        {DEMO_SCREEN_NOTE}
+      </p>
       <p aria-live="polite" className="sr-only">
         {announce}
       </p>

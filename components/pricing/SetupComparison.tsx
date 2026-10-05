@@ -15,6 +15,7 @@ import {
   type SetupOption,
   type SetupScopeKey,
 } from "@/lib/pricing";
+import { SETUP_COMPARISON_ID } from "@/lib/site";
 
 const TABLE_DETAIL_ID = "setup-scope-table";
 const PANEL_DETAIL_ID = "setup-scope-panel";
@@ -77,7 +78,7 @@ export function SetupComparison() {
   const current = SETUP_OPTIONS[selected];
 
   return (
-    <div data-reveal className="mt-10 mobile:mt-7">
+    <div id={SETUP_COMPARISON_ID} data-reveal className="mt-10 scroll-mt-24 mobile:mt-7">
       <div role="group" aria-label="구축 방식 선택" className="hidden grid-cols-2 gap-2.5 min-[600px]:grid-cols-4 mobile:grid">
         {SETUP_OPTIONS.map((option, i) => (
           <button
@@ -87,12 +88,10 @@ export function SetupComparison() {
             onClick={() => setSelected(i)}
             className="flex cursor-pointer flex-col justify-between gap-3 rounded-lg border border-line-strong p-3.5 text-left transition-colors duration-160 ease-out aria-pressed:border-accent aria-pressed:bg-white aria-pressed:shadow-[inset_0_0_0_1px_var(--color-accent),var(--shadow-md)]"
           >
+            {/* The badge is longer than half a phone's width allows: it is said in the panel below instead. */}
             <span className="flex items-start gap-2">
               <Letter option={option} />
-              <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1 pt-[3px]">
-                <span className="text-[14px] leading-[1.35] font-bold tracking-[-0.01em] text-ink">{option.name}</span>
-                {option.badge && <Badge>{option.badge}</Badge>}
-              </span>
+              <span className="pt-[3px] text-[14px] leading-[1.35] font-bold tracking-[-0.01em] text-ink">{option.name}</span>
             </span>
             <SetupPrice option={option} className="text-[19px]" />
           </button>
@@ -136,14 +135,14 @@ export function SetupComparison() {
           </thead>
           <tbody>
             {SETUP_COMPARISON.map((row) => (
-              <tr key={row.label}>
+              <tr key={row.label} className={row.included ? "bg-accent-soft/60" : "even:bg-sunken/60"}>
                 <th scope="row" className={`border-t border-line px-7 py-4 align-top narrow:px-5 ${ROW_LABEL}`}>
                   {row.label}
                 </th>
                 {row.values.map((value, i) => (
                   <td
                     key={SETUP_OPTIONS[i].key}
-                    className="border-t border-l border-line px-6 py-4 align-top text-[15px] leading-[1.5] font-medium text-ink narrow:px-4"
+                    className="border-t border-l border-line px-6 py-4 align-top text-[15px] leading-[1.5] font-medium text-pretty text-ink narrow:px-4"
                   >
                     <Value text={value} included={row.included} />
                   </td>
@@ -203,6 +202,7 @@ export function SetupComparison() {
 
         <div role="region" aria-label={`${current.name} 구축 범위`} className="hidden mobile:block">
           <p className="m-0 px-5 pt-5 pb-4">
+            {current.badge && <Badge className="mb-2.5">{current.badge}</Badge>}
             <span className="block text-[17px] leading-[1.45] font-bold tracking-[-0.02em] text-balance text-ink">
               {current.website}
             </span>

@@ -19,7 +19,7 @@ import {
   QUICK_VALUE,
   QUICK_VS_IMPROVEMENT,
 } from "@/lib/pricing-page";
-import { DEMO_URL, KAKAO_OPEN_CHAT_URL } from "@/lib/site";
+import { DEMO_URL, KAKAO_LABEL, KAKAO_OPEN_CHAT_URL } from "@/lib/site";
 
 const [INTEGRATION, QUICK, IMPROVEMENT, CUSTOM] = SETUP_OPTIONS;
 
@@ -169,7 +169,7 @@ function Quick() {
             {QUICK_EXAMPLE.cta}
           </ButtonLink>
           <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="md" variant="secondary">
-            {QUICK_EXAMPLE.consult}
+            {KAKAO_LABEL}
           </ButtonLink>
         </div>
       </div>
@@ -230,7 +230,8 @@ function Tailored({ option }: { option: SetupOption }) {
         {option.website} + {COMMON_BUILD}
       </p>
       <p className="mt-2 mb-0 text-[16px] leading-[1.65] text-pretty text-body">{option.summary}</p>
-      <CheckList items={option.highlights} lead={COMMON_LEAD} className="mt-6" />
+      {/* The line above already says the common build is in: the list is the homepage work only. */}
+      <CheckList items={option.highlights} className="mt-6" />
       <div className="mt-6">
         {option.note && <p className="m-0 text-[13px] leading-[1.6] text-muted">{option.note}</p>}
         <Disclosure {...SCOPE_TOGGLE} context={option.name} className="mt-6">

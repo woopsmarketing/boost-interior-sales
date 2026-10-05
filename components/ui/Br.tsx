@@ -7,6 +7,8 @@ const VISIBILITY = {
   phone: "hidden max-[480px]:inline",
   /** > 480px */
   wide: "max-[480px]:hidden",
+  /** ≤ 480px and ≥ 1280px — the hero title, set line by line on phones and on wide screens, flowing in between */
+  ends: "min-[481px]:max-[1279px]:hidden",
 } as const;
 
 /**

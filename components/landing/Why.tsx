@@ -1,16 +1,23 @@
 import { Br } from "@/components/ui/Br";
+import { Icon } from "@/components/ui/Icon";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
+import { WHY } from "@/lib/home";
+import { OPERATOR, SITE_NAME } from "@/lib/site";
 
-const BODY = "m-0 text-[19px] leading-[1.75] tracking-[-0.01em] text-pretty mobile:text-[17px]";
+const BODY = "m-0 text-[18px] leading-[1.75] tracking-[-0.01em] text-pretty mobile:text-[16px]";
 
-/** 만든 이유 — connecting ad/marketing visitors to an actual consultation. */
+/**
+ * 만든 이유 — why it exists, who runs it, and three things a first-time visitor can verify on this
+ * page. No customer count, review or result: there is none to show yet, so the proof is the product.
+ */
 export function Why() {
+  const [problem, answer] = WHY.body;
   return (
-    <Section id="why" aria-labelledby="why-title" pt="pt-30 mobile:pt-16">
+    <Section id="why" aria-labelledby="why-title" pt="pt-36 mobile:pt-16" pb="pb-0">
       <div
         data-reveal
-        className="grid grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] gap-24 border-t border-line-strong pt-14 narrow:grid-cols-1 narrow:gap-8 mobile:gap-7 mobile:pt-8"
+        className="grid grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] gap-x-24 gap-y-8 border-t border-line-strong pt-14 narrow:grid-cols-1 mobile:gap-y-6 mobile:pt-8"
       >
         <SceneHeader
           eyebrow="만든 이유"
@@ -23,17 +30,40 @@ export function Why() {
             </>
           }
         />
-        <div className="grid max-w-[720px] gap-6 pt-[30px] narrow:pt-0">
-          <p className={`${BODY} text-body`}>
-            인테리어 업체는 블로그, 광고, SNS, 홈페이지를 통해 고객을 데려옵니다. 하지만 방문한 고객이 자기 조건에 맞는
-            사례를 찾고, 궁금한 점을 해결하고, 실제 문의까지 남기는 과정은 별개입니다.
-          </p>
-          <p className={`${BODY} font-medium text-ink`}>
-            BoostInterior는 새로운 홈페이지를 만드는 것보다 먼저, 이미 방문한 고객과 상담이 시작되는 지점을 개선하는 데서
-            출발했습니다.
-          </p>
+        <div className="grid max-w-[720px] gap-5 pt-[30px] narrow:pt-0 mobile:gap-3.5">
+          <p className={`${BODY} text-body`}>{problem}</p>
+          <p className={`${BODY} font-medium text-ink`}>{answer}</p>
         </div>
       </div>
+
+      <ul
+        data-reveal
+        className="mt-12 mb-0 grid list-none grid-cols-3 gap-5 p-0 narrow:grid-cols-1 mobile:mt-7 mobile:gap-0 mobile:rounded-xl mobile:bg-white mobile:px-5 mobile:shadow-md"
+      >
+        {WHY.checks.map((check) => (
+          <li
+            key={check.title}
+            className="flex gap-4 rounded-xl bg-white p-6 shadow-md mobile:gap-3.5 mobile:rounded-none mobile:border-t mobile:border-line mobile:bg-transparent mobile:px-0 mobile:py-4 mobile:shadow-none mobile:first:border-t-0"
+          >
+            <span className="grid size-10 flex-none place-items-center rounded-md bg-accent-soft text-accent">
+              <Icon name={check.icon} className="size-5" />
+            </span>
+            <div>
+              <p className="m-0 text-[17px] leading-[1.4] font-bold tracking-[-0.01em] text-ink mobile:text-[16px]">{check.title}</p>
+              <p className="mt-1.5 mb-0 text-[14px] leading-[1.6] text-pretty text-body">{check.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <p data-reveal className="mt-6 mb-0 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[15px] leading-[1.6] text-muted mobile:mt-5">
+        <span className="font-bold text-ink">
+          {SITE_NAME} <span className="font-medium text-muted">by {OPERATOR}</span>
+        </span>
+        <span>
+          {SITE_NAME}는 {OPERATOR}가 만들고 운영합니다. 문의는 {OPERATOR} 카카오톡 1:1 오픈채팅에서 받습니다.
+        </span>
+      </p>
     </Section>
   );
 }

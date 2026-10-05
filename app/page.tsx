@@ -1,24 +1,24 @@
-import { BeforeAfter } from "@/components/landing/BeforeAfter";
 import { Contact } from "@/components/landing/Contact";
 import { DemoVideo } from "@/components/landing/DemoVideo";
+import { Faq } from "@/components/landing/Faq";
 import { Hero } from "@/components/landing/Hero";
-import { InstallPaths } from "@/components/landing/InstallPaths";
+import { HowItWorks } from "@/components/landing/HowItWorks";
 import { LiveDemo } from "@/components/landing/LiveDemo";
-import { MobileScene } from "@/components/landing/MobileScene";
+import { Onboarding } from "@/components/landing/Onboarding";
+import { OwnerResult } from "@/components/landing/OwnerResult";
 import { Partner } from "@/components/landing/Partner";
 import { Pricing } from "@/components/landing/Pricing";
 import { Problem } from "@/components/landing/Problem";
+import { QuickValue } from "@/components/landing/QuickValue";
 import { SiteFooter } from "@/components/landing/SiteFooter";
 import { SiteHeader } from "@/components/landing/SiteHeader";
-import { StoryRail } from "@/components/landing/StoryRail";
-import { StoryScene } from "@/components/landing/StoryScene";
 import { Why } from "@/components/landing/Why";
 import { MotionController } from "@/components/motion/MotionController";
-import { INSTALL_SCENE, STORY_SCENES } from "@/lib/scenes";
 
 /**
- * Section order follows ui_kits/sales-landing/index.html (Claude Design, approved), with the
- * Founding Partner benefits moved up under the hero and the pricing summary before the final CTA.
+ * Landing V3 — in the order an owner decides: what it is, that it really works, why it is needed,
+ * how it works, what arrives on the owner's side, try it, what it takes to start, what it costs,
+ * and only then the questions, who is behind it, the early-partner benefits and the way to ask.
  */
 export default function Home() {
   return (
@@ -30,22 +30,19 @@ export default function Home() {
         본문으로 건너뛰기
       </a>
       <SiteHeader />
-      <StoryRail />
       <main id="main">
         <Hero />
-        <Partner />
-        <Problem />
-        {STORY_SCENES.map((scene) => (
-          <StoryScene key={scene.id} scene={scene} />
-        ))}
-        <MobileScene />
+        <QuickValue />
         <DemoVideo />
-        <BeforeAfter />
-        <Why />
-        <StoryScene scene={INSTALL_SCENE} />
-        <InstallPaths />
+        <Problem />
+        <HowItWorks />
+        <OwnerResult />
         <LiveDemo />
+        <Onboarding />
         <Pricing />
+        <Faq />
+        <Why />
+        <Partner detail />
         <Contact />
       </main>
       <SiteFooter />

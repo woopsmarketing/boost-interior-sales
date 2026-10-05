@@ -1,4 +1,4 @@
-/** Compact label beside a product name ("인기상품"). The words are in the DOM; the colour only adds emphasis. */
+/** Compact label beside a product name ("홈페이지가 없다면 추천"). The words are in the DOM; the colour only adds emphasis. */
 export function Badge({ children, className = "" }: { children: string; className?: string }) {
   return (
     <span

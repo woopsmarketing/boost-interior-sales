@@ -114,7 +114,6 @@ export const QUICK_EXAMPLE = {
   text: "실제 화면과 BoostInterior 상담 흐름을 확인해보세요.",
   note: "가상 인테리어 업체를 기준으로 만든 예시 사이트입니다.",
   cta: `${QUICK.name} 예시 보기`,
-  consult: "도입 상담받기",
 } as const;
 
 /** Quick Start: who it is for — a quick start with a new homepage, not a cut-down one. */
@@ -136,6 +135,13 @@ export const QUICK_VS_IMPROVEMENT = {
     line: "현재 홈페이지에 맞춰 직접 수정",
     text: "현재 홈페이지의 제작 방식, 디자인, 주소, 내용, 페이지 구성을 유지하면서 업체마다 다른 문제를 하나씩 직접 고쳐야 하므로 맞춤 작업 범위가 커집니다.",
   },
+} as const;
+
+/** AI Portfolio Video in customer terms: what it is, and what it is made from. Said wherever Growth is explained. */
+export const PORTFOLIO_VIDEO = {
+  text: "시공사진을 공간의 흐름에 따라 보여주는 AI 시공사례 영상입니다. 완성된 시공사진을 사진 목록으로만 두지 않고, 공간을 따라 이동하는 영상으로 보여줄 수 있도록 지원합니다.",
+  terms: "시공사례 영상 제작 · 건수 제한 없음",
+  source: "업체가 제공하는 실제 시공 자료 기준",
 } as const;
 
 export const PRICING_FAQ: readonly { q: string; a: string }[] = [
@@ -177,7 +183,7 @@ export const PRICING_FAQ: readonly { q: string; a: string }[] = [
   },
   {
     q: "나중에 플랜을 변경할 수 있나요?",
-    a: "플랜 변경은 이용 상황에 맞춰 도입 상담에서 안내해드립니다. 카카오톡 1:1 상담으로 문의해 주세요.",
+    a: "플랜 변경은 이용 상황에 맞춰 안내해드립니다. 카카오톡으로 문의해 주세요.",
   },
   {
     q: "3D 시공사례도 제공하나요?",

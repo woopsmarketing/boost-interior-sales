@@ -1,8 +1,8 @@
 /**
  * Real product captures (demo tenant "부스트 인테리어").
  * Crops come from design-reference/claude-design/assets/product — see HANDOFF.md §3.
- * `scene-*` are full composites (used for mobile / reduced motion);
- * `layer-*` / `photo-*` are the depth layers for the desktop story.
+ * `layer-*` / `photo-*` are the depth layers of the step stages; `scene-01` is the video's poster.
+ * The other `scene-*` composites the longer walkthrough used stay on disk under public/images/product.
  */
 export interface Asset {
   src: string;
@@ -27,7 +27,7 @@ export interface Crop {
  * carry that platform's own name: the "Powered by" line under the chat input and the label
  * above the tenant name in the admin sidebar. The page presents one product name, so those
  * strips are cropped out. Nothing is painted over — the pixels that remain are untouched.
- * (The phone captures have the same line inside the device frame; see `PHONE_FADE`.)
+ * (The phone capture has the same line inside the device frame; the hero shows only its top rows.)
  */
 /** The chat window down to its input row (drops the capture's margins and the strip below). */
 export const CHAT_WINDOW: Crop = { x: 7, y: 6, w: 483, h: 679, r: 18 };
@@ -35,15 +35,6 @@ export const CHAT_WINDOW: Crop = { x: 7, y: 6, w: 483, h: 679, r: 18 };
 const COMPOSITE: Crop = { x: 0, y: 0, w: 1400, h: 692, r: 0 };
 /** Admin window from the tenant name down. */
 const DASHBOARD: Crop = { x: 0, y: 26, w: 1248, h: 677, r: 16 };
-const DASHBOARD_COMPOSITE: Crop = { x: 0, y: 42, w: 1360, h: 718, r: 0 };
-
-/**
- * Phone captures (380 × 788): there the line sits inside the device frame, where a crop would
- * cut the phone itself, so the last rows of the screen dissolve instead. Tailwind classes.
- */
-export const PHONE_FADE = "[mask-image:linear-gradient(to_bottom,#000_84%,transparent_95%)]";
-/** The same rows in the two-phone composite (860 × 830). */
-export const PHONE_COMPOSITE_FADE = "[mask-image:linear-gradient(to_bottom,#000_81.5%,transparent_92.5%)]";
 
 const pct = (v: number, of: number) => `${(v / of) * 100}%`;
 
@@ -79,7 +70,6 @@ const p = (file: string, width: number, height: number, alt: string, crop?: Crop
 
 export const ASSETS = {
   siteHero: p("layer-site-hero.png", 850, 703, "부스트 인테리어 데모 홈페이지 첫 화면"),
-  siteFull: p("layer-site-full.png", 1248, 703, "부스트 인테리어 데모 홈페이지"),
   chatWelcome: p("layer-chat-welcome.png", 500, 745, "BoostInterior 상담창의 첫 인사 메시지", CHAT_WINDOW),
   chatWidget: p(
     "layer-chat-widget.png",
@@ -126,60 +116,12 @@ export const ASSETS = {
     "정리된 상담 요청: 고객이 원하는 공사 요약과 지역 · 주거 유형 · 면적 · 공사 범위 · 선호 스타일 · 관심 사례",
   ),
   phoneChat: p("layer-phone-chat.png", 380, 788, "휴대폰 화면에서 열린 BoostInterior 상담창"),
-  phoneViewer: p("layer-phone-viewer.png", 380, 788, "휴대폰 화면 전체로 열린 시공사례 뷰어"),
 
   sceneConversation: p(
     "scene-01-conversation.png",
     1400,
     790,
     "부스트 인테리어 데모 홈페이지와, 방문자 요청에 시공사례를 추천하는 BoostInterior 상담창",
-    COMPOSITE,
-  ),
-  scenePortfolio: p(
-    "scene-02-portfolio.png",
-    1320,
-    690,
-    "데모 홈페이지 위에 표시된 추천 시공사례 카드",
-  ),
-  sceneViewer: p(
-    "scene-03-viewer.png",
-    1520,
-    760,
-    "상담창을 떠나지 않고 연 시공사례 사진 뷰어와 사례 정보",
-  ),
-  scenePhotos: p("scene-04-photos.png", 1420, 720, "한 시공사례의 주방 · 싱크대 · 욕실 사진"),
-  sceneMemory: p(
-    "scene-05-memory.png",
-    1400,
-    790,
-    "앞서 말한 지역 · 면적 · 공사 범위를 기억하고 견적 상담을 이어가는 상담창",
-    COMPOSITE,
-  ),
-  sceneInquiry: p(
-    "scene-06-inquiry.png",
-    1400,
-    790,
-    "상담창 안에서 바로 남기는 견적 문의 양식",
-    COMPOSITE,
-  ),
-  sceneDashboard: p(
-    "scene-07-dashboard.png",
-    1360,
-    760,
-    "사업자 관리 화면에 정리된 상담 요청 상세",
-    DASHBOARD_COMPOSITE,
-  ),
-  sceneMobile: p(
-    "scene-08-mobile.png",
-    860,
-    830,
-    "휴대폰에서 화면 전체로 열린 상담창과 시공사례 뷰어",
-  ),
-  sceneInstall: p(
-    "scene-09-install.png",
-    1400,
-    790,
-    "기존 인테리어 홈페이지 옆에 열린 BoostInterior 상담창",
     COMPOSITE,
   ),
 } satisfies Record<string, Asset>;

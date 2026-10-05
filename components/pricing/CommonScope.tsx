@@ -5,6 +5,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Notice } from "@/components/ui/Notice";
 import { COMMON_BOOSTINTERIOR_SCOPE, COMMON_SCOPE_ITEMS, SETUP_OPTIONS } from "@/lib/pricing";
 import { COMMON_SCOPE } from "@/lib/pricing-page";
+import { COMMON_SCOPE_ID } from "@/lib/site";
 
 const COUNT = COMMON_SCOPE_ITEMS.length;
 
@@ -16,10 +17,11 @@ const COUNT = COMMON_SCOPE_ITEMS.length;
 export function CommonScope() {
   return (
     <div
+      id={COMMON_SCOPE_ID}
       data-reveal
       role="group"
       aria-labelledby="common-scope-title"
-      className="mt-10 rounded-2xl border border-blue-200 bg-white p-12 shadow-window narrow:p-9 mobile:mt-7 mobile:rounded-xl mobile:p-6"
+      className="mt-10 scroll-mt-24 rounded-2xl border border-blue-200 bg-white p-12 shadow-window narrow:p-9 mobile:mt-7 mobile:rounded-xl mobile:p-6"
     >
       <p className="m-0 flex flex-wrap items-center gap-x-3 gap-y-2">
         <span className="flex gap-1">

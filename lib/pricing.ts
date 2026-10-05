@@ -74,20 +74,21 @@ export const SETUP_SCOPE_GROUPS = [
 export type SetupScopeKey = (typeof SETUP_SCOPE_GROUPS)[number]["key"];
 
 export interface SetupOption {
-  /** Same letter as the matching path in InstallPaths */
   key: "A" | "B" | "C" | "D";
   /** Anchor of the option's block on both pricing pages */
   id: string;
   name: string;
-  /** Compact label shown next to the name wherever the option is listed */
+  /** Compact label shown next to the name wherever the option is listed. A recommendation, never a sales claim. */
   badge?: string;
   price: number;
   /** Price is a starting point ("부터"): the scope is confirmed per site */
   from?: boolean;
   /** What happens to the homepage — the one thing the options differ in, and what the price follows */
   website: string;
-  /** The owner's situation it answers, as the landing's install paths and the /pricing cards say it */
+  /** The owner's situation it answers, as the /pricing cards say it */
   situation: string;
+  /** The same situation in the owner's own words: the decision helper on the landing and on /pricing */
+  need: string;
   summary: string;
   /** Who it is for */
   fit: string;
@@ -108,11 +109,15 @@ export interface Plan {
   /** What sets the plan apart, in a few words: core → analysis and video → people */
   role: string;
   price: number;
+  /** What the owner wants from it, as the decision helper says it */
+  need: string;
   summary: string;
   /** The plan this one contains in full */
   base?: "Core" | "Growth";
   /** The card, on the landing and on both pricing pages: the few things that define the plan. Every feature is in COMPARISON. */
   highlights: readonly string[];
+  /** Said under the card's list: what a reader might think is missing from the plan, and is not */
+  assurance?: string;
   note?: string;
 }
 
@@ -124,6 +129,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
     price: 290_000,
     website: "지금 홈페이지 그대로 사용",
     situation: "이미 홈페이지가 있다면",
+    need: "지금 홈페이지가 있고, 그대로 사용하고 싶어요",
     summary: "현재 홈페이지는 그대로 사용하면서, 우리 업체에 맞춘 BoostInterior AI 상담 시스템을 연결합니다.",
     fit: "이미 홈페이지가 있고, 디자인은 그대로 두고 싶은 업체",
     highlights: ["지금 홈페이지 그대로 사용", "디자인 · 구성 변경 없음"],
@@ -141,10 +147,11 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
     // The id is also the pricing pages' anchor, so it keeps the name the option had before "Quick Start".
     id: "quick-website",
     name: "Quick Start",
-    badge: "인기상품",
+    badge: "홈페이지가 없다면 추천",
     price: 490_000,
     website: "새 홈페이지 빠르게 제작",
     situation: "새 홈페이지가 빨리 필요하다면",
+    need: "홈페이지가 없고, 빠르게 시작하고 싶어요",
     summary: "새 홈페이지가 필요하고, 복잡한 제작 과정 없이 빠르게 시작하고 싶은 업체를 위한 상품입니다.",
     fit: "홈페이지가 없거나 새로 만들고 싶고, 오래 기다리지 않고 빠르게 시작하고 싶은 업체",
     highlights: ["휴대폰에서도 보기 편한 화면", "네이버·구글 노출 기본 설정 · 빠른 로딩", "기존 공개 시공사례 이전"],
@@ -166,6 +173,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
     from: true,
     website: "지금 홈페이지 맞춤 개선",
     situation: "지금 홈페이지를 고쳐 쓰고 싶다면",
+    need: "홈페이지는 있는데, 화면이나 구성을 함께 고치고 싶어요",
     summary: "현재 홈페이지를 살리면서 보기 불편한 화면과 시공사례 구성, 모바일 화면, 상담·견적 문의 동선을 업체에 맞게 개선합니다.",
     fit: "현재 홈페이지를 버리고 싶지는 않지만, 디자인과 상담 · 견적 문의 동선은 제대로 개선하고 싶은 업체",
     highlights: ["기존 홈페이지 진단 후 범위 확정", "보기 불편한 화면 · 모바일 화면 개선", "시공사례 → 상담 연결 개선"],
@@ -195,6 +203,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
     from: true,
     website: "완전 맞춤 홈페이지 새로 제작",
     situation: "브랜드부터 새로 설계한다면",
+    need: "홈페이지가 없고, 브랜드부터 새로 만들고 싶어요",
     summary: "업체의 브랜드와 원하는 구성에 맞춰 홈페이지를 처음부터 맞춤 제작합니다.",
     fit: "브랜드부터 홈페이지 구성까지 완전히 맞춰 제작하고 싶은 업체",
     highlights: ["브랜드에 맞춘 맞춤 디자인", "메뉴 · 화면 구성 맞춤 설계", "네이버·구글 노출 기본 설정 · 빠른 로딩"],
@@ -257,13 +266,16 @@ export const PLANS: readonly Plan[] = [
     name: "Core",
     role: "핵심 기능",
     price: 88_000,
+    need: "상담 · 시공사례 추천 · 견적 문의부터",
     summary: "BoostInterior의 핵심 기능을 사용합니다.",
     highlights: ["24시간 AI 상담", "조건에 맞는 실제 시공사례 추천", "견적 문의와 상담 기록 확인"],
+    assurance: "AI 상담 · 시공사례 추천 · 견적 문의는 Core부터 모두 포함됩니다.",
   },
   {
     name: "Growth",
     role: "분석 + Portfolio Video",
     price: 198_000,
+    need: "방문자 분석과 AI Portfolio Video까지",
     summary: "방문자가 어디를 보고 어떻게 움직이는지 확인하고, 시공사진을 공간의 흐름에 따라 영상으로 보여줍니다.",
     base: "Core",
     highlights: ["방문자가 어디를 보고 어떻게 움직이는지 확인", "AI Portfolio Video (시공사진 영상) · 건수 제한 없음"],
@@ -271,11 +283,13 @@ export const PLANS: readonly Plan[] = [
   },
   {
     name: "Managed",
-    role: "사람이 함께 운영",
+    role: "매달 함께 검토 · 개선",
     price: 297_000,
+    need: "매달 함께 확인하고 개선할 운영 지원까지",
     summary: "기능만 사용하는 것이 아니라, 매달 실제 데이터를 함께 보면서 개선합니다.",
     base: "Growth",
-    highlights: ["매월 방문 · 상담 데이터 확인", "상담 답변과 견적 문의 흐름 개선 지원", "우선 지원"],
+    // The Managed-only rows of COMPARISON, two to a line: what the owner gets every month.
+    highlights: ["월 1회 방문 · 상담 데이터 함께 확인", "자주 묻는 질문 답변 개선 · 시공사례 업데이트 지원", "월간 개선 포인트 정리 · 우선 지원"],
     note: "실제 작업 범위는 계약 및 운영정책에 따라 정해집니다.",
   },
 ];
@@ -352,6 +366,21 @@ export const COMPARISON: readonly { category: string; rows: readonly { label: st
     ],
   },
 ];
+
+/** The order the decision helper asks in: owners with a homepage first (keep it, or rework it), then those without. */
+export const DECISION_SETUP_KEYS: readonly SetupOption["key"][] = ["A", "C", "B", "D"];
+
+/**
+ * What a plan adds to the one below it: the comparison rows that start at that plan, by category.
+ * Growth → 방문자 분석 and AI Portfolio Video; Managed → 운영 지원.
+ */
+export const planAdditions = (name: Plan["name"]) => {
+  const i = PLANS.findIndex((plan) => plan.name === name);
+  return COMPARISON.map((group) => ({
+    category: group.category,
+    labels: group.rows.filter((row) => row.plans[i] && !(i > 0 && row.plans[i - 1])).map((row) => row.label),
+  })).filter((group) => group.labels.length > 0);
+};
 
 /** An option's homepage work — what it adds to the common build — as one list in SETUP_SCOPE_GROUPS order. */
 export const scopeItems = (option: SetupOption) =>
