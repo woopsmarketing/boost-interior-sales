@@ -6,8 +6,8 @@ import { PARTNER_ID, SITE_NAME } from "@/lib/site";
 
 /**
  * 초기 파트너 혜택 — a short band near the end, after the product and its price: what adopting now
- * adds on top of the plans. A feature the plans already carry (AI Portfolio Video) is named here only
- * for the extra on it, never as something still to come. It carries no button of its own; the final
+ * adds on top of the subscriptions. A feature a subscription already carries (the reel of AI 마케팅) is
+ * named here only for the extra on it, never as something still to come. It carries no button of its own; the final
  * 문의 block follows it on every page.
  * `detail` (the landing) gives each benefit its one line and owns the `#partner` anchor; without it
  * (the pricing pages) the band lists the titles and links back to the landing's.

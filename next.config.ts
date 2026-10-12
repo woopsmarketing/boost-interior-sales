@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
         source: "/video/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
       },
+      // The landing's films and stills. Their file names stay the same when a film is re-rendered, so a day, not a year.
+      {
+        source: "/assets/landing/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }],
+      },
     ];
   },
 };

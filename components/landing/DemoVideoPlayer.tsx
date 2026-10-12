@@ -2,6 +2,8 @@
 
 import Image, { getImageProps } from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { INSET_FOCUS } from "@/components/media/frames";
+import { idle, release, solo } from "@/components/media/solo";
 import type { Asset } from "@/lib/assets";
 
 export interface Chapter {
@@ -40,6 +42,7 @@ export function DemoVideoPlayer({
 }) {
   const [playing, setPlaying] = useState(false);
   const [inline, setInline] = useState(true);
+  const frame = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const startAt = useRef(0);
 
@@ -71,6 +74,23 @@ export function DemoVideoPlayer({
     if (!inline) expand(video);
   }, [playing, inline]);
 
+  // Scrolled out of view: stop, like the other films (it plays without sound). Not while it fills the screen.
+  useEffect(() => {
+    const el = frame.current;
+    const video = videoRef.current;
+    if (!playing || !el || !video) return;
+    let seen = false;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) seen = true;
+      else if (seen && document.fullscreenElement !== video) video.pause();
+    });
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      release(video);
+    };
+  }, [playing]);
+
   // Zoom the facade from its top edge so the rows below the poster's crop fall outside the frame.
   const zoom = poster.crop ? poster.height / poster.crop.h : 1;
 
@@ -84,7 +104,7 @@ export function DemoVideoPlayer({
 
   return (
     <div>
-      <div className="relative aspect-video overflow-hidden rounded-xl bg-gray-900 shadow-float mobile:rounded-md">
+      <div ref={frame} className="relative aspect-video overflow-hidden rounded-xl bg-gray-900 shadow-float mobile:rounded-md">
         {playing ? (
           <video
             ref={videoRef}
@@ -94,8 +114,12 @@ export function DemoVideoPlayer({
             autoPlay
             playsInline={inline}
             preload="auto"
-            aria-label={`BoostInterior 실제 작동 영상 (${duration})`}
-            className="block size-full object-contain"
+            aria-label={`BoostInterior 제품 화면 영상 (${duration}, 소리 없음)`}
+            onPlay={(event) => solo(event.currentTarget)}
+            onPause={(event) => idle(event.currentTarget)}
+            onEnded={(event) => idle(event.currentTarget)}
+            onError={(event) => idle(event.currentTarget)}
+            className={`block size-full object-contain ${INSET_FOCUS}`}
           />
         ) : (
           <>
@@ -111,22 +135,22 @@ export function DemoVideoPlayer({
             <button
               type="button"
               onClick={() => play(0)}
-              className="group absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-5 border-0 bg-transparent p-0 mobile:gap-3"
+              className={`group absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-3 border-0 bg-transparent p-0 ${INSET_FOCUS}`}
             >
               <span className="sr-only">데모 영상 재생 ({duration})</span>
               <span
                 aria-hidden="true"
-                className="grid size-24 place-items-center rounded-pill bg-white/96 shadow-float transition-transform duration-160 ease-out group-hover:scale-[1.04] group-active:scale-[.98] mobile:size-16"
+                className="grid size-[72px] place-items-center rounded-pill bg-white/96 shadow-float transition-transform duration-160 ease-out group-hover:scale-[1.05] group-active:scale-[.97] mobile:size-16"
               >
-                <span className="ml-1.5 h-0 w-0 border-y-[14px] border-l-[22px] border-y-transparent border-l-gray-900 mobile:ml-1 mobile:border-y-[10px] mobile:border-l-[16px]" />
+                <span className="ml-1 h-0 w-0 border-y-[11px] border-l-[18px] border-y-transparent border-l-gray-900" />
               </span>
               <span
                 aria-hidden="true"
-                className="flex items-center gap-2 rounded-pill bg-gray-900/70 px-4 py-2 text-[15px] leading-none font-semibold text-white mobile:px-3 mobile:py-1.5 mobile:text-[13px]"
+                className="flex items-center gap-1.5 rounded-pill bg-gray-900/72 px-3 py-1.5 text-[13px] leading-none font-semibold whitespace-nowrap text-white"
               >
-                <span className="font-mono text-[13px] font-medium mobile:text-[12px]">{duration}</span>
+                <span className="font-mono text-[12px] font-medium">{duration}</span>
                 <span className="text-white/50">·</span>
-                소리 없이 재생됩니다
+                소리 없음
               </span>
             </button>
           </>

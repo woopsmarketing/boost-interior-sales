@@ -1,111 +1,68 @@
 import type { IconName } from "@/components/ui/Icon";
-import { BASIC_CONNECTIONS_SHORT, COMMON_BUILD, manwon, SETUP_OPTIONS, VIDEO } from "@/lib/pricing";
+import {
+  ALL_IN_ONE,
+  ALLOWANCE_NOTE,
+  BASIC_CONNECTIONS_SHORT,
+  CONSULT_SETUP,
+  monthly,
+  SETUP_OPTIONS,
+  spoken,
+  SUBSCRIBE_NOTE,
+  SUBSCRIPTIONS,
+  TRIAL,
+  WEBSITE_OPERATION,
+  won,
+} from "@/lib/pricing";
 
 /**
- * Copy for the two pricing pages that is not a price. /pricing: what holds whichever option and plan
- * is picked. /pricing/details: what every setup option shares, what the 290,000원 setup actually does,
- * what Quick Start is, and the questions an owner asks before paying. Prices and scope lists come
- * from lib/pricing.ts.
+ * Copy for the two pricing pages that is not a price. /pricing: what holds whichever product is
+ * picked. /pricing/details: what 기존 홈페이지 연동 is, what Quick Start is, and the questions an owner
+ * asks before paying. Prices, features, conditions and the trial policy come from lib/pricing.ts.
+ * Contract length, cancellation after the trial and refunds are not decided, so no answer here
+ * implies one.
  */
 
-const [INTEGRATION, QUICK, IMPROVEMENT, CUSTOM] = SETUP_OPTIONS;
+const [MARKETING, CONSULTATION, BUNDLE] = SUBSCRIPTIONS;
+const [INTEGRATION, QUICK, IMPROVEMENT] = SETUP_OPTIONS;
 
-/** "29만원" / "120만원부터" — amounts inside sentences, read from the price list. */
-const spoken = (option: (typeof SETUP_OPTIONS)[number]) => `${manwon(option.price)}만원${option.from ? "부터" : ""}`;
-
-/** /pricing, under the cheapest way in: the doubt that price raises first. */
-export const STARTER_NOTE = `${spoken(INTEGRATION)}은 상담창 설치비가 아니라, 우리 업체에 BoostInterior를 처음 구축하는 기본 구축비입니다.`;
-
-/** /pricing: what is the same whichever setup option and plan an owner picks. */
+/** /pricing: what is the same whichever product an owner picks. */
 export const ASSURANCES: readonly { icon: IconName; title: string; text: string }[] = [
   {
-    icon: "chat",
-    title: "AI 상담 기능은 모두 같습니다",
-    text: `어떤 구축 방식을 선택해도 ${COMMON_BUILD}은 동일하게 포함됩니다. 달라지는 것은 홈페이지 작업 범위입니다.`,
-  },
-  {
-    icon: "layers",
-    title: "기존 시공사례 건수 제한 없음",
-    text: "지금 홈페이지에 공개된 기존 시공사례를 전체 정리해, AI가 조건에 맞게 찾아줄 수 있도록 만듭니다.",
-  },
-  {
-    icon: "sliders",
-    title: "관리 화면 기본 제공",
-    text: "상담 기록과 상담 요청은 BoostInterior 관리 화면에서 바로 확인합니다.",
-  },
-  {
     icon: "ticket",
-    title: "표시 가격이 최종 금액",
-    text: "구축비와 월 이용료 모두 부가세(VAT)가 포함된 금액입니다.",
+    title: "표시 가격은 부가세 포함",
+    text: "월 이용료와 홈페이지 제작비 모두 부가세(VAT)가 포함된 금액입니다. ‘부터’로 적힌 상품은 범위를 확인한 뒤 금액을 먼저 안내드립니다.",
   },
-];
-
-/**
- * The common build, above the setup comparison: the four options carry the same BoostInterior,
- * and the price follows the homepage work. The scope itself is COMMON_BOOSTINTERIOR_SCOPE.
- */
-export const COMMON_SCOPE = {
-  title: `어떤 구축 방식을 선택해도 ${COMMON_BUILD}은 동일하게 포함됩니다.`,
-  text: "가격 차이는 AI 상담 기능의 차이가 아니라, 현재 홈페이지를 그대로 사용할지, 새 홈페이지를 빠르게 만들지, 기존 홈페이지를 맞춤 개선할지, 처음부터 맞춤 제작할지에 따라 결정됩니다.",
-  /**
-   * 시공사례 policy: everything public on the current homepage, and nothing implied beyond it. "기존" keeps it
-   * apart from AI Portfolio Video, which is counted per plan.
-   */
-  portfolio: {
-    lead: "기존 시공사례 건수 제한 없음.",
-    text: "현재 홈페이지에 공개된 기존 시공사례 전체를 수집해 AI가 찾아줄 수 있도록 정리합니다. 홈페이지에 없는 별도 자료의 정리는 범위를 확인한 뒤 안내해드립니다.",
-  },
-} as const;
-
-/** Why 기존 홈페이지 연동 is not "installing a chat window": it is the common build, with no homepage work on top. */
-export const INTEGRATION_VALUE = {
-  title: `${spoken(INTEGRATION)}은 단순한 상담창 설치비가 아닙니다.`,
-  text: `홈페이지에 상담창 하나를 붙이는 비용이 아니라, 우리 업체에 BoostInterior를 처음 구축하는 기본 구축비입니다. 홈페이지는 지금 그대로 사용하므로, 홈페이지 작업 없이 아래 ${COMMON_BUILD} 과정만 진행합니다.`,
-} as const;
-
-/** The common build in four steps, in the order the work happens. */
-export const INTEGRATION_GROUPS: readonly { icon: IconName; title: string; text: string }[] = [
   {
     icon: "window",
-    title: "홈페이지 · 업체 분석",
-    text: "현재 홈페이지 구성과 업체 정보를 확인하고 초기 세팅합니다.",
+    title: WEBSITE_OPERATION.label,
+    text: `${WEBSITE_OPERATION.text} 홈페이지를 만들었다고 월 구독이 따라붙지 않습니다.`,
   },
   {
     icon: "layers",
-    title: "기존 시공사례 전체 정리",
-    text: "홈페이지에 공개된 기존 시공사례 전체를 수집해 AI가 조건에 맞게 찾아줄 수 있도록 정리합니다.",
+    title: "필요한 것만 구독",
+    text: `${MARKETING.name}과 ${CONSULTATION.name}은 따로 구독할 수 있고, 둘 다 필요하면 ${BUNDLE.name}이 월 ${won(ALL_IN_ONE.saving)}원 적습니다.`,
   },
   {
     icon: "chat",
-    title: "AI 검색 · 상담 연결",
-    text: "방문자의 조건에 맞는 실제 시공사례 검색 · 추천과 상담 · 견적 흐름을 연결합니다.",
-  },
-  {
-    icon: "shield",
-    title: "설치 · 점검",
-    text: "AI 상담창, 홈페이지 주소 연결, 휴대폰 화면, 상담 동작, 견적 문의 흐름을 점검한 뒤 적용합니다.",
+    title: "시작은 문의로",
+    text: SUBSCRIBE_NOTE,
   },
 ];
 
-/** How the 290,000원 setup proceeds, step by step — the detail behind the four steps above. */
-export const INTEGRATION_PROCESS: readonly { title: string; text: string }[] = [
-  { title: "홈페이지 확인", text: "현재 홈페이지와 상담 동선을 분석합니다." },
-  { title: "업체 정보 정리", text: "서비스, 지역, 상담 기준, 업체 정보를 BoostInterior에 세팅합니다." },
-  { title: "시공사례 수집", text: "홈페이지에 공개된 기존 시공사례를 전체 수집합니다." },
-  { title: "시공사례 정리", text: "지역 · 평형 · 공간 · 스타일 · 공사범위 등으로 AI가 찾아줄 수 있도록 정리합니다." },
-  { title: "AI 검색 연결", text: "방문자가 평소 말투로 말한 조건을 이해하고 실제 시공사례를 찾아주는 검색 흐름을 연결합니다." },
-  { title: "견적 흐름 연결", text: "시공사례 확인에서 상담과 견적 문의로 이어지도록 구성합니다." },
-  { title: "설치 및 점검", text: "AI 상담창, 홈페이지 주소 연결, 휴대폰 화면, 상담 동작을 확인한 뒤 적용합니다." },
-];
+/** What 기존 홈페이지 연동 is, said before its price is misread as a homepage build. */
+export const INTEGRATION_VALUE = {
+  title: `${INTEGRATION.name}은 새 홈페이지를 만드는 상품이 아닙니다.`,
+  text: `지금 홈페이지는 그대로 두고 ${CONSULTATION.name}을 연결하는 한 번의 작업입니다. 홈페이지 작업 없이 아래 ${CONSULT_SETUP}만 진행합니다.`,
+} as const;
 
 /** Quick Start — what the new homepage gives the customer, in their words. Six, so the grid stays 3 × 2. */
 export const QUICK_FEATURES: readonly { icon: IconName; label: string; text: string }[] = [
   { icon: "phone", label: "휴대폰에서도 편하게", text: "휴대폰 · 태블릿에서도 보기 편한 화면" },
-  { icon: "search", label: "네이버·구글 노출 기본 설정", text: "검색 노출에 필요한 기본 설정" },
-  { icon: "bolt", label: "빠른 페이지 로딩", text: "답답하지 않게 빠르게 열리는 화면" },
-  { icon: "gallery", label: "시공사례 구성", text: "보기 좋게 구성 · 기존 공개 사례 이전" },
-  { icon: "form", label: "상담·견적 문의 연결", text: "상담과 견적 문의로 이어지는 동선" },
-  { icon: "chat", label: "BoostInterior AI 상담", text: "기본 구축 전체 포함" },
+  { icon: "gallery", label: "시공사례 구성", text: "목록 · 상세 화면과 기존 공개 사례 이전" },
+  { icon: "search", label: "조건 검색", text: "공사 유형 · 평형 · 스타일로 찾기" },
+  { icon: "form", label: "견적 문의 양식", text: "상담과 견적 문의로 이어지는 동선" },
+  { icon: "chat", label: `${CONSULTATION.name} 연결`, text: "구독하면 바로 쓸 수 있는 상담창" },
+  { icon: "video", label: `${MARKETING.name} 연결`, text: "구독하면 시공사례로 영상과 글 만들기" },
 ];
 
 /**
@@ -114,14 +71,14 @@ export const QUICK_FEATURES: readonly { icon: IconName; label: string; text: str
  */
 export const QUICK_EXAMPLE = {
   title: `${QUICK.name} 예시 사이트`,
-  text: "실제 화면과 BoostInterior 상담 흐름을 확인해보세요.",
-  note: "가상 인테리어 업체를 기준으로 만든 예시 사이트입니다.",
+  text: "실제 화면과 견적 문의, AI 상담을 직접 확인해보세요.",
+  note: "가상 인테리어 업체를 기준으로 만든 예시 사이트입니다. 제작되는 홈페이지의 디자인은 이 예시와 다를 수 있습니다.",
   cta: `${QUICK.name} 예시 보기`,
 } as const;
 
 /** Quick Start: who it is for — a quick start with a new homepage, not a cut-down one. */
 export const QUICK_VALUE = {
-  title: "필요한 기능을 갖춘 새 홈페이지와 BoostInterior를 빠르게 시작하세요.",
+  title: "시공사례가 중심인 새 홈페이지를 빠르게 시작하세요.",
   text: "새 홈페이지가 필요하고, 복잡한 제작 과정 없이 빠르게 시작하고 싶은 업체를 위한 상품입니다. 인테리어 업체에 필요한 기본 기능을 갖춘 홈페이지를 빠르게 제작합니다.",
 } as const;
 
@@ -141,67 +98,48 @@ export const QUICK_VS_IMPROVEMENT = {
 } as const;
 
 /**
- * The three plans in one sentence, above the plan cards on both pricing pages: the basics, then more
- * video and the analysis, then people working on it with you. The video is in all three.
+ * /pricing/details: the questions asked right before a decision. Each answer is the price list's
+ * own words wherever it has them, so a question cannot promise more than the list does.
  */
-export const PLAN_LADDER = `Core는 AI 상담과 ${VIDEO.name} ${VIDEO.core.text}을 담은 운영 기본형, Growth는 영상 활용 범위를 넓히고 방문자 분석을 더한 강화형, Managed는 매달 함께 확인하고 개선하는 관리형입니다.`;
-
-/**
- * AI Portfolio Video in customer terms: what it is and where it is used, and what it is made from.
- * Said wherever the feature is explained. How much each plan carries is VIDEO_AMOUNTS (lib/pricing.ts).
- */
-export const PORTFOLIO_VIDEO = {
-  text: "시공사진을 공간의 흐름에 맞춰 AI 시공사례 영상으로 만듭니다. 완성된 시공사진을 사진 목록으로만 두지 않고, 홈페이지 · 인스타그램 · 유튜브 · 블로그 등에 영상으로 활용할 수 있습니다.",
-  source: "영상은 업체가 제공하는 실제 시공 자료로 제작합니다.",
-} as const;
-
 export const PRICING_FAQ: readonly { q: string; a: string }[] = [
   {
-    q: `${spoken(INTEGRATION)}은 단순히 상담창을 설치하는 비용인가요?`,
-    a: `아닙니다. 홈페이지에 상담창 하나를 붙이는 비용이 아니라, 우리 업체에 BoostInterior를 처음 구축하는 기본 구축비입니다. 업체 정보와 상담 정보 초기 세팅, 공개된 기존 시공사례 전체를 수집해 AI가 찾아줄 수 있도록 정리하는 작업, AI 시공사례 검색 연결, 상담 · 견적 문의 흐름 구성, AI 상담창과 홈페이지 주소 연결, 동작 점검까지 포함합니다.`,
-  },
-  {
-    q: "어떤 구축 방식을 선택해도 AI 상담 기능은 같은가요?",
-    a: `네. ${COMMON_BUILD} 범위는 모든 구축 방식에 공통으로 포함됩니다. 가격 차이는 홈페이지 작업 범위에 따라 달라집니다.`,
-  },
-  {
     q: "표시 가격에 부가세가 포함되어 있나요?",
-    a: "네. BoostInterior에 표시된 구축비와 월 이용료는 모두 부가세(VAT)가 포함된 최종 금액입니다.",
+    a: "네. 월 이용료와 홈페이지 제작비 모두 부가세(VAT)가 포함된 최종 금액입니다. 시작 가격(부터)인 상품은 범위를 확인한 뒤 금액을 먼저 안내드립니다.",
   },
   {
-    q: "기존 시공사례가 많아도 모두 등록하나요?",
-    a: "네. 현재 홈페이지에 공개 중인 시공사례는 건수 제한 없이 전체를 초기 구축 대상으로 세팅합니다. 홈페이지에 없는 별도 자료까지 함께 정리해야 한다면 범위를 확인한 뒤 안내해드립니다.",
+    q: "월 구독과 홈페이지 제작비는 어떻게 다른가요?",
+    a: `${MARKETING.name} · ${CONSULTATION.name} · ${BUNDLE.name}은 쓰는 동안 매월 내는 구독이고, 홈페이지 제작비는 처음 한 번 내는 비용입니다. 둘은 따로 선택합니다. 홈페이지만 만들 수도 있고, 기존 홈페이지에 ${CONSULTATION.name}만 구독할 수도 있습니다. ${MARKETING.name}은 지금 BoostInterior로 만든 홈페이지와 함께 이용합니다.`,
   },
   {
-    q: QUICK_VS_IMPROVEMENT.question,
-    a: `${QUICK.name}는 ${QUICK_VS_IMPROVEMENT.quick.text} ${IMPROVEMENT.name}은 ${QUICK_VS_IMPROVEMENT.improvement.text}`,
+    q: `${BUNDLE.name}에 홈페이지 제작도 포함되나요?`,
+    a: `아니요. ${BUNDLE.name}(${monthly(BUNDLE)})은 ${MARKETING.name}과 ${CONSULTATION.name}을 함께 쓰는 월 구독입니다. 따로 구독하면 월 ${won(ALL_IN_ONE.separate)}원이므로 월 ${won(ALL_IN_ONE.saving)}원이 적습니다. 홈페이지 신규 제작은 포함되지 않으며, 필요하면 제작비는 별도입니다.`,
   },
   {
-    q: `${QUICK.name}와 ${CUSTOM.name}은 무엇이 다른가요?`,
-    a: `빠르게 시작하는 것과 처음부터 맞춰 만드는 것의 차이입니다. ${QUICK.name}(${spoken(QUICK)})는 인테리어 업체에 필요한 기본 기능을 갖춘 홈페이지를 빠르게 제작합니다. 휴대폰에서도 보기 편한 화면, 네이버·구글 노출을 위한 기본 설정, 빠른 페이지 로딩, 고객이 안심하고 접속할 수 있는 보안 연결, 시공사례 구성, 상담 · 견적 문의로 이어지는 버튼과 동선을 기본으로 갖춥니다. ${CUSTOM.name}(${spoken(CUSTOM)})은 브랜드, 메뉴와 화면 구성, 주요 페이지를 업체에 맞춰 처음부터 설계합니다. ${BASIC_CONNECTIONS_SHORT}과 ${COMMON_BUILD}은 두 방식 모두 동일하게 포함됩니다.`,
+    q: "홈페이지 기본 운영에 월 이용료가 없다는 것은 무슨 뜻인가요?",
+    a: `${WEBSITE_OPERATION.text} ${WEBSITE_OPERATION.separate}`,
   },
   {
-    q: `${QUICK.name}로 만든 홈페이지는 나중에 수정할 수 있나요?`,
-    a: "네. 홈페이지 내용 수정이 필요한 경우 요청해주시면 반영을 지원합니다.",
+    q: `${CONSULTATION.name}만 구독해도 ${INTEGRATION.name}이 필요한가요?`,
+    a: `기존 홈페이지에 ${CONSULTATION.name}을 연결하려면 상담창 설치와 업체 정보 · 자주 묻는 질문 등록이 필요합니다. 이 작업을 저희가 진행하는 상품이 ${INTEGRATION.name}(${won(INTEGRATION.price)}원, 1회)입니다. BoostInterior로 만든 홈페이지는 상담창이 연결된 상태로 제작되므로 이 상품이 필요하지 않습니다.`,
   },
   {
-    q: "기존 홈페이지 개선에 홈페이지 관리 기능을 새로 만드는 작업도 포함되나요?",
-    a: "기존 홈페이지의 글과 사진을 직접 고치는 홈페이지 관리 기능을 새로 만들거나 바꾸는 작업은 기본 범위에 포함되지 않습니다. 필요한 경우 범위를 확인한 뒤 별도 안내드립니다. 상담 기록과 상담 요청을 확인하는 BoostInterior 관리 화면은 홈페이지 관리 기능과 별개이며, 모든 구축 방식에 기본으로 제공됩니다.",
+    q: `기존 홈페이지에서도 ${MARKETING.name}과 시공사례 추천을 쓸 수 있나요?`,
+    a: `지금은 아닙니다. ${MARKETING.name}과 시공사례를 카드로 추천하는 기능은 BoostInterior로 만든 홈페이지에서 제공합니다. 기존 홈페이지에서는 업체 정보와 자주 묻는 질문을 바탕으로 한 ${CONSULTATION.name}과 견적 문의 접수를 이용할 수 있습니다. 홈페이지 없이 ${MARKETING.name}만 따로 쓰는 방식은 출시 예정입니다.`,
   },
   {
-    q: "월 운영 플랜은 구축비와 별도인가요?",
-    a: "네. 초기 구축비는 처음 한 번, 운영 플랜은 매월 이용하는 비용입니다. 구축 방식과 운영 플랜은 각각 선택합니다.",
+    q: "무료 체험은 어떻게 진행되나요?",
+    a: `${TRIAL.title}의 출시 예정 정책은 이렇습니다. ${TRIAL.steps.join(" ")} ${TRIAL.cancel} ${TRIAL.notice} ${TRIAL.others}`,
   },
   {
-    q: "나중에 플랜을 변경할 수 있나요?",
-    a: "플랜 변경은 이용 상황에 맞춰 안내해드립니다. 카카오톡으로 문의해 주세요.",
+    q: "결제는 어떻게 하나요?",
+    a: `${SUBSCRIBE_NOTE} 카드 정기결제는 출시 예정입니다.`,
   },
   {
-    q: "3D 시공사례도 제공하나요?",
-    a: "3D 시공사례(3D Portfolio)는 현재 월 운영 플랜의 제공 기능에 포함되어 있지 않습니다. 준비되는 대로 초기 파트너(Founding Partner)에게 먼저 적용 · 사용 기회를 드릴 예정이며, 출시 일정은 확정되면 안내해드립니다.",
+    q: "한 달에 만들 수 있는 영상이나 상담 건수가 정해져 있나요?",
+    a: ALLOWANCE_NOTE,
   },
   {
-    q: `${VIDEO.name}는 어떤 플랜에서 사용할 수 있나요?`,
-    a: `모든 플랜에서 사용할 수 있습니다. Core는 ${VIDEO.core.text}, Growth와 Managed는 새롭게 등록되는 실제 시공사례를 기준으로 더 넉넉하게 제공합니다. 영상은 업체가 제공하는 실제 시공 자료로 제작합니다.`,
+    q: "카카오톡 · 지도 · 전화 연결도 홈페이지 제작에 포함되나요?",
+    a: `네. ${BASIC_CONNECTIONS_SHORT}은 홈페이지를 만들거나 고치는 세 가지 방식에 모두 같은 범위로 포함됩니다. 예약 · 결제처럼 따로 개발해야 하는 연동은 범위를 확인한 뒤 별도 견적을 안내합니다.`,
   },
 ];

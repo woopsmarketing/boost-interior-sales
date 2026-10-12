@@ -1,18 +1,19 @@
-import { manwon, PLANS, SETUP_OPTIONS, won } from "@/lib/pricing";
+import { ENTRY_BUILD, manwon, monthly, SETUP_OPTIONS, SUBSCRIPTIONS } from "@/lib/pricing";
 
 /**
- * Single source of truth for URLs, contact channel and SEO copy.
- * Change values here (or via env) instead of editing components.
+ * Single source of truth for URLs, routes, anchors, the contact channel and the search copy of
+ * every page. Change values here (or via env) instead of editing components.
  */
 
-const [INTEGRATION, QUICK] = SETUP_OPTIONS;
-const [CORE] = PLANS;
+const [MARKETING, CONSULTATION, BUNDLE] = SUBSCRIPTIONS;
+/** "AI 마케팅 월 29,700원, AI 상담 월 19,800원, 올인원 월 39,600원" — read from the price list. */
+const MONTHLY_PRICES = SUBSCRIPTIONS.map((item) => `${item.name} ${monthly(item)}`).join(", ");
 
 /** Live interior demo site visitors can try as a customer. It opens in a new tab. */
 export const DEMO_URL = "https://interior-demo.boostweb.co.kr";
 /** The one label of every link to the demo. */
 export const DEMO_LABEL = "실제 데모 체험하기";
-/** What to type in the demo. Said next to the hero's demo button and again in the 실제 데모 section. */
+/** What to type in the demo. Said in the 실제 데모 section, right above its button. */
 export const DEMO_PROMPT = "32평인데 주방과 욕실을 리모델링하고 싶어요";
 /** The made-up company in the demo and in every capture. It is not the product, and the page says so. */
 export const DEMO_COMPANY = "부스트 인테리어";
@@ -33,7 +34,7 @@ export const OPERATOR = "BoostWorks";
 export const KAKAO_NOTE = `${OPERATOR} 카카오톡 1:1 오픈채팅으로 연결됩니다.`;
 
 /**
- * Anchor of the 86s full demo video section. Outbound emails link straight to
+ * Anchor of the 86s full demo video (the consultation walkthrough). Outbound emails link straight to
  * `/#demo-video`, so don't rename it.
  */
 export const DEMO_VIDEO_ID = "demo-video";
@@ -51,40 +52,90 @@ export const SITE_URL = resolveSiteUrl();
 
 /** Customer-facing product name. The chat backend it runs on keeps its own (internal) name. */
 export const SITE_NAME = "BoostInterior";
-export const SITE_TITLE = "BoostInterior | 인테리어 업체를 위한 AI 상담·견적 시스템";
-export const SITE_DESCRIPTION =
-  "인테리어·리모델링 홈페이지 방문자의 조건을 이해하고, 관련 시공사례 추천부터 상담·견적 문의까지 연결하는 AI 상담 시스템.";
+export const SITE_TITLE = "BoostInterior | 시공사진으로 만드는 마케팅 콘텐츠와 AI 상담";
+export const SITE_DESCRIPTION = `인테리어·리모델링 업체의 시공사진으로 릴스·쇼츠 영상과 게시글, 블로그 초안을 만들고, 홈페이지 방문자의 질문에는 AI 상담이 답하며 견적 문의까지 연결합니다. ${MONTHLY_PRICES}.`;
 
-/** Landing anchors the header and the pricing pages link to. */
+/**
+ * Landing anchors the header and the other pages link to. Every id the landing has carried so far
+ * still exists on it (see app/page.tsx): links from outside keep landing on the matching block.
+ */
+export const VALUE_ID = "value";
 export const HOW_ID = "how";
+export const REELS_ID = "reels";
+export const BLOG_ID = "blog";
+export const CONSULT_ID = "consult";
+export const WEBSITE_ID = "website";
+export const BUNDLE_ID = "all-in-one";
 export const LIVE_ID = "live";
-/** Anchor of the landing's pricing summary. Every price is on the pricing page, the full scope one page further. */
+/** Anchor of the landing's price summary. Every price is on the pricing page, the full conditions one page further. */
 export const PRICING_ID = "pricing";
-/** Pricing at a glance (header "가격" link): every price, and which one fits. */
-export const PRICING_PATH = "/pricing";
-export const PRICING_TITLE = "BoostInterior 가격 | 인테리어 AI 상담 시스템 구축·운영 비용";
-/** Amounts come from the price list, so the search snippet cannot fall behind the page. */
-export const PRICING_DESCRIPTION = `${INTEGRATION.name} ${manwon(INTEGRATION.price)}만원부터, ${QUICK.name} ${manwon(QUICK.price)}만원, ${CORE.name} 월 ${won(CORE.price)}원부터. 모든 가격은 부가세(VAT) 포함. BoostInterior 구축 방식과 운영 플랜을 한눈에 비교하세요.`;
+export const FAQ_ID = "faq";
+export const CONTACT_ID = "contact";
 
-/** The full scope behind every price: what each option and plan includes, and the FAQ. */
+/**
+ * The three feature pages. Each has its own search intent: making marketing content, a consultation
+ * chatbot, and a homepage for an interior company. Amounts in a description come from the price list.
+ */
+export const FEATURES = {
+  marketing: {
+    path: "/features/ai-marketing",
+    label: MARKETING.name,
+    title: "AI 마케팅 | 시공사진으로 릴스·쇼츠 영상과 블로그 초안 만들기 - BoostInterior",
+    description: `인테리어 시공사진과 공사 정보를 올리면 릴스·쇼츠용 세로 영상, 표지 이미지, 인스타그램 본문과 해시태그, 네이버 블로그 초안이 만들어집니다. ${MARKETING.name} ${monthly(MARKETING)}(VAT 포함). 제품이 만든 영상을 그대로 확인해 보세요.`,
+  },
+  consultation: {
+    path: "/features/ai-consultation",
+    label: CONSULTATION.name,
+    title: "AI 상담 | 인테리어 업체 홈페이지 AI 상담 챗봇과 견적 문의 접수 - BoostInterior",
+    description: `홈페이지 방문자의 질문에 AI가 우리 업체 정보로 답하고, 견적 문의를 받아 관리 화면에 정리합니다. 기존 홈페이지에도 상담창을 설치해 쓸 수 있습니다. ${CONSULTATION.name} ${monthly(CONSULTATION)}(VAT 포함).`,
+  },
+  website: {
+    path: "/features/website",
+    label: "홈페이지 제작",
+    title: "홈페이지 제작 | 인테리어 업체 홈페이지와 시공사례 페이지 - BoostInterior",
+    description: `시공사례 목록과 상세, 조건 검색, 견적 문의 양식을 갖춘 인테리어 업체 홈페이지를 제작합니다. 제작비 ${manwon(ENTRY_BUILD.price)}만원부터(${ENTRY_BUILD.name} 기준, VAT 포함), 기본 운영 월 이용료 없음. 실제 데모 홈페이지를 직접 확인해 보세요.`,
+  },
+} as const;
+
+/** Pricing at a glance (header "요금 안내" link): every price, and which one fits. */
+export const PRICING_PATH = "/pricing";
+export const PRICING_TITLE = "요금 안내 | AI 마케팅 · AI 상담 · 올인원 요금과 홈페이지 제작비 - BoostInterior";
+/** Amounts come from the price list, so the search snippet cannot fall behind the page. */
+export const PRICING_DESCRIPTION = `${MONTHLY_PRICES}. 홈페이지 제작은 ${manwon(ENTRY_BUILD.price)}만원부터(${ENTRY_BUILD.name} 기준)이며 기본 운영 월 이용료가 없습니다. 모든 가격은 부가세(VAT) 포함.`;
+
+/** The conditions behind every price: what each product carries, what it needs, and the questions. */
 export const PRICING_DETAILS_PATH = "/pricing/details";
-export const PRICING_DETAILS_TITLE = "BoostInterior 상세 가격 | 구축 방식별 포함 범위 · 운영 플랜별 기능 비교";
-export const PRICING_DETAILS_DESCRIPTION =
-  "BoostInterior 구축 방식 4가지의 전체 포함 범위, 운영 플랜 3가지의 전체 기능 비교, 결정 전에 가장 많이 묻는 질문. 모든 가격은 부가세(VAT) 포함.";
-/** /pricing/details: anchor of the plan comparison table. The plan cards on both pricing pages link to it. */
+export const PRICING_DETAILS_TITLE = "상세 요금 | 상품별 제공 기능 · 이용 조건 · 홈페이지 제작 범위 비교 - BoostInterior";
+export const PRICING_DETAILS_DESCRIPTION = `${MARKETING.name} · ${CONSULTATION.name} · ${BUNDLE.name}과 홈페이지 제작을 항목별로 비교합니다. 홈페이지 필요 여부, 시공사례 추천에 필요한 자료, 초기 구축비, 무료 체험 정책, 구축 방식 ${SETUP_OPTIONS.length}가지의 포함 범위. 모든 가격은 부가세(VAT) 포함.`;
+/** Both pricing pages: the three subscriptions, the trial policy and the homepage builds. */
+export const PLANS_ID = "plans";
+export const TRIAL_ID = "trial";
+export const SETUP_ID = "setup";
+/** /pricing/details: the product comparison table. */
 export const COMPARISON_ID = "comparison";
 /** /pricing/details: the other blocks its summary jumps to. The landing's questions link to the last one. */
-export const COMMON_SCOPE_ID = "common-scope";
+export const CONSULT_SETUP_ID = "common-scope";
 export const SETUP_COMPARISON_ID = "setup-comparison";
-export const PORTFOLIO_VIDEO_ID = "portfolio-video";
 export const PRICING_FAQ_ID = "faq";
 
 /** Anchor of the Founding Partner block on the landing. */
 export const PARTNER_ID = "partner";
 
 /**
- * The 15s hero loop (public/video/chat-to-portfolio*.mp4) is kept on disk but no longer
- * rendered: the hero shows the product showcase instead.
+ * The header and footer menu, in the order an owner asks: what it does (three pages), what it
+ * costs, try it. 문의 is the button next to it. The first three open under one "기능" button on a
+ * desktop bar and are listed in full in the phone menu.
+ */
+export const NAV_FEATURES = [FEATURES.marketing, FEATURES.consultation, FEATURES.website] as const;
+export const NAV_PRICING_LABEL = "요금 안내";
+export const NAV_DEMO_LABEL = "실제 데모";
+
+/**
+ * The landing's films and stills are the asset pack under public/assets/landing/v2 (see lib/media.ts).
+ * This one predates the pack: an 86s cut of real product screens, scene by scene, from the visitor's
+ * first question to a request in the admin. It is not one take — its form is never sent and the
+ * request in the admin is a test one — so the landing calls it a cut, never a recording of one run.
+ * (The 15s loop public/video/chat-to-portfolio*.mp4 is kept on disk and no longer rendered.)
  */
 export const VIDEOS = {
   /** 86s full product walkthrough. Silent. */
@@ -104,11 +155,3 @@ export const VIDEOS = {
     ],
   },
 } as const;
-
-/**
- * AI Portfolio Video sample: a real result made with the feature, and nothing else. No such asset is
- * in this repo yet, and nothing is shown until there is one. Set this to a real asset under public/
- * and the sample appears in the three places wired for it: the landing's price summary, the AI
- * Portfolio Video part of the Growth card on /pricing and the AI Portfolio Video block on /pricing/details.
- */
-export const PORTFOLIO_VIDEO_SAMPLE: { src: string; poster: string; width: number; height: number } | null = null;

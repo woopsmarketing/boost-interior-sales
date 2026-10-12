@@ -1,9 +1,9 @@
-import { ASSETS, CAPTURED_CONDITIONS, CHAT_WINDOW, type Asset, type Crop } from "./assets";
+import { ASSETS, type Asset, type Crop } from "./assets";
 import type { Motion } from "./motion";
 
 /**
- * Product visuals of the landing's "작동 방식" steps and of the owner's screen.
- * Each step is drawn twice from the same captures and CSS picks one:
+ * The owner's screen in the landing's consultation section, drawn twice from the same captures; CSS
+ * picks one:
  * - above 820px, `layers`: captures layered on a depth stage. They settle into place while the
  *   stage scrolls into view (see MotionController); the stage itself is never pinned.
  * - at 820px and below, `focus`: one capture cropped to the part that matters, wide enough to read.
@@ -38,7 +38,6 @@ export interface Focus {
   thumbs?: readonly Asset[];
 }
 
-const STEP_FRAME = { w: 720, h: 520 };
 const OWNER_FRAME = { w: 1400, h: 760 };
 
 const cropped = (asset: Asset, crop: Crop): Asset => ({ ...asset, crop });
@@ -56,58 +55,6 @@ function at(frame: { w: number; h: number }, asset: Asset, x: number, y: number,
     w: ((asset.width * k) / frame.w) * 100,
   };
 }
-const step = (asset: Asset, x: number, y: number, w: number) => at(STEP_FRAME, asset, x, y, w);
-
-/** Captures trimmed to their UI: the margins of the page they were taken on are left out. */
-const SITE = cropped(ASSETS.siteHero, { x: 0, y: 1, w: 847, h: 702, r: 12 });
-const CASE_CARD = cropped(ASSETS.portfolioCard, { x: 2, y: 2, w: 401, h: 424, r: 14 });
-const CASE_INFO = cropped(ASSETS.viewerCard, { x: 4, y: 4, w: 474, h: 287, r: 14 });
-/** The viewer's photo pane. Its info pane is shown by CASE_INFO, larger. */
-const VIEWER = cropped(ASSETS.viewerModal, { x: 0, y: 0, w: 600, h: 622, r: 12 });
-const PHOTO = { x: 1, y: 1, w: 428, h: 320, r: 10 };
-
-/** Entry motion, back to front: each plane starts a little lower and later than the one behind it. */
-const BACK: Motion = { unit: "px", y: [28, 0, 0, 0.7], z: -30, opacity: [0, 1, 0, 0.3] };
-const FRONT: Motion = { unit: "px", y: [56, 0, 0.12, 0.9], z: [0, 40, 0.12, 0.9], opacity: [0, 1, 0.1, 0.45] };
-const TOP: Motion = { unit: "px", y: [72, 0, 0.3, 1], z: [0, 70, 0.3, 1], opacity: [0, 1, 0.28, 0.62] };
-
-/** Steps 1–3 of HOW_STEPS (lib/home.ts), by step id. Step 4 is the owner's screen below. */
-export const STEP_VISUALS: Readonly<Record<string, { stage: Stage; focus: Focus }>> = {
-  talk: {
-    stage: {
-      frame: STEP_FRAME,
-      layers: [
-        { ...step(SITE, 0, 44, 500), elevation: "window", radius: "lg", motion: BACK, decorative: true },
-        { ...step(ASSETS.chatWelcome, 390, 28, 330), elevation: "float", radius: "none", motion: FRONT },
-      ],
-    },
-    focus: { asset: cropped(ASSETS.chatWelcome, { ...CHAT_WINDOW, h: 352 }), fade: true },
-  },
-  recommend: {
-    stage: {
-      frame: STEP_FRAME,
-      layers: [
-        { ...step(VIEWER, 300, 8, 420), elevation: "window", radius: "md", motion: BACK },
-        { ...step(CASE_CARD, 0, 20, 316), elevation: "float", radius: "lg", motion: FRONT },
-        { ...step(cropped(ASSETS.photoSink, PHOTO), 12, 378, 138), elevation: "window", radius: "md", motion: TOP },
-        { ...step(cropped(ASSETS.photoBath, PHOTO), 162, 378, 138), elevation: "window", radius: "md", motion: TOP },
-        { ...step(CASE_INFO, 452, 352, 268), elevation: "float", radius: "lg", motion: TOP },
-      ],
-    },
-    focus: { asset: CASE_CARD, thumbs: [ASSETS.photoKitchen, ASSETS.photoSink, ASSETS.photoBath] },
-  },
-  inquiry: {
-    stage: {
-      frame: STEP_FRAME,
-      layers: [
-        { ...step(ASSETS.chatMemory, 0, 0, 330), elevation: "window", radius: "none", motion: BACK },
-        { ...step(ASSETS.chatForm, 390, 56, 330), elevation: "float", radius: "none", motion: FRONT },
-      ],
-      tags: { label: "기억한 조건", items: CAPTURED_CONDITIONS, l: 40.5, t: 30 },
-    },
-    focus: { asset: cropped(ASSETS.chatMemory, { ...CHAT_WINDOW, h: 540 }), fade: true },
-  },
-};
 
 const owner = (asset: Asset, x: number, y: number, w: number) => at(OWNER_FRAME, asset, x, y, w);
 
@@ -134,5 +81,8 @@ export const OWNER_STAGE: Stage = {
   ],
 };
 
-/** The same request on a phone: its fields, from "인테리어 상담 정보" down, at a size that reads. */
-export const OWNER_FOCUS: Focus = { asset: cropped(ASSETS.inquiryCard, { x: 8, y: 100, w: 452, h: 388, r: 0 }) };
+/**
+ * The same request on a phone: its fields, from "인테리어 상담 정보" down to "관심 사례", at a size that
+ * reads. The rows under those (an internal case id, the test request's own text) are left out.
+ */
+export const OWNER_FOCUS: Focus = { asset: cropped(ASSETS.inquiryCard, { x: 8, y: 100, w: 452, h: 192, r: 0 }) };

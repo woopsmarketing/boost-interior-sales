@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { CommonScope } from "@/components/pricing/CommonScope";
 import { Disclosure } from "@/components/pricing/Disclosure";
 import { SetupComparison } from "@/components/pricing/SetupComparison";
 import { Letter, SetupPrice } from "@/components/pricing/SetupParts";
@@ -7,21 +6,26 @@ import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { CheckList } from "@/components/ui/CheckList";
 import { Icon } from "@/components/ui/Icon";
+import { Notice } from "@/components/ui/Notice";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
-import { COMMON_BUILD, scopeItems, SETUP_OPTIONS, VAT_NOTICE, won, type SetupOption } from "@/lib/pricing";
+import { CONSULTATION_PAGE } from "@/lib/features";
 import {
-  INTEGRATION_GROUPS,
-  INTEGRATION_PROCESS,
-  INTEGRATION_VALUE,
-  QUICK_EXAMPLE,
-  QUICK_FEATURES,
-  QUICK_VALUE,
-  QUICK_VS_IMPROVEMENT,
-} from "@/lib/pricing-page";
-import { DEMO_URL, KAKAO_LABEL, KAKAO_OPEN_CHAT_URL } from "@/lib/site";
+  CONSULT_SETUP,
+  CONSULT_SETUP_ITEMS,
+  scopeItems,
+  SETUP_OPTIONS,
+  subscription,
+  VAT_NOTICE,
+  WEBSITE_OPERATION,
+  won,
+  type SetupOption,
+} from "@/lib/pricing";
+import { INTEGRATION_VALUE, QUICK_EXAMPLE, QUICK_FEATURES, QUICK_VALUE, QUICK_VS_IMPROVEMENT } from "@/lib/pricing-page";
+import { CONSULT_SETUP_ID, DEMO_URL, FEATURES, KAKAO_LABEL, KAKAO_OPEN_CHAT_URL, SETUP_ID, SITE_NAME } from "@/lib/site";
 
 const [INTEGRATION, QUICK, IMPROVEMENT, CUSTOM] = SETUP_OPTIONS;
+const CONSULTATION = subscription("consultation");
 
 const CARD = "scroll-mt-24 rounded-2xl bg-white p-12 shadow-md narrow:p-9 mobile:rounded-xl mobile:p-6";
 const SUBHEAD = "m-0 text-[13px] leading-[1.4] font-bold tracking-[0.01em] text-muted";
@@ -29,14 +33,12 @@ const STATEMENT = "mb-0 font-bold tracking-[-0.03em] text-balance text-ink";
 const DETAIL_HEAD = "m-0 text-[17px] leading-[1.4] font-bold tracking-[-0.01em] text-ink";
 
 const SCOPE_TOGGLE = { show: "전체 포함 범위 보기", hide: "전체 포함 범위 접기" };
-/** First row of every option's scope list: the common build is in all of them, in full. */
-const COMMON_LEAD = `${COMMON_BUILD} 전체 포함`;
 
 /** Which option a block is about: letter and name on the left, the price on the right. */
 function Head({ option }: { option: SetupOption }) {
   return (
     <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-      <div className="flex items-center gap-2.5">
+      <div className="flex flex-wrap items-center gap-2.5">
         <Letter option={option} />
         <h3 id={`${option.id}-title`} className="m-0 text-[20px] leading-[1.3] font-bold tracking-[-0.02em] text-ink mobile:text-[18px]">
           {option.name}
@@ -57,12 +59,13 @@ function Fit({ option, className = "" }: { option: SetupOption; className?: stri
   );
 }
 
-/** An option's homepage work under its toggle: the common build as one line, then what the option adds to it. */
+/** An option's homepage work under its toggle, item by item, and what falls outside it. */
 function Scope({ option, columns, className = "" }: { option: SetupOption; columns?: "wide"; className?: string }) {
   return (
     <>
       <h4 className={DETAIL_HEAD}>홈페이지 작업 {scopeItems(option).length}개 항목</h4>
-      <CheckList items={scopeItems(option)} lead={COMMON_LEAD} columns={columns} className={`mt-5 ${className}`} />
+      <CheckList items={scopeItems(option)} columns={columns} className={`mt-5 ${className}`} />
+      <p className="mt-5 mb-0 text-[14px] leading-[1.6] text-pretty text-muted">기본 범위 밖의 작업: {option.beyond}</p>
     </>
   );
 }
@@ -77,45 +80,51 @@ function Block({ option, className = "", children }: { option: SetupOption; clas
   );
 }
 
-/** 기존 홈페이지 연동 — why 290,000원 is a build, not an install: the common build in four steps, and no homepage work. */
+/**
+ * AI 상담 초기 세팅 — what connecting AI 상담 to a homepage consists of, said once. It is the whole of
+ * 기존 홈페이지 연동, and the part of the other three builds that concerns the consultation.
+ * The anchor keeps the name this block had when it was the builds' common scope.
+ */
+function ConsultSetup() {
+  return (
+    <div
+      id={CONSULT_SETUP_ID}
+      data-reveal
+      className="mt-10 grid scroll-mt-24 grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-x-14 gap-y-6 rounded-2xl border border-blue-200 bg-white p-12 shadow-window narrow:grid-cols-1 narrow:p-9 mobile:mt-7 mobile:rounded-xl mobile:p-6"
+    >
+      <div>
+        <p className="m-0 flex items-center gap-2.5 text-[13px] leading-[1.4] font-bold text-accent">
+          <Icon name={CONSULTATION.icon} className="size-[18px]" />
+          {CONSULTATION.name}을 홈페이지에 연결할 때
+        </p>
+        <h3 className="mt-2.5 mb-0 text-[26px] leading-[1.35] font-bold tracking-[-0.025em] text-ink mobile:text-[21px]">{CONSULT_SETUP}</h3>
+        <p className="mt-3 mb-0 text-[15.5px] leading-[1.7] text-pretty text-body">
+          {INTEGRATION.name}은 이 다섯 가지가 작업의 전부입니다. {IMPROVEMENT.name}에도 같은 세팅이 포함되고, {SITE_NAME}로 새로 만드는 홈페이지는 상담창이
+          연결된 상태로 제작됩니다.
+        </p>
+      </div>
+      <CheckList items={CONSULT_SETUP_ITEMS} className="[&>li]:text-[16px] [&>li]:font-medium [&>li]:text-ink" />
+    </div>
+  );
+}
+
+/** 기존 홈페이지 연동 — said first that it builds no homepage: it connects AI 상담 to the one the owner has. */
 function Integration() {
+  const steps = CONSULTATION_PAGE.installSteps;
   return (
     <Block option={INTEGRATION} className="mt-6 mobile:mt-4">
-      <p className={`mt-8 text-[30px] leading-[1.3] mobile:mt-6 mobile:text-[22px] ${STATEMENT}`}>{INTEGRATION_VALUE.title}</p>
-      <p className="mt-3 mb-0 max-w-[900px] text-[17px] leading-[1.7] text-pretty text-body mobile:text-[16px]">
-        {INTEGRATION_VALUE.text}
-      </p>
+      <p className={`mt-8 text-[28px] leading-[1.3] mobile:mt-6 mobile:text-[21px] ${STATEMENT}`}>{INTEGRATION_VALUE.title}</p>
+      <p className="mt-3 mb-0 max-w-[900px] text-[17px] leading-[1.7] text-pretty text-body mobile:text-[16px]">{INTEGRATION_VALUE.text}</p>
+      <CheckList items={INTEGRATION.highlights} className="mt-6" columns="wide" />
+      {INTEGRATION.note && <p className="mt-5 mb-0 max-w-[900px] text-[14px] leading-[1.65] text-pretty text-muted">{INTEGRATION.note}</p>}
 
-      <ol className="mt-8 mb-0 grid list-none grid-cols-4 gap-3 p-0 narrow:grid-cols-2 mobile:mt-6 mobile:grid-cols-1 mobile:gap-2.5">
-        {INTEGRATION_GROUPS.map((group, i) => (
-          <li key={group.title} className="rounded-lg border border-line bg-sunken p-5 mobile:flex mobile:gap-4 mobile:p-4">
-            <div className="flex items-center justify-between mobile:flex-none mobile:flex-col mobile:justify-start mobile:gap-2">
-              <span className="grid size-10 place-items-center rounded-md bg-white text-accent shadow-sm">
-                <Icon name={group.icon} className="size-5" />
-              </span>
-              <span aria-hidden="true" className="font-mono text-[13px] leading-none font-medium text-accent">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-            </div>
-            <div>
-              <p className="mt-4 mb-0 text-[17px] leading-[1.4] font-bold tracking-[-0.01em] text-ink mobile:mt-0 mobile:text-[16px]">
-                {group.title}
-              </p>
-              <p className="mt-1.5 mb-0 text-[14px] leading-[1.6] text-pretty text-body">{group.text}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-
-      <Disclosure {...SCOPE_TOGGLE} context={INTEGRATION.name} className="mt-7">
+      <Disclosure show="진행 순서 보기" hide="진행 순서 접기" context={INTEGRATION.name} className="mt-7">
         <div className="mt-7 border-t border-line pt-7">
-          <Scope option={INTEGRATION} />
-
-          <h4 className={`mt-10 mobile:mt-8 ${DETAIL_HEAD}`}>
-            {won(INTEGRATION.price)}원으로 진행되는 작업 {INTEGRATION_PROCESS.length}단계
+          <h4 className={DETAIL_HEAD}>
+            {won(INTEGRATION.price)}원으로 진행되는 작업 {steps.length}단계
           </h4>
           <ol className="mt-5 mb-0 grid list-none grid-cols-2 gap-x-12 p-0 narrow:grid-cols-1">
-            {INTEGRATION_PROCESS.map((step, i) => (
+            {steps.map((step, i) => (
               <li key={step.title} className="flex gap-4 border-t border-line py-4">
                 <span aria-hidden="true" className="pt-1 font-mono text-[13px] leading-none font-medium text-accent">
                   {String(i + 1).padStart(2, "0")}
@@ -128,6 +137,7 @@ function Integration() {
             ))}
           </ol>
           <Fit option={INTEGRATION} className="mt-6" />
+          <p className="mt-4 mb-0 text-[14px] leading-[1.6] text-pretty text-muted">기본 범위 밖의 작업: {INTEGRATION.beyond}</p>
         </div>
       </Disclosure>
     </Block>
@@ -195,10 +205,7 @@ function QuickVsImprovement() {
       className="mt-6 rounded-2xl border border-blue-200 bg-white p-12 shadow-window narrow:p-9 mobile:mt-4 mobile:rounded-xl mobile:p-6"
     >
       <p className="m-0 text-[13px] leading-[1.4] font-bold text-accent">자주 묻는 질문</p>
-      <h3
-        id="quick-vs-improvement"
-        className="mt-2 mb-0 text-[26px] leading-[1.35] font-bold tracking-[-0.025em] text-balance text-ink mobile:text-[20px]"
-      >
+      <h3 id="quick-vs-improvement" className="mt-2 mb-0 text-[26px] leading-[1.35] font-bold tracking-[-0.025em] text-balance text-ink mobile:text-[20px]">
         {question}
       </h3>
       <div className="mt-7 grid grid-cols-2 gap-5 mobile:mt-5 mobile:grid-cols-1 mobile:gap-3">
@@ -226,11 +233,8 @@ function QuickVsImprovement() {
 function Tailored({ option }: { option: SetupOption }) {
   return (
     <Block option={option} className="row-span-5 grid grid-rows-subgrid gap-y-0">
-      <p className={`mt-7 text-[22px] leading-[1.4] mobile:mt-5 mobile:text-[19px] ${STATEMENT}`}>
-        {option.website} + {COMMON_BUILD}
-      </p>
+      <p className={`mt-7 text-[22px] leading-[1.4] mobile:mt-5 mobile:text-[19px] ${STATEMENT}`}>{option.website}</p>
       <p className="mt-2 mb-0 text-[16px] leading-[1.65] text-pretty text-body">{option.summary}</p>
-      {/* The line above already says the common build is in: the list is the homepage work only. */}
       <CheckList items={option.highlights} className="mt-6" />
       <div className="mt-6">
         {option.note && <p className="m-0 text-[13px] leading-[1.6] text-muted">{option.note}</p>}
@@ -246,28 +250,34 @@ function Tailored({ option }: { option: SetupOption }) {
 }
 
 /**
- * 초기 구축 — the four ways to build. What they share comes first, once; the comparison then answers
- * "which one" by the homepage work alone, and the blocks under it answer "why this price", each
- * with its full scope one toggle away.
+ * 홈페이지 제작 — the four one-time builds. What connecting AI 상담 consists of comes first, once;
+ * the comparison then answers "which one" by what happens to the homepage, and the blocks under it
+ * answer "why this price", each with its full scope one toggle away.
  */
 export function SetupSection() {
   return (
-    <Section id="setup" aria-labelledby="setup-title" pt="pt-28 mobile:pt-16" pb="pb-0" className="scroll-mt-8">
+    <Section id={SETUP_ID} aria-labelledby="setup-title" pt="pt-28 mobile:pt-16" pb="pb-0" className="scroll-mt-8">
       <div data-reveal>
         <SceneHeader
-          step="01"
-          eyebrow="초기 구축 · 한 번"
+          size="md"
+          step="03"
+          eyebrow={`${FEATURES.website.label} · 처음 한 번`}
           titleId="setup-title"
-          title="홈페이지 상태에 맞는 구축 방식을 선택합니다."
-          sub="지금 홈페이지를 그대로 쓸 수도, 새로 만들 수도, 고쳐 쓸 수도 있습니다."
+          title="홈페이지 상태에 맞는 방식을 선택합니다."
+          sub="지금 홈페이지를 그대로 쓸 수도, 새로 만들 수도, 고쳐 쓸 수도 있습니다. 월 구독과는 따로 선택합니다."
+          subSize="md"
+          subClassName="mobile:text-[16px]"
         />
       </div>
 
-      <CommonScope />
+      <ConsultSetup />
       <SetupComparison />
-      <p data-reveal className="mt-4 mb-0 text-[14px] leading-[1.6] text-muted">
-        {VAT_NOTICE.setup}
-      </p>
+      <div data-reveal>
+        <Notice className="mt-4">
+          <strong className="font-bold text-ink">{WEBSITE_OPERATION.label}.</strong> {WEBSITE_OPERATION.text} {WEBSITE_OPERATION.separate}
+        </Notice>
+        <p className="mt-3 mb-0 text-[14px] leading-[1.6] text-muted">{VAT_NOTICE.setup}</p>
+      </div>
 
       <Integration />
       <Quick />

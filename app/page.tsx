@@ -1,52 +1,47 @@
+import { AllInOne } from "@/components/landing/AllInOne";
+import { BlogDraft } from "@/components/landing/BlogDraft";
+import { CaseBuilder } from "@/components/landing/CaseBuilder";
+import { Consult } from "@/components/landing/Consult";
 import { Contact } from "@/components/landing/Contact";
-import { DemoVideo } from "@/components/landing/DemoVideo";
 import { Faq } from "@/components/landing/Faq";
 import { Hero } from "@/components/landing/Hero";
-import { HowItWorks } from "@/components/landing/HowItWorks";
 import { LiveDemo } from "@/components/landing/LiveDemo";
-import { Onboarding } from "@/components/landing/Onboarding";
-import { OwnerResult } from "@/components/landing/OwnerResult";
+import { Outputs } from "@/components/landing/Outputs";
 import { Partner } from "@/components/landing/Partner";
 import { Pricing } from "@/components/landing/Pricing";
-import { Problem } from "@/components/landing/Problem";
-import { QuickValue } from "@/components/landing/QuickValue";
-import { SiteFooter } from "@/components/landing/SiteFooter";
-import { SiteHeader } from "@/components/landing/SiteHeader";
-import { Why } from "@/components/landing/Why";
-import { MotionController } from "@/components/motion/MotionController";
+import { Reels } from "@/components/landing/Reels";
+import { Website } from "@/components/landing/Website";
+import { PageShell } from "@/components/layout/PageShell";
 
 /**
- * Landing V3 — in the order an owner decides: what it is, that it really works, why it is needed,
- * how it works, what arrives on the owner's side, try it, what it takes to start, what it costs,
- * and only then the questions, who is behind it, the early-partner benefits and the way to ask.
+ * Landing V3 — what a 시공사진 becomes and what happens to a visitor's question, product by product:
+ * the claim, the four things on offer at a glance, AI 마케팅 (how, the reels it makes, the posts),
+ * AI 상담, the homepage build, why the two subscriptions go together, try it, what it costs, the
+ * questions, the early-partner benefits and the way to ask.
+ * Each product gets one short block and a link to its own page; the films under the hero are 5–10s
+ * clips that play by themselves, one at a time.
+ * Every anchor the landing has carried so far is still on it: `#value` (Outputs), `#how`
+ * (CaseBuilder), `#reels`, `#blog`, `#consult` `#talk` `#recommend` `#inquiry` `#owner` (Consult),
+ * `#install` (Website), `#live` `#demo-video` `#why` `#problem` (LiveDemo), `#pricing`, `#faq`, `#partner`, `#contact`.
+ * `#why` and `#problem` were sections of earlier landings; both now land on 실제 데모, where a visitor
+ * checks the product for themselves.
  */
 export default function Home() {
   return (
-    <>
-      <a
-        href="#main"
-        className="sr-only z-50 rounded-pill bg-ink text-[14px] font-semibold text-white no-underline focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:px-4 focus:py-2.5 focus:text-white"
-      >
-        본문으로 건너뛰기
-      </a>
-      <SiteHeader />
-      <main id="main">
-        <Hero />
-        <QuickValue />
-        <DemoVideo />
-        <Problem />
-        <HowItWorks />
-        <OwnerResult />
-        <LiveDemo />
-        <Onboarding />
-        <Pricing />
-        <Faq />
-        <Why />
-        <Partner detail />
-        <Contact />
-      </main>
-      <SiteFooter />
-      <MotionController />
-    </>
+    <PageShell page="home">
+      <Hero />
+      <Outputs />
+      <CaseBuilder />
+      <Reels />
+      <BlogDraft />
+      <Consult />
+      <Website />
+      <AllInOne />
+      <LiveDemo />
+      <Pricing />
+      <Faq />
+      <Partner detail />
+      <Contact />
+    </PageShell>
   );
 }

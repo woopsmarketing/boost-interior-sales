@@ -6,8 +6,7 @@ import type { IconName } from "@/components/ui/Icon";
  * The rest have no numbers on purpose: discount rates, free-use amounts and release dates
  * are not decided yet, so the copy must not invent any.
  * The landing lists them in short, after the price (title and one line each); the pricing pages list
- * the titles only. `tag` is the small line above the title. It is Korean wherever the title needs context; the two
- * features that have an English name (AI Portfolio Video, 3D Portfolio) carry it there, under a Korean title.
+ * the titles only. `tag` is the small line above the title, in Korean: it gives the title its context.
  */
 export const PARTNER_BENEFITS: readonly { icon: IconName; tag: string; title: string; text: string }[] = [
   {
@@ -24,14 +23,14 @@ export const PARTNER_BENEFITS: readonly { icon: IconName; tag: string; title: st
   },
   {
     icon: "video",
-    tag: "AI Portfolio Video",
-    title: "AI 시공사례 영상 추가 혜택",
-    // AI Portfolio Video is in every plan today. The benefit is something extra on it, never the feature itself.
-    text: "AI Portfolio Video는 지금 모든 플랜에서 제공하는 기능입니다. 초기 파트너에게는 영상 관련 추가 혜택을 먼저 드립니다.",
+    tag: "AI 마케팅",
+    title: "릴스 · 쇼츠 영상 추가 혜택",
+    // Making the video is what AI 마케팅 does today. The benefit is something extra on it, never the feature itself.
+    text: "릴스 · 쇼츠 영상 만들기는 지금 AI 마케팅에서 제공하는 기능입니다. 초기 파트너에게는 영상 관련 추가 혜택을 먼저 드립니다.",
   },
   {
     icon: "cube",
-    tag: "3D Portfolio",
+    tag: "공간형 3D",
     title: "3D 시공사례 우선 적용",
     text: "공간형 3D 시공사례가 준비되면 초기 파트너에게 먼저 적용 · 사용 기회를 드립니다.",
   },

@@ -1,128 +1,85 @@
-import Image from "next/image";
-import Link from "next/link";
 import type { ReactNode } from "react";
-import { Br } from "@/components/ui/Br";
+import { HeroFilm } from "@/components/media/HeroFilm";
+import { MediaNote } from "@/components/media/MediaNote";
 import { ButtonLink } from "@/components/ui/Button";
+import { MoreLink } from "@/components/ui/MoreLink";
 import { SceneHeader } from "@/components/ui/SceneHeader";
-import { ASSETS } from "@/lib/assets";
 import { ENTRY_PRICE } from "@/lib/home";
-import { DEMO_LABEL, DEMO_PROMPT, DEMO_SCREEN_NOTE, DEMO_URL, DEMO_VIDEO_ID, PRICING_PATH, VIDEOS } from "@/lib/site";
-import { HeroShowcase } from "./HeroShowcase";
+import { heroFilm } from "@/lib/media";
+import { DEMO_LABEL, DEMO_URL, KAKAO_LABEL, KAKAO_OPEN_CHAT_URL, NAV_PRICING_LABEL, PRICING_PATH } from "@/lib/site";
 
-/** Phone capture's device body inside the 380 × 788 image, and its corner radius (capture px). */
-const PHONE = { x: 2, y: 2, w: 375, h: 784, r: 52 };
-/** Rows of the phone shown below 1024px: its top, down to the recommended case. */
-const PHONE_SHOWN = 430;
-
-/** One clause of the title. Where the title flows (481–1279px) it wraps between clauses, never inside one. */
+/** One clause of the title: the title breaks between clauses, never inside one. */
 function Clause({ children }: { children: ReactNode }) {
   return <span className="whitespace-nowrap">{children}</span>;
 }
 
 /**
- * Who it is for, what it does and what comes of it, in the title. One filled button: the demo.
- * ≥1024px: copy | real product showcase (cycling states).
- * Below: copy and buttons first, then the top of one real phone capture, static.
+ * What the product does, in the title: marketing content from a 시공사진, and a consultation that
+ * ends in a request. The two ways on (try the demo, ask) are right under it, then the three monthly
+ * prices, then the brand film — the page's first film, playing by itself.
+ * The copy and the buttons come before the film at every width, so a phone shows them first.
  */
 export function Hero() {
+  const brand = heroFilm();
   return (
-    <section
-      id="top"
-      aria-labelledby="hero-title"
-      className="mx-auto max-w-[1440px] px-20 pt-[132px] pb-16 split:grid split:grid-cols-[minmax(0,54fr)_minmax(0,46fr)] split:items-center split:gap-12 split:pt-[104px] split:pb-12 mobile:px-5 mobile:pt-[92px] mobile:pb-2"
-    >
-      <div>
-        <SceneHeader
-          as="h1"
-          size="xl"
-          titleId="hero-title"
-          eyebrow="인테리어 · 리모델링 업체를 위한 24시간 AI 상담"
-          className="max-w-[860px]"
-          titleClassName="text-[clamp(34px,4.6vw,46px)] split:text-[clamp(32px,3.3vw,48px)] mobile:text-[clamp(27px,8.2vw,34px)] leading-[1.24]"
-          subClassName="text-[19px] split:narrow:text-[17px] mobile:text-[16.5px]"
-          title={
-            <>
-              <Clause>홈페이지 방문자를</Clause> <Br on="phone" />
-              <Clause>24시간 상담하고,</Clause> <Br on="ends" />
-              <Clause>우리 시공사례로 답하고,</Clause> <Br on="ends" />
-              <Clause>견적 문의까지 받습니다.</Clause>
-            </>
-          }
-          sub={
-            <>
-              고객이 원하는 지역 · 평수 · 공사 범위를 말하면 비슷한 시공사례와 사진을 보여주며 상담합니다. <Br />
-              기존 홈페이지에도 그대로 연결할 수 있습니다.
-            </>
-          }
+    <section id="top" aria-labelledby="hero-title" className="mx-auto max-w-[1440px] px-20 pt-[136px] narrow:px-10 mobile:px-5 mobile:pt-[96px]">
+      <SceneHeader
+        as="h1"
+        size="xl"
+        align="center"
+        titleId="hero-title"
+        eyebrow="인테리어 · 리모델링 업체를 위한 AI 마케팅 · AI 상담"
+        className="min-[821px]:max-w-[1120px]"
+        titleClassName="min-[821px]:text-[clamp(38px,4.6vw,66px)] max-[480px]:text-[clamp(30px,9vw,38px)]"
+        subClassName="mx-auto max-w-[740px] mobile:text-[16.5px]"
+        title={
+          <>
+            <Clause>시공사진 하나로</Clause> <Clause>마케팅 콘텐츠를,</Clause>
+            <br />
+            <Clause>AI 상담으로</Clause> <Clause>고객 문의까지.</Clause>
+          </>
+        }
+        sub={
+          <>
+            시공사진을 올리면 <span className="whitespace-nowrap">릴스 · 쇼츠</span> 영상과 게시글, 블로그 초안이 만들어집니다. 홈페이지 방문자의 질문에는 AI
+            상담이 답하고, 견적 문의를 받아 둡니다. 홈페이지가 필요하면 제작도 맡길 수 있습니다.
+          </>
+        }
+      />
+
+      <div className="mt-9 flex flex-wrap items-center justify-center gap-3 mobile:mt-7">
+        <ButtonLink href={DEMO_URL} external size="lg" arrow className="max-[480px]:w-full">
+          {DEMO_LABEL}
+        </ButtonLink>
+        <ButtonLink href={KAKAO_OPEN_CHAT_URL} external size="lg" variant="secondary" className="max-[480px]:flex-1">
+          {KAKAO_LABEL}
+        </ButtonLink>
+        <MoreLink href={PRICING_PATH} className="h-14 px-2">
+          {NAV_PRICING_LABEL}
+        </MoreLink>
+      </div>
+
+      <p className="mt-5 mb-0 flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-[15px] leading-[1.5] font-semibold text-ink mobile:mt-4 mobile:text-[14px]">
+        {ENTRY_PRICE.map((part, i) => (
+          <span key={part} className="flex items-center gap-2.5 whitespace-nowrap">
+            <span className={i === ENTRY_PRICE.length - 1 ? "font-medium text-muted" : ""}>{part}</span>
+            {/* The dot trails its item, so a wrapped line never starts with one. */}
+            {i < ENTRY_PRICE.length - 1 && (
+              <span aria-hidden="true" className="text-faint max-[480px]:hidden">
+                ·
+              </span>
+            )}
+          </span>
+        ))}
+      </p>
+
+      <div className="mx-auto mt-14 max-w-[1200px] mobile:mt-9">
+        <HeroFilm
+          film={brand}
+          label="시공사례 한 건에서 홈페이지 시공사례와 릴스 · 쇼츠 영상, 블로그 초안, 인스타그램 본문이 만들어지는 BoostInterior 소개 영상"
+          className="aspect-video rounded-2xl shadow-float mobile:rounded-xl phone:mx-auto phone:aspect-[9/16] phone:max-w-[320px]"
         />
-
-        <div className="mt-8 flex flex-wrap items-center gap-3 mobile:mt-6">
-          <ButtonLink href={DEMO_URL} external size="lg" arrow className="max-[480px]:w-full">
-            {DEMO_LABEL}
-          </ButtonLink>
-          <ButtonLink href={`#${DEMO_VIDEO_ID}`} size="lg" variant="secondary" className="max-[480px]:flex-1 max-[480px]:px-4">
-            <span aria-hidden="true" className="ml-0.5 h-0 w-0 border-y-[5px] border-l-[8px] border-y-transparent border-l-accent" />
-            {VIDEOS.master.seconds}초 영상으로 보기
-          </ButtonLink>
-          <Link
-            href={PRICING_PATH}
-            className="group inline-flex h-14 items-center gap-1.5 px-2 text-[16px] leading-none font-semibold text-link no-underline"
-          >
-            <span className="underline-offset-4 group-hover:underline">가격 보기</span>
-            <span aria-hidden="true" className="transition-transform duration-160 ease-out group-hover:translate-x-0.5">
-              →
-            </span>
-          </Link>
-        </div>
-
-        <p className="mt-5 mb-0 text-[15px] leading-[1.6] text-muted mobile:mt-4 mobile:text-[14px]">
-          데모 화면 오른쪽 아래 상담 버튼을 누르고 이렇게 물어보세요: <span className="font-semibold text-ink">“{DEMO_PROMPT}”</span>
-        </p>
-
-        <p className="mt-4 mb-0 flex flex-wrap items-center gap-x-2.5 gap-y-1 border-t border-line-strong pt-4 text-[15px] leading-[1.5] font-semibold text-ink mobile:text-[14px]">
-          {ENTRY_PRICE.map((part, i) => (
-            <span key={part} className="flex items-center gap-2.5 whitespace-nowrap">
-              <span className={i === ENTRY_PRICE.length - 1 ? "font-medium text-muted" : ""}>{part}</span>
-              {/* The dot trails its item, so a wrapped line never starts with one; phones wrap before the last item, so its dot goes. */}
-              {i < ENTRY_PRICE.length - 1 && (
-                <span aria-hidden="true" className={`text-faint ${i === ENTRY_PRICE.length - 2 ? "max-[480px]:hidden" : ""}`}>
-                  ·
-                </span>
-              )}
-            </span>
-          ))}
-        </p>
-      </div>
-
-      <div className="hidden split:block">
-        <HeroShowcase />
-      </div>
-
-      {/* Tablet / mobile: the top of one real phone capture, static, after the copy and the buttons. */}
-      <div className="mt-10 flex flex-col items-center gap-2.5 split:hidden mobile:mt-7">
-        <div
-          className="relative w-[min(330px,86vw)] overflow-hidden [mask-image:linear-gradient(to_bottom,#000_72%,transparent)]"
-          style={{
-            aspectRatio: `${PHONE.w} / ${PHONE_SHOWN}`,
-            borderRadius: `${(PHONE.r / PHONE.w) * 100}% / ${(PHONE.r / PHONE_SHOWN) * 100}% ${(PHONE.r / PHONE_SHOWN) * 100}% 0 0`,
-          }}
-        >
-          <Image
-            src={ASSETS.phoneChat.src}
-            width={ASSETS.phoneChat.width}
-            height={ASSETS.phoneChat.height}
-            alt={ASSETS.phoneChat.alt}
-            sizes="(max-width: 384px) 86vw, 330px"
-            quality={85}
-            className="absolute block h-auto max-w-none"
-            style={{
-              width: `${(ASSETS.phoneChat.width / PHONE.w) * 100}%`,
-              left: `${(-PHONE.x / PHONE.w) * 100}%`,
-              top: `${(-PHONE.y / PHONE_SHOWN) * 100}%`,
-            }}
-          />
-        </div>
-        <p className="m-0 text-[12px] leading-[1.5] text-muted">{DEMO_SCREEN_NOTE}</p>
+        <MediaNote className="mt-3 text-center">{brand.note}</MediaNote>
       </div>
     </section>
   );
