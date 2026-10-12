@@ -1,0 +1,448 @@
+{
+  "pack": "LANDING_ASSET_PACK_V3",
+  "basePath": "/assets/landing/v3",
+  "origin": "Landing V2 영상(public/assets/landing/v2/videos)의 한 장면을 잘라 웹 크기로 다시 인코딩한 편집본입니다. 장면을 새로 만들거나 순서를 바꾸지 않았습니다.",
+  "encode": "H.264 High, CRF 24, slow, 30 fps, yuv420p, no audio, faststart",
+  "clips": [
+    {
+      "id": "CLIP-01",
+      "title": "사진과 메모가 시공사례 초안이 되는 과정",
+      "of": "VIDEO-04",
+      "scenes": "S2",
+      "video": "/assets/landing/v3/clips/clip-01-case-draft.mp4",
+      "poster": "/assets/landing/v3/posters/clip-01-case-draft.jpg",
+      "width": 1280,
+      "height": 720,
+      "duration": 6.6,
+      "bytes": 640285,
+      "hasAudio": false,
+      "codec": "h264 High",
+      "posterBytes": 75831,
+      "sha256": "deac2196e43a6f3ab6f42687db809ca039aab852ab01f6af5260dbf10d719d33",
+      "source": {
+        "file": "/assets/landing/v2/videos/04-ai-portfolio-to-website.mp4",
+        "in": 3.2,
+        "out": 9.8,
+        "posterAt": 8.9
+      },
+      "mobileVariant": {
+        "video": "/assets/landing/v3/clips/clip-01-case-draft-vertical.mp4",
+        "poster": "/assets/landing/v3/posters/clip-01-case-draft-vertical.jpg",
+        "width": 720,
+        "height": 1280,
+        "duration": 8,
+        "bytes": 466127,
+        "hasAudio": false,
+        "codec": "h264 High",
+        "posterBytes": 67511,
+        "sha256": "f7d02f5484c39b531254b3c38e46c9096a9f3562ebff609a25ffe3d0fedb1f98",
+        "source": {
+          "file": "/assets/landing/v2/videos/04-ai-portfolio-to-website-vertical.mp4",
+          "in": 3,
+          "out": 11,
+          "posterAt": 9.6
+        }
+      }
+    },
+    {
+      "id": "CLIP-02",
+      "title": "시공사진으로 만든 릴스 · 쇼츠 영상",
+      "of": "VIDEO-02",
+      "scenes": "S3–S4",
+      "video": "/assets/landing/v3/clips/clip-02-reels-result.mp4",
+      "poster": "/assets/landing/v3/posters/clip-02-reels-result.jpg",
+      "width": 1280,
+      "height": 720,
+      "duration": 9.5,
+      "bytes": 821774,
+      "hasAudio": false,
+      "codec": "h264 High",
+      "posterBytes": 81602,
+      "sha256": "69d92591f3df1d2f48455e068061ef14f349bad20c5f7b9f33200b1712710e4a",
+      "source": {
+        "file": "/assets/landing/v2/videos/02-reels-shorts-generator.mp4",
+        "in": 6.8,
+        "out": 16.3,
+        "posterAt": 9.4
+      },
+      "mobileVariant": {
+        "video": "/assets/landing/v3/clips/clip-02-reels-result-vertical.mp4",
+        "poster": "/assets/landing/v3/posters/clip-02-reels-result-vertical.jpg",
+        "width": 720,
+        "height": 1280,
+        "duration": 8.9,
+        "bytes": 843680,
+        "hasAudio": false,
+        "codec": "h264 High",
+        "posterBytes": 61019,
+        "sha256": "27d23690d0c4ffa47bf8e69bf5f2143a4405bf3b4130ce846c92915eac84b665",
+        "source": {
+          "file": "/assets/landing/v2/videos/02-reels-shorts-generator-vertical.mp4",
+          "in": 6.8,
+          "out": 15.7,
+          "posterAt": 9
+        }
+      }
+    },
+    {
+      "id": "CLIP-03",
+      "title": "시공 정보로 만든 네이버 블로그 초안",
+      "of": "VIDEO-03",
+      "scenes": "S3 (앞부분)",
+      "video": "/assets/landing/v3/clips/clip-03-blog-draft.mp4",
+      "poster": "/assets/landing/v3/posters/clip-03-blog-draft.jpg",
+      "width": 1280,
+      "height": 720,
+      "duration": 6.3,
+      "bytes": 437355,
+      "hasAudio": false,
+      "codec": "h264 High",
+      "posterBytes": 76796,
+      "sha256": "d1653692f715f46724f1aee94c7dc2fb613ab9834afa9c841565c7df41e040a9",
+      "source": {
+        "file": "/assets/landing/v2/videos/03-naver-blog-generator.mp4",
+        "in": 8.3,
+        "out": 14.55,
+        "posterAt": 12.9
+      },
+      "mobileVariant": {
+        "video": "/assets/landing/v3/clips/clip-03-blog-draft-vertical.mp4",
+        "poster": "/assets/landing/v3/posters/clip-03-blog-draft-vertical.jpg",
+        "width": 720,
+        "height": 1280,
+        "duration": 6.8,
+        "bytes": 264553,
+        "hasAudio": false,
+        "codec": "h264 High",
+        "posterBytes": 75987,
+        "sha256": "a7f4500fbc18fc015ed22f861188e104a207b5cf2938c47eae0fd28aed2d0f34",
+        "source": {
+          "file": "/assets/landing/v2/videos/03-naver-blog-generator-vertical.mp4",
+          "in": 7.2,
+          "out": 14,
+          "posterAt": 9.4
+        }
+      }
+    },
+    {
+      "id": "CLIP-04",
+      "title": "방문자 질문에 시공사례로 답하는 AI 상담",
+      "of": "VIDEO-05",
+      "scenes": "S3",
+      "video": "/assets/landing/v3/clips/clip-04-consult-answer.mp4",
+      "poster": "/assets/landing/v3/posters/clip-04-consult-answer.jpg",
+      "width": 1280,
+      "height": 720,
+      "duration": 8.3,
+      "bytes": 467633,
+      "hasAudio": false,
+      "codec": "h264 High",
+      "posterBytes": 80439,
+      "sha256": "c2cb69098ee69f44b3dadd0c9e9e8f339b8ed27346c947f5050223c63021266f",
+      "source": {
+        "file": "/assets/landing/v2/videos/05-ai-consultation-24-7.mp4",
+        "in": 10.4,
+        "out": 18.7,
+        "posterAt": 16.9
+      },
+      "mobileVariant": {
+        "video": "/assets/landing/v3/clips/clip-04-consult-answer-vertical.mp4",
+        "poster": "/assets/landing/v3/posters/clip-04-consult-answer-vertical.jpg",
+        "width": 720,
+        "height": 1280,
+        "duration": 8.4,
+        "bytes": 577756,
+        "hasAudio": false,
+        "codec": "h264 High",
+        "posterBytes": 79720,
+        "sha256": "7ea5abab15c5a8958f9230aa0640cb4c7c30abbcf515b5dbf0407e303248855d",
+        "source": {
+          "file": "/assets/landing/v2/videos/05-ai-consultation-24-7-vertical.mp4",
+          "in": 7.3,
+          "out": 15.7,
+          "posterAt": 13.5
+        }
+      }
+    },
+    {
+      "id": "CLIP-05",
+      "title": "업체 홈페이지의 시공사례 목록",
+      "of": "VIDEO-04",
+      "scenes": "S4",
+      "video": "/assets/landing/v3/clips/clip-05-site-gallery.mp4",
+      "poster": "/assets/landing/v3/posters/clip-05-site-gallery.jpg",
+      "width": 1280,
+      "height": 720,
+      "duration": 7,
+      "bytes": 540202,
+      "hasAudio": false,
+      "codec": "h264 High",
+      "posterBytes": 88736,
+      "sha256": "a90aa673f4194febd16788b922490fd1d8d6047c6933a87945bed7029272f729",
+      "source": {
+        "file": "/assets/landing/v2/videos/04-ai-portfolio-to-website.mp4",
+        "in": 17.8,
+        "out": 24.8,
+        "posterAt": 22.9
+      },
+      "mobileVariant": {
+        "video": "/assets/landing/v3/clips/clip-05-site-gallery-vertical.mp4",
+        "poster": "/assets/landing/v3/posters/clip-05-site-gallery-vertical.jpg",
+        "width": 720,
+        "height": 1280,
+        "duration": 5.1,
+        "bytes": 274351,
+        "hasAudio": false,
+        "codec": "h264 High",
+        "posterBytes": 81369,
+        "sha256": "1a900e4ca78f1eda94963eb5074b54f0bd5d56383e843df2a476f5d473670c6f",
+        "source": {
+          "file": "/assets/landing/v2/videos/04-ai-portfolio-to-website-vertical.mp4",
+          "in": 19,
+          "out": 23.05,
+          "holdLastFrame": 1,
+          "posterAt": 22.5
+        }
+      }
+    },
+    {
+      "id": "CLIP-06",
+      "title": "시공사례를 확인하고 게시하는 과정",
+      "of": "VIDEO-04",
+      "scenes": "S3",
+      "video": "/assets/landing/v3/clips/clip-06-case-publish.mp4",
+      "poster": "/assets/landing/v3/posters/clip-06-case-publish.jpg",
+      "width": 1280,
+      "height": 720,
+      "duration": 6.5,
+      "bytes": 904156,
+      "hasAudio": false,
+      "codec": "h264 High",
+      "posterBytes": 86144,
+      "sha256": "aaa60fee48c1059231938d73fcf04a38565fc673e435baaec029ef0cfcd2cda8",
+      "source": {
+        "file": "/assets/landing/v2/videos/04-ai-portfolio-to-website.mp4",
+        "in": 10.5,
+        "out": 17,
+        "posterAt": 14.9
+      },
+      "mobileVariant": {
+        "video": "/assets/landing/v3/clips/clip-06-case-publish-vertical.mp4",
+        "poster": "/assets/landing/v3/posters/clip-06-case-publish-vertical.jpg",
+        "width": 720,
+        "height": 1280,
+        "duration": 5.8,
+        "bytes": 355874,
+        "hasAudio": false,
+        "codec": "h264 High",
+        "posterBytes": 79646,
+        "sha256": "b6fa968e1e153713a2de705edeb03b103f4949ae31f5769fc43df971b1cb7bcb",
+        "source": {
+          "file": "/assets/landing/v2/videos/04-ai-portfolio-to-website-vertical.mp4",
+          "in": 12.6,
+          "out": 18.35,
+          "posterAt": 14.5
+        }
+      }
+    },
+    {
+      "id": "CLIP-07",
+      "title": "상담창 안에서 여는 상담 요청 양식",
+      "of": "VIDEO-05",
+      "scenes": "S4",
+      "video": "/assets/landing/v3/clips/clip-07-consult-inquiry.mp4",
+      "poster": "/assets/landing/v3/posters/clip-07-consult-inquiry.jpg",
+      "width": 1280,
+      "height": 720,
+      "duration": 7,
+      "bytes": 507520,
+      "hasAudio": false,
+      "codec": "h264 High",
+      "posterBytes": 62891,
+      "sha256": "c1e54ec3334271510d6c50e6cb173123fc742a1c3a73c52c9cb8aef7b2e84a2d",
+      "source": {
+        "file": "/assets/landing/v2/videos/05-ai-consultation-24-7.mp4",
+        "in": 19.4,
+        "out": 26.4,
+        "posterAt": 25.2
+      },
+      "mobileVariant": {
+        "video": "/assets/landing/v3/clips/clip-07-consult-inquiry-vertical.mp4",
+        "poster": "/assets/landing/v3/posters/clip-07-consult-inquiry-vertical.jpg",
+        "width": 720,
+        "height": 1280,
+        "duration": 5.1,
+        "bytes": 235775,
+        "hasAudio": false,
+        "codec": "h264 High",
+        "posterBytes": 80691,
+        "sha256": "a0172d831bcb6e6c3c251b35d4aaeaf44d64e1313aadfa53a0b09c6c1b1cd0f1",
+        "source": {
+          "file": "/assets/landing/v2/videos/05-ai-consultation-24-7-vertical.mp4",
+          "in": 16.3,
+          "out": 21.4,
+          "posterAt": 20.4
+        }
+      }
+    }
+  ],
+  "hero": {
+    "of": "VIDEO-01",
+    "note": "승인된 VIDEO-01을 같은 길이 · 같은 해상도로 다시 인코딩한 웹용 파일입니다. 장면은 바꾸지 않았습니다.",
+    "encode": "H.264 High, CRF 26, slow, 30 fps, yuv420p, no audio, faststart",
+    "wide": {
+      "video": "/assets/landing/v3/hero/01-hero-main.mp4",
+      "width": 1920,
+      "height": 1080,
+      "duration": 29.2,
+      "bytes": 4689076,
+      "hasAudio": false,
+      "codec": "h264 High",
+      "sha256": "3cb3840c1cb75cb3c6626b448364c984e683575e64fc77e8506c0d023bd6cf28",
+      "source": {
+        "file": "/assets/landing/v2/videos/01-hero-main.mp4",
+        "bytes": 8758127
+      },
+      "saved": "46%",
+      "ssim": 0.996,
+      "vmaf": 95.09
+    },
+    "tall": {
+      "video": "/assets/landing/v3/hero/01-hero-main-vertical.mp4",
+      "width": 1080,
+      "height": 1920,
+      "duration": 30,
+      "bytes": 2544167,
+      "hasAudio": false,
+      "codec": "h264 High",
+      "sha256": "e839cf219b2401ded7ae67fa4538e36ddd1a018cbfb7889e0b795522fe4fe61f",
+      "source": {
+        "file": "/assets/landing/v2/videos/01-hero-main-vertical.mp4",
+        "bytes": 4727175
+      },
+      "saved": "46%",
+      "ssim": 0.997,
+      "vmaf": 96.416
+    }
+  },
+  "stills": [
+    {
+      "id": "SITE-01",
+      "fallback": "/assets/landing/v3/stills/site-01-home.jpg",
+      "width": 2880,
+      "height": 1800,
+      "bytes": 212965,
+      "sha256": "df60defff9d90414e215de40b9f21268dfd8a2e5f33d6d82c8dceb5507c36462",
+      "alt": "데모 홈페이지의 첫 화면",
+      "note": "가상 업체 ‘부스트 인테리어’의 데모 홈페이지를 그대로 촬영한 화면입니다. 시공사례 사진은 AI로 만든 예시 이미지입니다.",
+      "noteRequired": true,
+      "source": {
+        "url": "https://interior-demo.boostweb.co.kr/",
+        "viewport": "1440×900",
+        "capturedOn": "2026-10-11"
+      }
+    },
+    {
+      "id": "SITE-02",
+      "fallback": "/assets/landing/v3/stills/site-02-cases.jpg",
+      "width": 2880,
+      "height": 1800,
+      "bytes": 285062,
+      "sha256": "59faa8306cf1630cd54f2d8319424f2f9580e9039706fbc2eee872b2f9537eff",
+      "alt": "데모 홈페이지의 시공사례 목록과 조건 검색",
+      "note": "가상 업체 ‘부스트 인테리어’의 데모 홈페이지를 그대로 촬영한 화면입니다. 시공사례 사진은 AI로 만든 예시 이미지입니다.",
+      "noteRequired": true,
+      "source": {
+        "url": "https://interior-demo.boostweb.co.kr/portfolio",
+        "viewport": "1440×900",
+        "capturedOn": "2026-10-11"
+      }
+    },
+    {
+      "id": "SITE-03",
+      "fallback": "/assets/landing/v3/stills/site-03-case.jpg",
+      "width": 2880,
+      "height": 1800,
+      "bytes": 319184,
+      "sha256": "67f71bf03790a940ee3d3c84ff6d9fbba7988ca757b2cdf2a5531b4a1e5e3e91",
+      "alt": "데모 홈페이지의 시공사례 상세 화면",
+      "note": "가상 업체 ‘부스트 인테리어’의 데모 홈페이지를 그대로 촬영한 화면입니다. 시공사례 사진은 AI로 만든 예시 이미지입니다.",
+      "noteRequired": true,
+      "source": {
+        "url": "https://interior-demo.boostweb.co.kr/portfolio/suseong-white-34py-apartment-remodeling",
+        "viewport": "1440×900",
+        "capturedOn": "2026-10-11"
+      }
+    },
+    {
+      "id": "SITE-04",
+      "fallback": "/assets/landing/v3/stills/site-04-inquiry.jpg",
+      "width": 1560,
+      "height": 1500,
+      "bytes": 110322,
+      "sha256": "134bb94908ad15522c8d9721daf4557075b330243e2ff72f535a97046eab934f",
+      "alt": "데모 홈페이지의 견적 문의 양식",
+      "note": "가상 업체 ‘부스트 인테리어’의 데모 홈페이지를 그대로 촬영한 화면입니다. 시공사례 사진은 AI로 만든 예시 이미지입니다.",
+      "noteRequired": true,
+      "source": {
+        "url": "https://interior-demo.boostweb.co.kr/contact",
+        "viewport": "1440×900",
+        "crop": {
+          "x": 1290,
+          "y": 240,
+          "w": 1560,
+          "h": 1500
+        },
+        "capturedOn": "2026-10-11"
+      }
+    },
+    {
+      "id": "SITE-05",
+      "fallback": "/assets/landing/v3/stills/site-05-home-phone.jpg",
+      "width": 780,
+      "height": 1688,
+      "bytes": 91510,
+      "sha256": "7ccd8da83b34e03200fac0ab2ba8545b6e07568c1bfac9a166860debdcde5f3f",
+      "alt": "휴대폰에서 본 데모 홈페이지의 첫 화면",
+      "note": "가상 업체 ‘부스트 인테리어’의 데모 홈페이지를 그대로 촬영한 화면입니다. 시공사례 사진은 AI로 만든 예시 이미지입니다.",
+      "noteRequired": true,
+      "source": {
+        "url": "https://interior-demo.boostweb.co.kr/",
+        "viewport": "390×844",
+        "capturedOn": "2026-10-11"
+      }
+    },
+    {
+      "id": "SITE-06",
+      "fallback": "/assets/landing/v3/stills/site-06-cases-phone.jpg",
+      "width": 780,
+      "height": 1688,
+      "bytes": 114794,
+      "sha256": "7b20aef6b1ebf6f56dab5231339f1cfbb72a9e776abdee06b223ae0e2ebc7d25",
+      "alt": "휴대폰에서 본 데모 홈페이지의 시공사례 목록",
+      "note": "가상 업체 ‘부스트 인테리어’의 데모 홈페이지를 그대로 촬영한 화면입니다. 시공사례 사진은 AI로 만든 예시 이미지입니다.",
+      "noteRequired": true,
+      "source": {
+        "url": "https://interior-demo.boostweb.co.kr/portfolio",
+        "viewport": "390×844",
+        "capturedOn": "2026-10-11"
+      }
+    },
+    {
+      "id": "SITE-07",
+      "fallback": "/assets/landing/v3/stills/site-07-case-phone.jpg",
+      "width": 780,
+      "height": 1688,
+      "bytes": 125095,
+      "sha256": "68c516b38cd5fea5fb4acc8c95f1723b9df7b6a48c97fb25f112996de79f7074",
+      "alt": "휴대폰에서 본 데모 홈페이지의 시공사례 상세 화면",
+      "note": "가상 업체 ‘부스트 인테리어’의 데모 홈페이지를 그대로 촬영한 화면입니다. 시공사례 사진은 AI로 만든 예시 이미지입니다.",
+      "noteRequired": true,
+      "source": {
+        "url": "https://interior-demo.boostweb.co.kr/portfolio/suseong-white-34py-apartment-remodeling",
+        "viewport": "390×844",
+        "capturedOn": "2026-10-11"
+      }
+    }
+  ]
+}
