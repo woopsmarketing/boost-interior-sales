@@ -3,7 +3,8 @@ import type { IconName } from "@/components/ui/Icon";
 /**
  * BoostInterior pricing — the only prices this site shows (KRW), shared by the landing, the three
  * feature pages and the two pricing pages. Two kinds of price that do not depend on each other:
- * a monthly subscription (AI 마케팅, AI 상담, or both as 올인원) and a one-time homepage build.
+ * a monthly subscription (AI 마케팅, AI 상담, or both as 올인원) and a one-time homepage build
+ * (AI 스마트 홈페이지).
  * Every amount is what the customer pays, VAT included. Monthly only: there is no annual plan.
  * What each product carries, where it works today, what is still to be released, the trial policy
  * and the way on (this site takes no payment) are stated here once. Pages read them; none restates them.
@@ -136,6 +137,20 @@ export const ALL_IN_ONE = {
 } as const;
 
 /**
+ * AI 스마트 홈페이지 — the name of the homepage product: the fourth thing this site sells, next to the
+ * three subscriptions, and priced once by the builds in SETUP_OPTIONS. The name says what the
+ * homepage is ready for (the two subscriptions are added to it), never how it is made: we build it.
+ * Nothing may read as AI generating a homepage, so `made` is said where the name is explained.
+ * The builds keep their own names (Quick Start, 맞춤 홈페이지 제작 …), and "홈페이지 제작" stays an
+ * ordinary phrase for the work and its cost (제작비).
+ */
+export const WEBSITE = {
+  name: "AI 스마트 홈페이지",
+  line: `시공사례와 견적 문의 양식을 갖추고, ${CONSULTATION.name}과 ${MARKETING.name}을 월 구독으로 더해 쓸 수 있는 인테리어 업체 홈페이지입니다.`,
+  made: "홈페이지는 저희가 제작합니다. AI가 홈페이지를 대신 만들어 주는 상품이 아닙니다.",
+} as const;
+
+/**
  * 14일 무료 체험 — a policy decided for the launch of card payment. Nothing of it works yet: this
  * site registers no card, starts no trial and charges nothing, so every page that names it carries
  * `notice` and leads on with the demo or the 문의 button, never with a "start" button.
@@ -202,6 +217,15 @@ export const BASIC_CONNECTIONS = "카카오톡 상담 · 지도 · 전화 · SNS
 /** The same scope inside a sentence. */
 export const BASIC_CONNECTIONS_SHORT = "카카오톡 · 지도 · 전화 · SNS 등 기본 연결";
 
+/**
+ * Search exposure of a homepage built here. Whether a delivered site is open to Naver and Google is
+ * not verified in operation yet, so no option lists it as included: each says it is checked and
+ * told before the build. Make it a plain inclusion only once that is verified.
+ */
+export const SEARCH_EXPOSURE = "네이버·구글 검색 노출 설정은 적용 가능 여부와 범위를 제작 전에 확인해 안내";
+/** The same, as a cell of the build comparison. */
+export const SEARCH_EXPOSURE_SHORT = "검색 노출 설정은 제작 전에 확인해 안내";
+
 /** /pricing/details: the areas of homepage work the build options are compared by, in display order. */
 export const SETUP_SCOPE_GROUPS = [
   { key: "site", label: "홈페이지 디자인 · 구성" },
@@ -247,8 +271,8 @@ export interface SetupOption {
 }
 
 /**
- * 홈페이지 제작 — four one-time builds. Their prices are the ones the site has always shown; this
- * version changed none of them. A is not a homepage build: it connects AI 상담 to the homepage the
+ * AI 스마트 홈페이지 — the four one-time builds it is priced by. Their prices are the ones the site
+ * has always shown; no version since has changed them. A is not a homepage build: it connects AI 상담 to the homepage the
  * owner already has, and is listed first so the two are never confused.
  */
 export const SETUP_OPTIONS: readonly SetupOption[] = [
@@ -293,7 +317,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
       site: ["인테리어 업체에 필요한 기본 기능을 갖춘 새 홈페이지", "인테리어 업체에 맞는 기본 페이지 구성"],
       portfolio: ["시공사례를 보기 좋게 구성", "기존 공개 시공사례 이전 (건수와 범위는 제작 전에 안내)"],
       cta: ["상담 · 견적 문의로 이어지는 버튼과 동선"],
-      quality: ["휴대폰 · 태블릿에서도 보기 편한 화면", "네이버·구글 노출을 위한 기본 설정", "빠른 페이지 로딩"],
+      quality: ["휴대폰 · 태블릿에서도 보기 편한 화면", SEARCH_EXPOSURE, "빠른 페이지 로딩"],
       launch: ["고객이 안심하고 접속할 수 있는 보안 연결", BASIC_CONNECTIONS, "오픈 전 기본 점검"],
     },
     subscriptions: ["marketing", "consultation", "all-in-one"],
@@ -344,7 +368,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
     need: "홈페이지가 없고, 브랜드부터 새로 만들고 싶어요",
     summary: "업체의 브랜드와 원하는 구성에 맞춰 홈페이지를 처음부터 맞춤 제작합니다.",
     fit: "브랜드부터 홈페이지 구성까지 완전히 맞춰 제작하고 싶은 업체",
-    highlights: ["브랜드에 맞춘 맞춤 디자인", "메뉴 · 화면 구성 맞춤 설계", "네이버·구글 노출 기본 설정 · 빠른 로딩"],
+    highlights: ["브랜드에 맞춘 맞춤 디자인", "메뉴 · 화면 구성 맞춤 설계", "휴대폰 · 태블릿에서도 보기 편한 화면"],
     includes: {
       site: [
         "업체 브랜드에 맞춘 디자인",
@@ -354,7 +378,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
       ],
       portfolio: ["시공사례 페이지 맞춤 설계"],
       cta: ["상담에서 견적 문의까지 이어지는 흐름 설계"],
-      quality: ["휴대폰 · 태블릿에서도 보기 편한 화면", "네이버·구글 노출을 위한 기본 설정", "빠른 페이지 로딩"],
+      quality: ["휴대폰 · 태블릿에서도 보기 편한 화면", SEARCH_EXPOSURE, "빠른 페이지 로딩"],
       launch: ["고객이 안심하고 접속할 수 있는 보안 연결", BASIC_CONNECTIONS],
     },
     subscriptions: ["marketing", "consultation", "all-in-one"],
@@ -363,7 +387,7 @@ export const SETUP_OPTIONS: readonly SetupOption[] = [
   },
 ];
 
-/** The cheapest build that makes a homepage: what "홈페이지 제작 ○○만원부터" reads from. */
+/** The cheapest build that makes a homepage: what "AI 스마트 홈페이지 ○○만원부터" reads from. */
 export const ENTRY_BUILD = SETUP_OPTIONS.filter((option) => option.builds).reduce((low, option) => (option.price < low.price ? option : low));
 /** The one option that connects AI 상담 to a homepage the owner already has. */
 export const INTEGRATION_OPTION = SETUP_OPTIONS.find((option) => option.key === "A")!;
@@ -407,7 +431,12 @@ export const SETUP_COMPARISON: readonly { label: string; values: PerSetup }[] = 
   },
   {
     label: "휴대폰 화면 · 검색 노출 · 속도",
-    values: ["기존 홈페이지 기준", "기본 설정 포함", "휴대폰 화면 · 주요 페이지 오류 등 필요한 범위 개선", "기본 설정 포함"],
+    values: [
+      "기존 홈페이지 기준",
+      `휴대폰 화면 포함 · ${SEARCH_EXPOSURE_SHORT}`,
+      "휴대폰 화면 · 주요 페이지 오류 등 필요한 범위 개선",
+      `휴대폰 화면 포함 · ${SEARCH_EXPOSURE_SHORT}`,
+    ],
   },
   {
     label: `${CONSULTATION.name} (월 구독)`,
@@ -435,7 +464,7 @@ const NO: Cell = { text: "해당 없음", mark: "no" };
 const won0 = (value: number) => value.toLocaleString("en-US");
 
 /** The four things this site sells, as the columns of the product comparison. */
-export const PRODUCT_COLUMNS = [MARKETING.name, CONSULTATION.name, BUNDLE.name, "홈페이지 제작"] as const;
+export const PRODUCT_COLUMNS = [MARKETING.name, CONSULTATION.name, BUNDLE.name, WEBSITE.name] as const;
 
 /**
  * /pricing/details product comparison: one row per question an owner asks before choosing, one cell

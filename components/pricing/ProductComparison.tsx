@@ -54,7 +54,7 @@ export function ProductComparison() {
           eyebrow="상품 비교"
           titleId="comparison-title"
           title="네 가지 상품을 같은 질문으로 비교합니다."
-          sub="월 구독 세 가지와 홈페이지 제작. 조건이 붙는 항목은 조건까지 적었습니다."
+          sub={`월 구독 세 가지와 ${PRODUCT_COLUMNS[3]}. 조건이 붙는 항목은 조건까지 적었습니다.`}
           subSize="md"
           subClassName="mobile:text-[16px]"
         />
@@ -62,7 +62,7 @@ export function ProductComparison() {
 
       <div data-reveal className="mt-9 overflow-hidden rounded-xl bg-white shadow-md mobile:hidden">
         <table className="w-full table-fixed border-collapse text-left">
-          <caption className="sr-only">AI 마케팅, AI 상담, 올인원, 홈페이지 제작 비교</caption>
+          <caption className="sr-only">{PRODUCT_COLUMNS.join(", ")} 비교</caption>
           <colgroup>
             <col className="w-[17%]" />
             <col span={4} />

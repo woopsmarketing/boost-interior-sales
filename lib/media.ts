@@ -98,7 +98,7 @@ export function sample(id: SampleId): Film {
   return { id, ...clip(entry), note: entry.note };
 }
 
-/** The asset pack's stills, and the screenshots of the live demo homepage taken for the 홈페이지 제작 page (SITE-01 …). */
+/** The asset pack's stills, and the screenshots of the live demo homepage taken for the AI 스마트 홈페이지 page (SITE-01 …). */
 const STILLS = [...Object.values(manifest.images).flat(), ...shorts.stills];
 
 export function still(id: string): Still {

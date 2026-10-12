@@ -9,13 +9,14 @@ import {
   monthly,
   SUBSCRIPTIONS,
   TRIAL,
+  WEBSITE,
   WEBSITE_OPERATION,
   won,
 } from "@/lib/pricing";
 import { DEMO_COMPANY, SITE_NAME } from "@/lib/site";
 
 /**
- * Copy for the three feature pages: AI 마케팅, AI 상담, 홈페이지 제작. Each page says how its product
+ * Copy for the three feature pages: AI 마케팅, AI 상담, AI 스마트 홈페이지. Each page says how its product
  * works with the product's own screens, where it works today, and what it needs — in that order,
  * and only what was checked against the product. Amounts, "today / not yet" and the trial policy
  * come from lib/pricing.ts.
@@ -161,7 +162,7 @@ export const CONSULTATION_PAGE = {
   ] satisfies readonly Question[],
 } as const;
 
-// ---------------------------------------------------------------- 홈페이지 제작
+// ---------------------------------------------------------------- AI 스마트 홈페이지
 
 export const WEBSITE_PAGE = {
   /** The pages a homepage made here has. Each one is on the demo homepage. */
@@ -200,6 +201,11 @@ export const WEBSITE_PAGE = {
   ],
 
   faq: [
+    {
+      // The name could be read as AI making the homepage: the first answer says who makes it.
+      q: `${WEBSITE.name}는 AI가 홈페이지를 만들어 주는 건가요?`,
+      a: `아니요. ${WEBSITE.made} ${WEBSITE.name}는 ${SITE_NAME}가 제작하는 인테리어 업체 홈페이지의 이름으로, 제작한 홈페이지에 ${CONSULTATION.name}과 ${MARKETING.name}을 월 구독으로 더해 쓸 수 있다는 뜻입니다. 두 기능은 구독할 때만 이용하며, 홈페이지만 만들 수도 있습니다.`,
+    },
     {
       q: "홈페이지를 만들면 매달 내는 비용이 있나요?",
       a: `${WEBSITE_OPERATION.text} ${WEBSITE_OPERATION.separate}`,

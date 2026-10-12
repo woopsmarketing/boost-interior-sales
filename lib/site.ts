@@ -1,4 +1,4 @@
-import { ENTRY_BUILD, manwon, monthly, SETUP_OPTIONS, SUBSCRIPTIONS } from "@/lib/pricing";
+import { ENTRY_BUILD, manwon, monthly, SETUP_OPTIONS, SUBSCRIPTIONS, WEBSITE } from "@/lib/pricing";
 
 /**
  * Single source of truth for URLs, routes, anchors, the contact channel and the search copy of
@@ -50,6 +50,15 @@ function resolveSiteUrl() {
 /** Canonical origin used for metadataBase, sitemap and robots. */
 export const SITE_URL = resolveSiteUrl();
 
+/**
+ * Whether this build may be indexed. A Vercel preview serves the same six pages under another
+ * address, so it asks not to be indexed (the robots meta in app/layout.tsx, the X-Robots-Tag header
+ * in next.config.ts). Everything else is indexable: the production deployment, and a local build,
+ * which nothing outside can reach and which the checks read as production will be served.
+ * A preview build is never the production one: production is always built as production.
+ */
+export const INDEXABLE = process.env.VERCEL_ENV !== "preview";
+
 /** Customer-facing product name. The chat backend it runs on keeps its own (internal) name. */
 export const SITE_NAME = "BoostInterior";
 export const SITE_TITLE = "BoostInterior | 시공사진으로 만드는 마케팅 콘텐츠와 AI 상담";
@@ -75,6 +84,7 @@ export const CONTACT_ID = "contact";
 /**
  * The three feature pages. Each has its own search intent: making marketing content, a consultation
  * chatbot, and a homepage for an interior company. Amounts in a description come from the price list.
+ * The third is AI 스마트 홈페이지 (the name is the price list's); its address stays /features/website.
  */
 export const FEATURES = {
   marketing: {
@@ -91,22 +101,22 @@ export const FEATURES = {
   },
   website: {
     path: "/features/website",
-    label: "홈페이지 제작",
-    title: "홈페이지 제작 | 인테리어 업체 홈페이지와 시공사례 페이지 - BoostInterior",
-    description: `시공사례 목록과 상세, 조건 검색, 견적 문의 양식을 갖춘 인테리어 업체 홈페이지를 제작합니다. 제작비 ${manwon(ENTRY_BUILD.price)}만원부터(${ENTRY_BUILD.name} 기준, VAT 포함), 기본 운영 월 이용료 없음. 실제 데모 홈페이지를 직접 확인해 보세요.`,
+    label: WEBSITE.name,
+    title: `${WEBSITE.name} | 인테리어 업체 홈페이지 제작과 시공사례 페이지 - BoostInterior`,
+    description: `${WEBSITE.name}는 시공사례 목록과 상세, 조건 검색, 견적 문의 양식을 갖추고 ${CONSULTATION.name} · ${MARKETING.name}을 월 구독으로 더해 쓸 수 있는 인테리어 업체 홈페이지입니다. 제작비 ${manwon(ENTRY_BUILD.price)}만원부터(${ENTRY_BUILD.name} 기준, VAT 포함), 기본 운영 월 이용료 없음. 실제 데모 홈페이지를 직접 확인해 보세요.`,
   },
 } as const;
 
 /** Pricing at a glance (header "요금 안내" link): every price, and which one fits. */
 export const PRICING_PATH = "/pricing";
-export const PRICING_TITLE = "요금 안내 | AI 마케팅 · AI 상담 · 올인원 요금과 홈페이지 제작비 - BoostInterior";
+export const PRICING_TITLE = `요금 안내 | AI 마케팅 · AI 상담 · 올인원 요금과 ${WEBSITE.name} 제작비 - BoostInterior`;
 /** Amounts come from the price list, so the search snippet cannot fall behind the page. */
-export const PRICING_DESCRIPTION = `${MONTHLY_PRICES}. 홈페이지 제작은 ${manwon(ENTRY_BUILD.price)}만원부터(${ENTRY_BUILD.name} 기준)이며 기본 운영 월 이용료가 없습니다. 모든 가격은 부가세(VAT) 포함.`;
+export const PRICING_DESCRIPTION = `${MONTHLY_PRICES}. ${WEBSITE.name} 제작비는 ${manwon(ENTRY_BUILD.price)}만원부터(${ENTRY_BUILD.name} 기준)이며 기본 운영 월 이용료가 없습니다. 모든 가격은 부가세(VAT) 포함.`;
 
 /** The conditions behind every price: what each product carries, what it needs, and the questions. */
 export const PRICING_DETAILS_PATH = "/pricing/details";
 export const PRICING_DETAILS_TITLE = "상세 요금 | 상품별 제공 기능 · 이용 조건 · 홈페이지 제작 범위 비교 - BoostInterior";
-export const PRICING_DETAILS_DESCRIPTION = `${MARKETING.name} · ${CONSULTATION.name} · ${BUNDLE.name}과 홈페이지 제작을 항목별로 비교합니다. 홈페이지 필요 여부, 시공사례 추천에 필요한 자료, 초기 구축비, 무료 체험 정책, 구축 방식 ${SETUP_OPTIONS.length}가지의 포함 범위. 모든 가격은 부가세(VAT) 포함.`;
+export const PRICING_DETAILS_DESCRIPTION = `${MARKETING.name} · ${CONSULTATION.name} · ${BUNDLE.name}과 ${WEBSITE.name}를 항목별로 비교합니다. 홈페이지 필요 여부, 시공사례 추천에 필요한 자료, 초기 구축비, 무료 체험 정책, 구축 방식 ${SETUP_OPTIONS.length}가지의 포함 범위. 모든 가격은 부가세(VAT) 포함.`;
 /** Both pricing pages: the three subscriptions, the trial policy and the homepage builds. */
 export const PLANS_ID = "plans";
 export const TRIAL_ID = "trial";

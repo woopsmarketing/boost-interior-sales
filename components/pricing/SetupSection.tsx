@@ -250,7 +250,7 @@ function Tailored({ option }: { option: SetupOption }) {
 }
 
 /**
- * 홈페이지 제작 — the four one-time builds. What connecting AI 상담 consists of comes first, once;
+ * AI 스마트 홈페이지 — the four one-time builds. What connecting AI 상담 consists of comes first, once;
  * the comparison then answers "which one" by what happens to the homepage, and the blocks under it
  * answer "why this price", each with its full scope one toggle away.
  */

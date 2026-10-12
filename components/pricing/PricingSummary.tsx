@@ -58,7 +58,7 @@ export function PricingHero() {
             홈페이지는 필요할 때 만듭니다.
           </>
         }
-        sub={`월 구독은 ${MARKETING.name} · ${CONSULTATION.name} · ${BUNDLE.name} 세 가지입니다. 홈페이지 제작은 처음 한 번의 비용이며, 기본 운영에는 월 이용료가 없습니다.`}
+        sub={`월 구독은 ${MARKETING.name} · ${CONSULTATION.name} · ${BUNDLE.name} 세 가지입니다. ${FEATURES.website.label}는 처음 한 번의 제작비이며, 기본 운영에는 월 이용료가 없습니다.`}
       />
       <ul className="mt-6 mb-0 hidden max-w-[560px] list-none overflow-hidden rounded-xl bg-white p-0 shadow-hairline narrow:block">
         {SUBSCRIPTIONS.map((item) => (
@@ -176,7 +176,7 @@ export function Situations() {
           eyebrow="내 상황에 맞는 선택"
           titleId="decide-title"
           title="내 상황과 가장 가까운 문장을 찾으세요."
-          sub="구독과 홈페이지 제작은 따로 고릅니다. 둘 다 필요한 경우도, 하나만 필요한 경우도 있습니다."
+          sub={`구독과 ${FEATURES.website.label}는 따로 고릅니다. 둘 다 필요한 경우도, 하나만 필요한 경우도 있습니다.`}
           subSize="md"
           subClassName="mobile:text-[16px]"
         />
@@ -223,7 +223,7 @@ export function Situations() {
 }
 
 /**
- * 홈페이지 제작 — the four one-time builds, and the one thing decided about keeping a homepage open:
+ * AI 스마트 홈페이지 — the four one-time builds, and the one thing decided about keeping a homepage open:
  * no monthly fee for basic operation. What that covers is confirmed before a contract, and the
  * notice says so.
  */

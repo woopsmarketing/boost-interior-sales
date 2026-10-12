@@ -9,7 +9,7 @@ import { PRICING_DETAILS_PATH } from "@/lib/site";
 const usable = (option: SetupOption) => option.subscriptions.map((key) => subscription(key).name).join(" · ");
 
 /**
- * 홈페이지 제작 — the four one-time builds as cards: what happens to the homepage, the amount, the
+ * AI 스마트 홈페이지 — the four one-time builds as cards: what happens to the homepage, the amount, the
  * work that matters most and which subscriptions can be used on the result today. The full scope of
  * each is on /pricing/details. `anchors` (/pricing) gives each card its option's id.
  */

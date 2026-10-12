@@ -16,7 +16,7 @@ import { WEBSITE_PAGE } from "@/lib/features";
 import { BUILD_FROM } from "@/lib/home";
 import { short, still } from "@/lib/media";
 import { pageMetadata } from "@/lib/page-metadata";
-import { subscription, VAT_NOTICE, VAT_SHORT, WEBSITE_OPERATION } from "@/lib/pricing";
+import { subscription, VAT_NOTICE, VAT_SHORT, WEBSITE, WEBSITE_OPERATION } from "@/lib/pricing";
 import {
   DEMO_LABEL,
   DEMO_URL,
@@ -37,11 +37,13 @@ const HALF_SLOT = "(max-width: 820px) calc(100vw - 40px), (max-width: 1440px) ca
 const PHONE_SLOT = "(max-width: 640px) 200px, 240px";
 
 /**
- * 홈페이지 제작 — the page for an owner without a homepage, or with one that does not show the work:
+ * AI 스마트 홈페이지 — the page for an owner without a homepage, or with one that does not show the work:
  * the demo homepage's own screens (desktop and phone), how a 시공사례 gets onto it, where a request
  * goes, how a build proceeds and who does what, the four one-time prices, and that keeping it open
  * carries no monthly fee. Every screenshot is the live demo as it is; the demo is one button away.
- * It promises no design choice an owner cannot make today, and no address of the owner's own.
+ * It promises no design choice an owner cannot make today, and no address of the owner's own. The
+ * name is explained where it is first read (the hero) and asked about first (the FAQ): we build the
+ * homepage, and the AI features are subscriptions added to it.
  */
 export default function WebsitePage() {
   const publish = short("CLIP-06");
@@ -65,7 +67,7 @@ export default function WebsitePage() {
             인테리어 업체 홈페이지.
           </>
         }
-        sub="시공사례 목록과 상세 화면, 조건 검색, 견적 문의 양식을 갖춘 홈페이지를 한 번의 제작비로 만듭니다. 이미 홈페이지가 있다면 그대로 두고 AI 상담만 연결할 수 있습니다."
+        sub={`${WEBSITE.line} 한 번의 제작비로 저희가 만들고, 이미 홈페이지가 있다면 그대로 두고 AI 상담만 연결할 수 있습니다.`}
         actions={
           <>
             <ButtonLink href={DEMO_URL} external size="lg" arrow>

@@ -9,6 +9,7 @@ import {
   SUBSCRIPTIONS,
   TRIAL,
   VAT_SHORT,
+  WEBSITE,
   WEBSITE_OPERATION,
   won,
 } from "@/lib/pricing";
@@ -29,7 +30,7 @@ const [MARKETING, CONSULTATION, BUNDLE] = SUBSCRIPTIONS;
 export const BUILD_FROM = `${manwon(ENTRY_BUILD.price)}만원부터`;
 
 /** Under the hero's buttons: the three monthly prices and what a homepage build starts at, as the price list has them. */
-export const ENTRY_PRICE = [...SUBSCRIPTIONS.map((item) => `${item.name} ${monthly(item)}`), `홈페이지 제작 ${BUILD_FROM}`, VAT_SHORT] as const;
+export const ENTRY_PRICE = [...SUBSCRIPTIONS.map((item) => `${item.name} ${monthly(item)}`), `${WEBSITE.name} ${BUILD_FROM}`, VAT_SHORT] as const;
 
 /**
  * 02 — what each product leaves in the owner's hands. Named, never counted: reels and shorts take

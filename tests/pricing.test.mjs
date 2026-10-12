@@ -3,6 +3,8 @@
 // today and the trial policy are checked there; the rest of the customer-facing source is scanned
 // as text. The copy is written for an owner who knows no web terms, so the wording is checked too.
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -15,6 +17,8 @@ import {
   INTEGRATION_OPTION,
   PRODUCT_COLUMNS,
   PRODUCT_COMPARISON,
+  SEARCH_EXPOSURE,
+  SEARCH_EXPOSURE_SHORT,
   SETUP_COMPARISON,
   SETUP_OPTIONS,
   SETUP_SCOPE_GROUPS,
@@ -23,12 +27,15 @@ import {
   SUBSCRIPTIONS,
   TRIAL,
   VAT_NOTICE,
+  VAT_SHORT,
+  WEBSITE,
   WEBSITE_OPERATION,
   monthly,
   scopeItems,
   won,
 } from "../lib/pricing.ts";
 import { PARTNER_BENEFITS, PARTNER_TERMS } from "../lib/partner.ts";
+import { MANIFESTS, usedMedia } from "./used-media.mjs";
 
 const ROOT = join(import.meta.dirname, "..");
 const sourceFiles = (dir) =>
@@ -97,7 +104,7 @@ test("PRICE-3 the four homepage builds: names and prices did not move", () => {
       ["D", "custom-website", undefined],
     ],
   );
-  // "홈페이지 제작 49만원부터" reads the cheapest option that makes a homepage; 연동 connects AI 상담 and builds none.
+  // "AI 스마트 홈페이지 49만원부터" reads the cheapest option that makes a homepage; 연동 connects AI 상담 and builds none.
   assert.equal(ENTRY_BUILD.key, "B");
   assert.equal(INTEGRATION_OPTION.key, "A");
   assert.deepEqual(SETUP_OPTIONS.map((option) => option.builds), [false, true, false, true]);
@@ -124,6 +131,63 @@ test("PRICE-5 VAT: every notice says included, nothing says extra", () => {
     assert.ok(!/(VAT|부가세|부가가치세)\s*(는|은)?\s*(별도|미포함|제외)/.test(text), `${file} says VAT is extra`);
   }
   assert.match(read("lib", "pricing-page.ts"), /표시 가격에 부가세가 포함되어 있나요\?/);
+  // Decided: every amount shown is the amount paid. Each of the six pages says so next to a price.
+  assert.equal(VAT_SHORT, "VAT 포함");
+  for (const where of [
+    ["components", "landing", "Pricing.tsx"],
+    ["app", "features", "ai-marketing", "page.tsx"],
+    ["app", "features", "ai-consultation", "page.tsx"],
+    ["app", "features", "website", "page.tsx"],
+    ["components", "pricing", "PricingSummary.tsx"],
+    ["components", "pricing", "PricingIntro.tsx"],
+  ]) {
+    assert.match(src(...where), /\{VAT_SHORT\}|\{VAT_NOTICE\.(all|setup|monthly)\}/, `${where.at(-1)} shows a price without saying VAT is included`);
+  }
+  assert.match(src("lib", "home.ts"), /ENTRY_PRICE = \[[^\]]*VAT_SHORT\]/);
+});
+
+test("NAME-1 the homepage product is AI 스마트 홈페이지: one name, the same address, and we make it", () => {
+  assert.equal(WEBSITE.name, "AI 스마트 홈페이지");
+  // The menu, the cards, the price rows and the comparison read the name from the price list.
+  const site = src("lib", "site.ts");
+  assert.match(site, /website: \{\s*path: "\/features\/website",\s*label: WEBSITE\.name,/);
+  assert.equal(PRODUCT_COLUMNS.at(-1), WEBSITE.name);
+  assert.match(src("lib", "home.ts"), /`\$\{WEBSITE\.name\} \$\{BUILD_FROM\}`/);
+  // What is left of "홈페이지 제작" is the work (제작은 따로), its cost, its options or the build named 맞춤 홈페이지 제작: never the product.
+  for (const { file, text } of SOURCE) {
+    for (const [phrase, custom, rest] of code(text).matchAll(/(맞춤 )?홈페이지 제작(비| 방식| 범위|은 따로|도 포함|에 포함|과 시공사례)?/g)) {
+      assert.ok(custom || rest, `${file} names the product "${phrase}"`);
+    }
+  }
+  assert.equal(SETUP_OPTIONS.at(-1).name, "맞춤 홈페이지 제작");
+  // The name says what the homepage is ready for. The making is ours, and the page says so.
+  assert.match(WEBSITE.line, /AI 상담과 AI 마케팅을 월 구독으로 더해 쓸 수 있는 인테리어 업체 홈페이지/);
+  assert.equal(WEBSITE.made, "홈페이지는 저희가 제작합니다. AI가 홈페이지를 대신 만들어 주는 상품이 아닙니다.");
+  assert.match(src(...["app", "features", "website", "page.tsx"]), /\$\{WEBSITE\.line\}/);
+  assert.match(read("lib", "features.ts"), /q: `\$\{WEBSITE\.name\}는 AI가 홈페이지를 만들어 주는 건가요\?`,\s*a: `아니요\. \$\{WEBSITE\.made\}/);
+  // Nothing says AI makes, writes or designs a homepage: only the sentence that denies it and the question it answers.
+  for (const { file, text } of SOURCE) {
+    for (const line of code(text).split("\n")) {
+      if (!/AI(가|로|는)?\s*(홈페이지|사이트)[^.\n]{0,14}(만들|제작|생성|완성|디자인|구축)/.test(line)) continue;
+      assert.match(line, /아닙니다|건가요\?/, `${file} reads as AI making the homepage: ${line.trim()}`);
+    }
+  }
+});
+
+test("SEARCH-1 search exposure of a built homepage is checked before the build, never listed as included", () => {
+  assert.match(SEARCH_EXPOSURE, /^네이버·구글 검색 노출 설정은 적용 가능 여부와 범위를 제작 전에 확인해 안내$/);
+  assert.match(SEARCH_EXPOSURE_SHORT, /제작 전에 확인해 안내$/);
+  const [, quick, , custom] = SETUP_OPTIONS;
+  for (const option of [quick, custom]) {
+    assert.ok(option.includes.quality.includes(SEARCH_EXPOSURE), `${option.key} says something else about search exposure`);
+    assert.ok(!option.highlights.some((line) => /노출|검색 (등록|엔진)/.test(line)), `${option.key} leads with search exposure`);
+  }
+  const row = SETUP_COMPARISON.find((entry) => entry.label.startsWith("휴대폰 화면"));
+  for (const i of [1, 3]) assert.ok(row.values[i].endsWith(SEARCH_EXPOSURE_SHORT), `the comparison promises search exposure: "${row.values[i]}"`);
+  for (const { file, text } of SOURCE) {
+    const promise = code(text).match(/노출을 위한 기본 설정|노출 기본 설정|(검색|네이버|구글)[^.\n"`]{0,14}(설정 포함|등록 포함|노출 보장|노출됩니다|노출해 드|에 등록해 드)/);
+    assert.ok(!promise, `${file} promises search exposure: "${promise?.[0]}"`);
+  }
 });
 
 test("PRICE-6 homepage operation: no monthly fee, and nothing promised beyond that", () => {
@@ -212,7 +276,7 @@ test("PAY-1 the site takes no payment and collects nothing", () => {
 // ---------------------------------------------------------------- Comparison tables and build scope
 
 test("COMPARE-1 the product comparison answers the twelve questions for all four products", () => {
-  assert.deepEqual([...PRODUCT_COLUMNS], ["AI 마케팅", "AI 상담", "올인원", "홈페이지 제작"]);
+  assert.deepEqual([...PRODUCT_COLUMNS], ["AI 마케팅", "AI 상담", "올인원", "AI 스마트 홈페이지"]);
   assert.deepEqual(
     PRODUCT_COMPARISON.map((row) => row.label),
     [
@@ -494,10 +558,36 @@ test("ROUTE-1 six pages, each with its own title, description and canonical addr
   }
 });
 
+test("SEO-1 production is indexable, a Vercel preview is not, and no page decides that for itself", () => {
+  // One rule in two places that cannot import each other: only a preview build says noindex.
+  const site = src("lib", "site.ts");
+  assert.match(site, /export const INDEXABLE = process\.env\.VERCEL_ENV !== "preview";/);
+  const layout = src("app", "layout.tsx");
+  assert.match(layout, /robots: \{ index: INDEXABLE, follow: INDEXABLE \}/);
+  assert.match(layout, /alternates: \{ canonical: "\/" \}/);
+  const config = src("next.config.ts");
+  assert.match(config, /const PREVIEW = process\.env\.VERCEL_ENV === "preview";/);
+  assert.match(config, /\.\.\.\(PREVIEW \? \[\{ source: "\/:path\*", headers: \[\{ key: "X-Robots-Tag", value: "noindex, nofollow" \}\] \}\] : \[\]\)/);
+  assert.equal((config.match(/X-Robots-Tag/g) ?? []).length, 1, "next.config.ts sets X-Robots-Tag outside the preview rule");
+  // robots.txt lets crawlers in and names the sitemap, in every build: a crawler that is kept out cannot read a noindex.
+  const robots = src("app", "robots.ts");
+  assert.match(robots, /rules: \{ userAgent: "\*", allow: "\/" \}/);
+  assert.ok(!/disallow/i.test(robots), "robots.txt keeps crawlers out");
+  assert.match(robots, /sitemap: `\$\{SITE_URL\}\/sitemap\.xml`/);
+  // The canonical address is the production one, never a deployment's own.
+  assert.match(site, /VERCEL_PROJECT_PRODUCTION_URL/);
+  assert.ok(!/VERCEL_URL\b|VERCEL_BRANCH_URL/.test(site), "the canonical address follows a deployment's own address");
+  for (const { file, text } of SOURCE) {
+    if (/app[\\/]layout\.tsx$/.test(file)) continue;
+    const own = code(text).match(/noindex|nofollow|\brobots:/);
+    assert.ok(!own, `${file} sets "${own?.[0]}" itself`);
+  }
+});
+
 test("ROUTE-2 the menu: three feature pages, 요금 안내, 실제 데모, and 문의 as the button", () => {
   const site = read("lib", "site.ts");
   assert.match(site, /NAV_FEATURES = \[FEATURES\.marketing, FEATURES\.consultation, FEATURES\.website\]/);
-  assert.match(site, /label: "홈페이지 제작"/);
+  assert.match(site, /label: WEBSITE\.name/);
   assert.match(site, /NAV_PRICING_LABEL = "요금 안내"/);
   assert.match(site, /NAV_DEMO_LABEL = "실제 데모"/);
   const header = src("components", "landing", "SiteHeader.tsx");
@@ -676,12 +766,17 @@ const size = (path) => {
 test("MEDIA-1 every film, clip and still a page shows is in a manifest, with its files and its note", () => {
   const used = new Set(SHOWING.flatMap(({ text }) => [...code(text).matchAll(/"((?:VIDEO|SAMPLE|HERO|FEAT|COMP|UI|CLIP|SITE)-[\w-]+)"/g)].map((match) => match[1])));
   assert.ok(used.size >= 20, "the pages show fewer assets than they were built with");
+  // Of an entry's files, Git carries the ones a page shows (MEDIA-6 checks each of them). The others
+  // (a WebP poster no page uses, the approved cut behind the web hero) are only on the machine that made the pack.
+  const shown = new Set(usedMedia().map((file) => file.path));
   for (const id of used) {
     const item = PACK_ITEMS.find((entry) => entry.id === id);
     assert.ok(item, `${id} is not in a manifest`);
     const files = [item.video, item.posterFallback, item.poster, item.mobileVariant?.video, item.mobileVariant?.posterFallback, item.mobileVariant?.poster, item.fallback].filter(Boolean);
     assert.ok(files.length > 0, `${id} has no file`);
-    for (const path of files) assert.ok(size(path) > 0, `${id}: ${path} is missing under public/`);
+    const served = files.filter((path) => shown.has(path));
+    assert.ok(served.length > 0, `${id} is shown by a page, and none of its files is on the list of shown media`);
+    for (const path of served) assert.ok(size(path) > 0, `${id}: ${path} is missing under public/`);
     if (!id.startsWith("CLIP-")) assert.ok(item.note && item.noteRequired, `${id} lost its note`);
   }
   for (const id of ["CLIP-01", "CLIP-02", "CLIP-03", "CLIP-04", "CLIP-05", "CLIP-06", "CLIP-07", "SAMPLE-01", "SAMPLE-02", "SITE-01", "SITE-05"]) {
@@ -699,12 +794,14 @@ test("MEDIA-2 short clips are short and light; the hero is the approved film, re
     }
     assert.ok(V2.videos.some((video) => video.id === clip.of), `${clip.id} is cut from a film that is not in the pack`);
   }
-  // The hero: same film, about half the bytes, and the approved files are still where they were.
+  // The hero: same film, about half the bytes, under its own path. The approved films are not served and
+  // not in Git, so a fresh checkout does not have them; where they are on disk, they are as the pack made them.
   const approved = V2.videos.find((video) => video.id === "VIDEO-01");
-  for (const [cut, original] of [[V3.hero.wide, approved.video], [V3.hero.tall, approved.mobileVariant.video]]) {
+  for (const [cut, original] of [[V3.hero.wide, approved], [V3.hero.tall, approved.mobileVariant]]) {
     assert.ok(cut.video.startsWith("/assets/landing/v3/hero/"), "the web hero overwrote an approved file");
-    assert.ok(size(original) > 0, `the approved ${original} is gone`);
-    assert.ok(size(cut.video) > 0 && size(cut.video) < size(original) * 0.65, `${cut.video} is not lighter than the approved film`);
+    assert.deepEqual(cut.source, { file: original.video, bytes: original.bytes }, `${cut.video} is not a re-encode of the approved film`);
+    if (size(original.video) > 0) assert.equal(size(original.video), original.bytes, `the approved ${original.video} was changed`);
+    assert.ok(size(cut.video) > 0 && size(cut.video) < original.bytes * 0.65, `${cut.video} is not lighter than the approved film`);
   }
   assert.match(src("lib", "media.ts"), /export function heroFilm\(\)/);
   assert.match(src("components", "landing", "Hero.tsx"), /heroFilm\(\)/);
@@ -784,4 +881,30 @@ test("MEDIA-5 no pinned scroll scenes", () => {
   for (const { file, text } of SOURCE) {
     assert.ok(!/\bsticky\b[^"`]*\bh-\[\d+s?vh\]|h-\[2\d\ds?vh\]|pinned:/.test(code(text)), `${file} pins a scene to the scroll`);
   }
+});
+
+test("MEDIA-6 Git carries exactly the media the pages show, as the manifests describe it", () => {
+  const used = usedMedia();
+  assert.ok(used.length >= 50, "the pages show fewer files than they were built with");
+  for (const file of used) {
+    assert.ok(size(file.path) > 0, `${file.id}: ${file.path} is missing under public/`);
+    if (file.bytes !== undefined) assert.equal(size(file.path), file.bytes, `${file.path} does not weigh what its manifest says`);
+    if (file.sha256) assert.equal(createHash("sha256").update(readFileSync(join(ROOT, "public", file.path))).digest("hex"), file.sha256, `${file.path} is not the file its manifest describes`);
+  }
+  // Vercel builds from Git: a file a page shows must be tracked, and the rest of the packs (approved originals
+  // of re-encoded films, unused films and stills) must not be. Without Git (an unpacked archive) there is nothing to compare.
+  let tracked;
+  try {
+    tracked = execFileSync("git", ["ls-files", "public/assets/landing"], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+  } catch {
+    return;
+  }
+  const inGit = new Set(tracked.trim().split("\n").filter(Boolean).map((path) => path.slice("public".length)));
+  const needed = new Set([...used.map((file) => file.path), ...MANIFESTS]);
+  for (const path of needed) assert.ok(inGit.has(path), `${path} is shown by a page and not in Git: git add -f public${path}`);
+  for (const path of inGit) assert.ok(needed.has(path), `${path} is in Git and no page shows it: git rm --cached public${path}`);
+  // The rest of the V2 pack is ignored, so it can never be added by accident; v3 is tracked whole.
+  const ignore = read(".gitignore");
+  assert.match(ignore, /^\/public\/assets\/landing\/v2\/\*$/m);
+  assert.match(ignore, /^!\/public\/assets\/landing\/v2\/manifest\.json$/m);
 });

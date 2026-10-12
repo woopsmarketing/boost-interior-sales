@@ -7,7 +7,7 @@ import { MoreLink } from "@/components/ui/MoreLink";
 import { SceneHeader } from "@/components/ui/SceneHeader";
 import { Section } from "@/components/ui/Section";
 import { BUILD_FROM, PRODUCT_RESULTS } from "@/lib/home";
-import { ALL_IN_ONE, SUBSCRIPTIONS, TODAY as CONDITION, WEBSITE_OPERATION, won } from "@/lib/pricing";
+import { ALL_IN_ONE, SUBSCRIPTIONS, TODAY as CONDITION, WEBSITE, WEBSITE_OPERATION, won } from "@/lib/pricing";
 import { FEATURES, PRICING_PATH, VALUE_ID } from "@/lib/site";
 
 const [MARKETING, CONSULTATION, BUNDLE] = SUBSCRIPTIONS;
@@ -56,7 +56,7 @@ export function Outputs() {
               함께 쓰거나.
             </>
           }
-          sub="AI 마케팅과 AI 상담은 따로 구독할 수 있고, 함께 쓰면 올인원입니다. 홈페이지 제작은 한 번만 내는 별도 서비스입니다."
+          sub={`AI 마케팅과 AI 상담은 따로 구독할 수 있고, 함께 쓰면 올인원입니다. ${WEBSITE.name}는 제작비를 한 번만 내는 별도 서비스입니다.`}
           subClassName="mobile:text-[16px]"
         />
       </div>
@@ -109,7 +109,7 @@ export function Outputs() {
             <Icon name="window" className="size-[22px]" />
           </span>
           <h3 className={`mt-5 ${NAME}`}>{FEATURES.website.label}</h3>
-          <p className={LINE}>홈페이지가 필요하면 시공사례 중심으로 만들어 드립니다. 월 구독이 아닌 1회 제작입니다.</p>
+          <p className={LINE}>시공사례 중심 홈페이지를 저희가 만들어 드립니다. AI 상담 · AI 마케팅은 필요할 때 구독으로 더합니다.</p>
           <Results items={PRODUCT_RESULTS.website} />
           <div className="mt-auto pt-6">
             <p className="m-0 text-[26px] leading-none font-bold tracking-[-0.035em] whitespace-nowrap text-ink">{BUILD_FROM}</p>

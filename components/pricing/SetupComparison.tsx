@@ -37,7 +37,7 @@ function Scope({ option, area }: { option: SetupOption; area: SetupScopeKey }) {
 }
 
 /**
- * 홈페이지 제작 — the four options side by side: what happens to the homepage, what each means for
+ * AI 스마트 홈페이지 — the four options side by side: what happens to the homepage, what each means for
  * the two subscriptions and for the monthly fee, then the full scope of each under one toggle.
  * From 821px up it is a table; below that four columns stop being readable, so the options become
  * a selector and the same rows are shown for one option at a time.

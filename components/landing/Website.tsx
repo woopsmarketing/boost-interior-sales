@@ -12,7 +12,7 @@ import { VAT_SHORT, WEBSITE_OPERATION } from "@/lib/pricing";
 import { DEMO_LABEL, DEMO_URL, FEATURES, WEBSITE_ID } from "@/lib/site";
 
 /**
- * 홈페이지 제작 — the service an owner adds when there is no homepage yet: what a homepage made here
+ * AI 스마트 홈페이지 — the service an owner adds when there is no homepage yet: what a homepage made here
  * has (each line is on the demo homepage, one button away), what it costs once, and that keeping it
  * open carries no monthly fee. `#install` was the earlier landing's "how it gets onto a homepage"
  * block; the build is what answers that now, so the anchor lands here.
@@ -34,7 +34,7 @@ export function Website() {
               시공사례 중심으로 만들어 드립니다.
             </>
           }
-          sub="월 구독이 아니라 한 번 제작하는 서비스입니다. 이미 홈페이지가 있다면 그대로 두고 AI 상담만 연결할 수 있습니다."
+          sub="홈페이지는 저희가 제작하고, AI 상담과 AI 마케팅은 필요할 때 월 구독으로 더합니다. 한 번 제작하는 서비스이며, 이미 홈페이지가 있다면 그대로 두고 AI 상담만 연결할 수 있습니다."
           subClassName="mobile:text-[16px]"
         />
       </div>
